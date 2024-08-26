@@ -2,7 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+    // Check if use is admin
+    
+    // Display page
+  res.render('admin.ejs');
 });
 
 module.exports = router;

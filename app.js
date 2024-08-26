@@ -1,12 +1,24 @@
-var express = require('express');
+require("custom-env").env(process.env.NODE_ENV, "./config")
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const express = require('express');
+const indexRouter = require('./routes/index')
+const usersRouter = require('./routes/users')
+const session = require('express-session')
+const mongoose = require("mongoose")
 
-var app = express();
 
+mongoose.connect(process.env.DB_URL)
+
+const app = express();
+
+app.use(session({
+  secret: 'TEMP SECRET',
+  saveUninitialized: false,
+  resave: false
+}))
+app.set("view engine", "ejs")
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -20,11 +32,11 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error.ejs');
+  res.render('error');
 });
 
-app.listen(3000)
+app.listen(process.env.PORT)

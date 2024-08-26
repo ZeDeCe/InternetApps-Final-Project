@@ -8,7 +8,10 @@
     "serverstart": "SET DEBUG=final-project:* & npm run devstart"
   },
   "dependencies": {
+    "custom-env": "^2.0.6",
+    "dotenv-expand": "^11.0.6",
     "express": "^4.19.2",
+    "express-session": "^1.18.0",
     "mongoose": "^8.5.4"
   },
   "devDependencies": {
