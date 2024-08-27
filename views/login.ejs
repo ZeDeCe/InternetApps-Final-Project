@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Sign-In"}); %>
+    </head>
+    <body class="bg-dark p-5 mb-2">
+        <% var showhelp = false %>
+        <div class="text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center align-items-center parent container w-50 rounded h-50 bg-light-subtle bg-gradient p-4">
+            <h1 class="text-start pl-1 w-50">
+                Sign in
+            </h1>
+            <form method="POST" action="/login" class="w-50 mt-2">
+                <div class="form-data mt-1">
+                    <label for="grade">Email or mobile phone number</label>
+                    <input type="text" class="form-control" name="username" autofocus="autofocus" placeholder="Username">
+                </div>
+                <div class="form-data mt-1">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
+                </div>
+            </form>
+            <div class="w-50">
+                By continuing, you agree to Website's <a href="./conditions">Conditions of Use</a> and <a href="./privacy">Privacy Notice</a>
+            </div>
+            <a onclick="showhelp=true" class="w-50 mt-3 mb-3">
+                Need help?
+            </a>
+            <% if(showhelp) { %>
+                <a href="./reset-password">Forgot your password?</a>
+            <%}%>
+        </div>
+    </body>
+</html>

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "devstart": "nodemon app.js",
+    "devstart": "nodemon --inspect app.js",
     "serverstart": "SET DEBUG=final-project:* & npm run devstart"
   },
   "dependencies": {

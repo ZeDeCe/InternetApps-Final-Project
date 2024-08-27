@@ -3,9 +3,9 @@ require("custom-env").env(process.env.NODE_ENV, "./config")
 const express = require('express');
 const indexRouter = require('./routes/index')
 const usersRouter = require('./routes/users')
+const loginRouter = require('./routes/login')
 const session = require('express-session')
 const mongoose = require("mongoose")
-
 
 mongoose.connect(process.env.DB_URL)
 
@@ -22,6 +22,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/login', loginRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
