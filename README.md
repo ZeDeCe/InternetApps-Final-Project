@@ -37,3 +37,5 @@ To run the program:
 1. In dev mode using nodemon: `npm run serverstart`
 2. In dev mode using nodemon without DEBUG flag: `npm run devstart`
 3. In production: `npm start`
+
+Test
