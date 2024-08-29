@@ -14,4 +14,13 @@ async function register(username, password) {
     await user.save()
 }
 
-module.exports = {login, register}
+async function validateUsername(username) {
+    const user = await User.findOne({_id: username})
+    return user != null;
+}
+
+module.exports = {
+    login, 
+    register,
+    validateUsername
+}

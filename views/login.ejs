@@ -4,30 +4,77 @@
         <%- include('./partials/head', {title: "Website: Sign-In"}); %>
     </head>
     <body class="bg-dark p-5 mb-2">
-        <% var showhelp = false %>
-        <div class="text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-center align-items-center parent container w-50 rounded h-50 bg-light-subtle bg-gradient p-4">
-            <h1 class="text-start pl-1 w-50">
-                Sign in
-            </h1>
-            <form method="POST" action="/login" class="w-50 mt-2">
-                <div class="form-data mt-1">
-                    <label for="grade">Email or mobile phone number</label>
-                    <input type="text" class="form-control" name="username" autofocus="autofocus" placeholder="Username">
+        <div class="parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light-subtle bg-gradient p-4" style="width: 35%; height: 70%; min-width: 500px;">
+            <div class="w-100">
+                <h1 class="text-start pl-1">
+                    Sign in
+                </h1>
+                <div id="user-tab" class="tab">
+                    <div class="form-data mt-1">
+                        <label for="grade">Email or mobile phone number</label>
+                        <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="Username">
+                    </div>
+                    <br>
+                    <button id="continue" class="btn btn-primary w-100">Continue</button>
+                    <div class="mt-2">
+                        By continuing, you agree to Website's <a href="./conditions">Conditions of Use</a> and <a href="./privacy">Privacy Notice</a>
+                    </div>
+                    <br><br>
+                    <div class="mt-2">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
+                            Need help?
+                        </button>
+                        <div class="collapse mt-1" id="collapseHelp">
+                            <a href="./help">
+                                Forgot your password?
+                            </a>
+                            <br>
+                            <a href="./help">
+                                Other issues with Sign in?
+                            </a>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div id="register" class="text-center position-absolute bottom-0 start-50 translate-middle">
+                        <p>New to Website?</p>
+                        <button class="btn btn-primary">Create your Website account</button>
+                    </div>
                 </div>
-                <div class="form-data mt-1">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password">
+                <div id="password-tab" class="tab d-none">
+                    <div class="form-data mt-1">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" class="form-control" name="password">
+                    </div>
+                    <input type="checkbox" class="form-control" style="width:30px; height:30px" name="keepmesigned">Keep me signed in</input>
+                    <br>
+                    <button id="sign-in" class="btn btn-primary w-100">Sign in</button>
                 </div>
-            </form>
-            <div class="w-50">
-                By continuing, you agree to Website's <a href="./conditions">Conditions of Use</a> and <a href="./privacy">Privacy Notice</a>
             </div>
-            <a onclick="showhelp=true" class="w-50 mt-3 mb-3">
-                Need help?
-            </a>
-            <% if(showhelp) { %>
-                <a href="./reset-password">Forgot your password?</a>
-            <%}%>
         </div>
+        <script>
+            $(document).ready(function(){
+                var username = null
+                $("#continue").click(function() {
+                    username = $("#username").val()
+                    console.log(username)
+                    $.post('/login/validate_username', {username}).done(function(data) {
+                        $("#user-tab").addClass("d-none")
+                        $("#password-tab").removeClass("d-none")
+                        $("#password").focus()
+                    }).fail(function(data) {
+                        console.log("fail")
+                        alert(data)
+                    })
+                })
+                $("#sign-in").click(function() {
+                    var password = $("#password").val()
+                    $.post('/login', {username, password}).done(function(data) {
+
+                    }).fail(function(data) {
+                        alert(data)
+                    })
+                })
+            })
+        </script>
     </body>
 </html>

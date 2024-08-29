@@ -18,7 +18,7 @@ async function login(req, res) {
         res.redirect('/')
     }
     else { 
-        res.redirect('/login')
+        res.send("Failed to log in")
     }
 }
 
@@ -35,8 +35,13 @@ async function register(req, res) {
     }
 }
 
+async function validateUsername(req, res) {
+    res.send(await loginService.validateUsername(req.body.username))
+}
+
 module.exports = {
     isLoggedIn,
     login,
-    register
+    register,
+    validateUsername
 }
