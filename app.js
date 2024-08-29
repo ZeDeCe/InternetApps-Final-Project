@@ -2,8 +2,8 @@ require("custom-env").env(process.env.NODE_ENV, "./config")
 
 const express = require('express');
 const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
 const loginRouter = require('./routes/login')
+const userpageRouter = require('./routes/user_page')
 const session = require('express-session')
 const mongoose = require("mongoose")
 
@@ -16,13 +16,14 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }))
+
 app.set("view engine", "ejs")
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/login', loginRouter)
+app.use('/user_page', userpageRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
