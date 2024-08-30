@@ -39,3 +39,11 @@ const deleteOrder = async (id) => {
     await order.remove();
     return order;
 };
+
+module.exports = {
+    deleteOrder,
+    updateOrder,
+    getOrders,
+    getOrderById,
+    createOrder
+}
