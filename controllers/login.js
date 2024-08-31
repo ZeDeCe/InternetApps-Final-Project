@@ -15,11 +15,8 @@ async function login(req, res) {
     const result = await loginService.login(username, password)
     if (result) {
         req.session.username = username
-        res.redirect('/')
     }
-    else { 
-        res.send("Failed to log in")
-    }
+    res.send(result)
 }
 
 async function register(req, res) {
