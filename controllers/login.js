@@ -13,8 +13,10 @@ async function login(req, res) {
     const {username, password} = req.body
 
     const result = await loginService.login(username, password)
+    const isadmin = await loginService.isAdmin(username);
     if (result) {
         req.session.username = username
+        req.session.isAdmin = isadmin
     }
     res.send(result)
 }
@@ -23,13 +25,24 @@ async function register(req, res) {
     const {username, password} = req.body
 
     try {
-        const result = await loginService.register(username, password)
+        await loginService.register(username, password)
         req.session.username = username
         res.redirect('/')
     }
     catch (e) {
-        res.redirect('/register')
+        res.send(err.message)
     }
+}
+
+async function logout(req, res) {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error logging out');
+        } else {
+            res.send('Logged out');
+        }
+    });
 }
 
 async function validateUsername(req, res) {
@@ -40,5 +53,6 @@ module.exports = {
     isLoggedIn,
     login,
     register,
-    validateUsername
+    validateUsername,
+    logout
 }
