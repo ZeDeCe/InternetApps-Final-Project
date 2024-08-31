@@ -7,28 +7,85 @@
         <%- include('./partials/header'); %>
     </header>
     <body class="bg-light">
-        <div class="container mt-5" style="min-width: 800px;">
-            <div class="row">
-                <div class="col-3 p-0">
-                    <div class="me-3 p-3 border border-1">
-                        <b>Personal Center</b>
-                        <ul class="list-group">
-                            <li>
-                                My Account
-                            </li>
-                            <li>
-                                My Orders
-                            </li>
-                        </ul>
-                    </div> 
-                </div>
-                <div class="col-9 p-0">
-                    <div class="ms-3 p-3 border border-1">
-                        <b>Hi, shaqedmov</b>
-                    </div>  
+        <div class="position-relative w-100">
+            <div class="container mt-5 position-absolute top-50 start-50 h-100 translate-middle" style="min-width: 800px;">
+                <div class="row">
+                    <div class="col-3 p-0">
+                        <div class="me-2 p-3 bg-white">
+                            <b>Personal Center</b>
+                            <ul class="list-group">
+                                <li class="list-group-item bg-transparent border border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                                    </svg>
+                                    My Account
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+                                        <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z"/>
+                                        <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                                    </svg>
+                                    My Orders
+                                </li>
+                            </ul>
+                            <b>Policy</b>
+                            <ul class="list-group">
+                                <li class="list-group-item bg-transparent border border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
+                                        <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5zm1.294 7.456A2 2 0 0 1 4.732 11h5.536a2 2 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456M12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2"/>
+                                    </svg>
+                                    Shipping Info
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard2-check" viewBox="0 0 16 16">
+                                        <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
+                                        <path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M10.854 7.854a.5.5 0 0 0-.708-.708L7.5 9.793 6.354 8.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0z"/>
+                                    </svg>
+                                    Return Policy
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+                                    </svg>
+                                    Privacy & Cookie Policy
+                                </li>
+                            </ul>
+                        </div> 
+                    </div>
+                    <div class="col-6 p-0">
+                        <div class="ms-2 mb-2 me-2 p-3 bg-white">
+                            <b>Hi, shaqedmov</b>
+                        </div>
+                        <div class="ms-2 mt-2 me-2 p-3 bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <b>Your Recent Order</b>
+                                <a href="#"><small><small>All Orders</small></small></a>
+                            </div>
+                            <div class="">
+                            </div>
+                            
+                        </div>  
+                    </div>
+                    <div class="col-3 p-0">
+                        <div class="me-2 ms-2 p-3 bg-white">
+                            <b>Re-Purchase</b>
+                            <ul class="list-group">
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 1
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 2
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 3
+                                </li>
+                            </ul>
+                        </div> 
+                    </div>
                 </div>
             </div>
-
         </div>
     </body>
 </html>
