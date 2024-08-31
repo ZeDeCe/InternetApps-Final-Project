@@ -40,7 +40,7 @@ async function logout(req, res) {
             console.error(err);
             res.status(500).send('Error logging out');
         } else {
-            res.send('Logged out');
+            res.redirect("/");
         }
     });
 }
