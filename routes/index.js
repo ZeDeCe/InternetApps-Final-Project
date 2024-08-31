@@ -10,10 +10,16 @@ router.get('/policies', function(req, res) {
   switch (req.query.page){
     case "shipping_info":
       res.render('shipping_info.ejs')
+      break;
     case "return_policy":
       res.render('return_policy.ejs')
+      break;
     case "privacy_policy":
       res.render('privacy_policy.ejs')
+      break;
+    default:
+      res.render('error.ejs')
+      break;
   }
 
 })
