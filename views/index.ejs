@@ -13,5 +13,13 @@
         <h3>
             Is admin: <%=isadmin%>
         </h3>
+        <button id="logout" class="btn btn-primary">Log out</button>
+        <script>
+            $(document).ready(function() {
+                $("#logout").click(function() {
+                    location.href = "/logout"
+                })
+            })
+        </script>
     </body>
 </html>

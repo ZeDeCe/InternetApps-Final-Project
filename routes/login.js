@@ -3,7 +3,7 @@ const router = express.Router();
 
 const loginController = require('../controllers/login')
 
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
     res.render('login.ejs');
 });
 
