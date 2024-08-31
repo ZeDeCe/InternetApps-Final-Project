@@ -9,6 +9,15 @@ function isLoggedIn(req, res, next) {
     }
 }
 
+function isAdmin(req, res, next) {
+    if (req.session.isAdmin) {
+        return next()
+    }
+    else {
+        res.status(404).send("Only admins have access to this page!")
+    }
+}
+
 async function login(req, res) {
     const {username, password} = req.body
 
@@ -54,5 +63,6 @@ module.exports = {
     login,
     register,
     validateUsername,
-    logout
+    logout,
+    isAdmin
 }

@@ -61,6 +61,7 @@
         <script>
             $(document).ready(function(){
                 var username = null
+                var onPassword = false
                 $("#continue").click(function() {
                     username = $("#username").val()
                     console.log(username)
@@ -69,6 +70,7 @@
                             $("#user-tab").addClass("d-none")
                             $("#password-tab").removeClass("d-none")
                             $("#password").focus()
+                            onPassword = true
                         }
                         else {
                             $("#wronguser").removeClass("d-none")
@@ -87,6 +89,16 @@
                         }
                     })
                 })
+                $(document).on('keypress',function(e) {
+                    if(e.which == 13) { // Pressed enter
+                        if (!onPassword) {
+                            $("#continue").click()
+                            console.log("")
+                        } else {
+                            $("#sign-in").click()
+                        }
+                    }
+                });
             })
         </script>
     </body>
