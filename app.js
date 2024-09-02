@@ -4,6 +4,7 @@ const express = require('express');
 const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const userpageRouter = require('./routes/user_page')
+const aboutRouter = require('./routes/about')
 const session = require('express-session')
 const mongoose = require("mongoose")
 
@@ -24,6 +25,9 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
+app.use('/about', aboutRouter);
+
+app.use(express.static(__dirname + '/public'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

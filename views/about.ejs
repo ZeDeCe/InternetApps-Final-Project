@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "About US"}); %>
+        <link rel="stylesheet" href="/stylesheets/style.css">
+        <script type="module" src="/about.js"></script>
+        
+    </head>
+    <body>
+        <%- include('./partials/header'); %>
+
+        <section class="about-section mt-5" id="about-us-section">
+            <h1>
+                About US
+            </h1>
+            <p>
+                Today, there's no need to spend all your precious time finding
+                assets availabe on the market.
+            </p>
+            <p class="mb-5">
+                <b>The Shop Company</b> will help you find the best real Estate
+                which fits you. With a team of the best real estate agents we will
+                help you find the one which fits you the most in the hottest location available!
+            </p>
+
+            <video controls autoplay>
+                <source src="/multimedia/intro.mp4" class="intro-video" type="video/mp4">
+              Your browser does not support the video tag.
+              </video>
+
+        </section>
+
+        <section class="about-section mt-5" id="statics-section">
+            <h1>
+                Statistics
+            </h1>
+            <p class="mb-5">
+                To be Done When there will be statistics.
+            </p>
+        </section>
+
+        
+        <section class="about-section mt-5" id="visit-us-section">
+            <h1>
+                Let's Grab A Coffee
+            </h1>
+            <p>
+                We understand buying real esate online is not for everyone.
+                feels like you need a coffee time consulting with us?<br>
+                You are welcome to visit us at the closest branch to your house!
+                <br><br>
+                Click the closest pointer available at your location to get the branch information
+            </p>
+        </section>
+
+        <div class="container map-holder">
+            <div class="row justify-content-center no-gutters">
+                <div class="col md-0">
+                    <div id="map"></div>
+                </div>
+                <div class="col-3 md-0 branch-col text-center">
+                    <div class="container" id="map-click-result">
+                        
+                    </div>
+                </div>
+                
+            </div>
+            
+        </div>
+        
+    <%- include('./partials/footer'); %>
+
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.MAPS_TOKEN %>&callback=initMap&v=weekly&language=he&region=I&Loading=async"
+    defer
+    ></script>
+
+    </body>
+</html>
