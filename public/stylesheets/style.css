@@ -1,5 +1,10 @@
 body {
   font: 14px "Poppins Regular";
+  font: 14px "Poppins Regular";
+}
+
+div {
+  min-width: 800px;
 }
 
 a {
@@ -68,6 +73,10 @@ body{
 
   .col {
     height: 100%;
+  }
+
+  div {
+    min-width: 0;
   }
 }
 
