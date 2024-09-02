@@ -7,15 +7,21 @@ const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
 const session = require('express-session')
 const mongoose = require("mongoose")
+const MongoStore = require("connect-mongo");
+
 
 mongoose.connect(process.env.DB_URL)
-
 const app = express();
 
 app.use(session({
-  secret: 'TEMP SECRET',
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
-  resave: false
+  resave: false,
+  store: new MongoStore(
+    {
+        mongoUrl: process.env.DB_URL + 'session-store'
+    }
+)
 }))
 
 app.set("view engine", "ejs")

@@ -18,7 +18,10 @@ DB_PORT=
 DB_USER=
 DB_PASS=
 DB_URL=
+SESSION_SECRET=
 ```
+Make sure to have the DB_URL end in a /  
+Session secret can be some random string- this will change in production so it is temporary
 
 Open visual studio and in a terminal execute the following:
 ```
@@ -30,7 +33,9 @@ If the last command returned versions for npm and node continue to the next step
 Run the following:
 `npm install`
 
-Now everything should be set.  
+Now attempt to run the program so it creates your DB, then do the following:
+1. Open the mongodb compass app
+2. Add a user to the users collection under test that has: _id: username, password: password, isAdmin: false
   
 To run the program:
 ---

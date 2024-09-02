@@ -8,6 +8,7 @@
     "serverstart": "SET DEBUG=final-project:* & npm run devstart"
   },
   "dependencies": {
+    "connect-mongo": "^5.1.0",
     "custom-env": "^2.0.6",
     "dotenv-expand": "^11.0.6",
     "ejs": "^3.1.10",
