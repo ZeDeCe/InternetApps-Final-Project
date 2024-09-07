@@ -28,12 +28,14 @@ app.use(session({
 app.set("view engine", "ejs")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
+app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
