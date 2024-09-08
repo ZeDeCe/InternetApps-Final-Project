@@ -1,10 +1,10 @@
 const Branch = require('../models/Branch')
 
 const getBranches = async () => {
-    return await Branch.find({}).select('name phone location -_id');
+    return await Branch.find({});
 };
 
-const createBranch = async(name, location, phone) => {
+const createBranch = async(name, address, phone) => {
     const branch = new Branch({
         name: name, 
         location: location, 
@@ -25,7 +25,6 @@ const updateBranch = async(id, name, location, phone) => {
         branch.phone = phone;
 
         await branch.save();
-        //return branch;
     } catch (e) {
         console.log(e);
         return null;

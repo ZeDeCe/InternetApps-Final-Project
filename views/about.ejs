@@ -9,10 +9,11 @@
     
     <header>
         <%- include('./partials/header'); %>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
     </header>
 
     <body>
-        <section class="about-section mt-5" id="about-us-section">
+        <section class="mt-5 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
             <h1>
                 About US
             </h1>
@@ -26,57 +27,81 @@
                 help you find the one which fits you the most in the hottest location available!
             </p>
 
-            <video controls autoplay>
-                <source src="/multimedia/intro.mp4" class="intro-video" type="video/mp4">
+            <video controls autoplay class="intro-video rounded" style="max-width: 100%;">
+                <source src="/multimedia/intro.mp4" type="video/mp4">
               Your browser does not support the video tag.
               </video>
 
         </section>
 
-        <section class="about-section mt-5" id="statics-section">
-            <h1>
-                Statistics
-            </h1>
-            <p class="mb-5">
-                To be Done When there will be statistics.
-            </p>
-        </section>
-
-        
-        <section class="about-section mt-5" id="visit-us-section">
-            <h1>
-                Let's Grab A Coffee
-            </h1>
-            <p>
-                We understand buying real esate online is not for everyone.
-                feels like you need a coffee time consulting with us?<br>
-                You are welcome to visit us at the closest branch to your house!
-                <br><br>
-                Click the closest pointer available at your location to get the branch information
-            </p>
-        </section>
-
-        <div class="container map-holder">
-            <div class="row justify-content-center no-gutters">
-                <div class="col md-0">
-                    <div id="map"></div>
+        <section class="mt-5">
+            <div class="container-fluid text-center text-center">
+                <div class="row">
+                    <h1>
+                        Statistics
+                    </h1>
                 </div>
-                <div class="col-3 md-0 branch-col text-center">
-                    <div class="container" id="map-click-result">
+
+                <div class="row justify-content-center">
+                   <p>Soon...</p>
+                </div>
+            </div>
+        </section>
+        
+        
+        <section class="mt-5" style="height: 100%;">
+            <div class="container map-holder mt-4 mb-5" style="height:100%; max-height: 600px;">
+                <div class="row text-center text-wrap text-break" style="max-width: 35vw; margin: 0 auto;">
+                    <h1>
+                        Let's Grab A Coffee
+                    </h1>
+                    <p>
+                        We understand buying real esate online is not for everyone.
+                        feels like you need a coffee time consulting with us?<br>
+                        You are welcome to visit us at the closest branch to your house!
+                    </p>
+                    <h5>
+                        Click the closest pointer available at your location to get the branch information
+                    </h5>
+                </div>
+                <div class="row mt-3 justify-content-center" style="height: 100%;">
+                    <div class="col-sm-8 rounded" id="map"></div>
+                    <div class="col-sm-4 bg-primary text-light rounded-end text-center" id="map-click-result" style="display:none;">
+                        <div class="row mt-5 mb-5">
+                            <h1 id="branch-name"></h1>
+                          </div>
+                          <div class="row mb-5">
+                              <h1>
+                                  <b>Call US</b>
+                              </h1>
+                              <h5 id="branch-phone">
+                                  
+                              </h5>
+                          </div>
                         
-                    </div>
+                          <div class="row">
+                              <h1>
+                                  <b>Address</b>
+                              </h1>
+                              <h5 id="branch-address">
+                                  
+                              </h5>
+                          </div>        
+    
+    
+                    </div>   
                 </div>
                 
             </div>
-            
-        </div>
-        
+        </section>
+
     <%- include('./partials/footer'); %>
 
     <script
     src="https://maps.googleapis.com/maps/api/js?key=<%= process.env.MAPS_TOKEN %>&callback=initMap&v=weekly&language=he&region=I&Loading=async"
     defer
     ></script>
+
 
     </body>
 </html>

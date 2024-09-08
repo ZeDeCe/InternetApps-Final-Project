@@ -1,6 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 16px "Poppins Regular", "Heebo";
+}
+
+h1 {
+  font-weight: 800;
 }
 
 div {
@@ -11,50 +18,6 @@ a {
   color: #00B7FF;
 }
 
-.about-title{
-  h1 {
-    font-size: 50px;
-    font-weight: 800;
-  }
-
-  h5 {
-    font-weight:600;
-  }
-
-}
-
-.about-section {
-  
-  padding: 0 0 15px 20px;
-  text-align: center;
-  justify-content: center;
-
-  h1 {
-    color: #6681FA;
-    font-size: 40px;
-    font-weight: 800;
-  }
-
-  p {
-    font-size: 20px;
-    max-width: 40vw;
-    margin: 0 auto;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-
-  video {
-    border-radius: 15px;
-    max-height: 500px;
-    width: auto;
-  }
-}
-
-
-#map {
-  height: 100%;
-  border-radius: 10px 0 0 10px;
-}
 
 html,
 body{
@@ -64,17 +27,6 @@ body{
 }
 
 .map-holder {
-  height:50%;
-  padding: 30px 0 30px 0;
-   
-  .row{
-    height: 100%;
-  }
-
-  .col {
-    height: 100%;
-  }
-
   div {
     min-width: 0;
   }
@@ -103,50 +55,13 @@ body{
   border-top: 8px solid #3d5377;
 }
 
-.branch-col{
-  background-color: #6681FA;
-  color: white;
-  height: 100%;
-  border-radius: 0 10px 10px 0;
-  margin: 0;
-  padding: 0;
-  display: block;
-}
 
 #map-click-result {
   min-height: 200px;
   min-width: 200px;
-  margin-top: 50px;
 
   .row {
     margin-bottom: 20px;
   }
 
-}
-
-.footer-style {
-  color: white;
-  font-size: 16px;
-  .a {
-    text-decoration: none;
-  }
-
-  a:link, a:visited {
-    text-decoration: none;
-    color:White;
-  }
-
-  a:hover {
-    color: gray;
-  }
-
-  ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-  }
-  ul li {
-      display: inline;
-      margin-right: 20px;
-  }
 }

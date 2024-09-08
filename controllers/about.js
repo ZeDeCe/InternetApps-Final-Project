@@ -9,8 +9,6 @@ async function getAbout(req, res)  {
     res.render('about.ejs');
 }
 
-
-
 module.exports = {
     getAbout,
     getBranches
