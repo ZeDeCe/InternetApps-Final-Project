@@ -1,4 +1,5 @@
 const loginService = require("../services/login")
+const userService = require("../services/user")
 
 function isLoggedIn(req, res, next) {
     if (req.session.username != null) {
@@ -13,7 +14,7 @@ async function login(req, res) {
     const {username, password} = req.body
 
     const result = await loginService.login(username, password)
-    const isadmin = await loginService.isAdmin(username);
+    const isadmin = await userService.isAdmin(username);
     if (result) {
         req.session.username = username
         req.session.isAdmin = isadmin
@@ -22,15 +23,15 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-    const {username, password} = req.body
+    const {username, password, name} = req.body
 
     try {
-        await loginService.register(username, password)
+        await loginService.register(username, password, name)
         req.session.username = username
-        res.redirect('/')
+        res.send("Success")
     }
     catch (e) {
-        res.send(err.message)
+        res.send("An error with the DB has occured")
     }
 }
 
@@ -45,14 +46,11 @@ async function logout(req, res) {
     });
 }
 
-async function validateUsername(req, res) {
-    res.send(await loginService.validateUsername(req.body.username))
-}
+
 
 module.exports = {
     isLoggedIn,
     login,
     register,
-    validateUsername,
     logout
 }

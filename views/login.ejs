@@ -11,7 +11,7 @@
                 </h1>
                 <div id="user-tab" class="tab">
                     <div class="form-data mt-1">
-                        <label for="grade">Email or mobile phone number</label>
+                        <label for="username">Email or mobile phone number</label>
                         <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="Username">
                     </div>
                     <br>
@@ -19,7 +19,7 @@
                     <br>
                     <p id="wronguser" class="fw-bold text-danger d-none">Username does not exist!</p>
                     <div class="mt-2">
-                        By continuing, you agree to Website's <a href="./conditions">Conditions of Use</a> and <a href="./privacy">Privacy Notice</a>
+                        By continuing, you agree to Website's <a href="/policies?page=privacy_policy">Privacy Policy</a>
                     </div>
                     <br><br>
                     <div class="mt-2">
@@ -31,7 +31,7 @@
                                 Forgot your password?
                             </a>
                             <br>
-                            <a href="./help">
+                            <a href="/policies?page=password_qna">
                                 Other issues with Sign in?
                             </a>
                         </div>
@@ -39,7 +39,7 @@
                     <br><br>
                     <div id="register" class="text-center position-absolute bottom-0 start-50 translate-middle">
                         <p>New to Website?</p>
-                        <button class="btn btn-primary">Create your Website account</button>
+                        <a class="btn btn-primary" role="button" href="/login/register">Create your Website account</a>
                     </div>
                 </div>
                 <div id="password-tab" class="tab d-none">
@@ -61,6 +61,7 @@
         <script>
             $(document).ready(function(){
                 var username = null
+                var onPassword = false
                 $("#continue").click(function() {
                     username = $("#username").val()
                     console.log(username)
@@ -69,6 +70,7 @@
                             $("#user-tab").addClass("d-none")
                             $("#password-tab").removeClass("d-none")
                             $("#password").focus()
+                            onPassword = true
                         }
                         else {
                             $("#wronguser").removeClass("d-none")
@@ -87,6 +89,16 @@
                         }
                     })
                 })
+                $(document).on('keypress',function(e) {
+                    if(e.which == 13) { // Pressed enter
+                        if (!onPassword) {
+                            $("#continue").click()
+                            console.log("")
+                        } else {
+                            $("#sign-in").click()
+                        }
+                    }
+                });
             })
         </script>
     </body>

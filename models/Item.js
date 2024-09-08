@@ -17,7 +17,8 @@ const Item = new mongoose.Schema ({
         type: Number,
         required: true
 
-    }
+    },
+    description: String,
     // You may add more features if you'd like :)
 })
 
