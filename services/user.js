@@ -34,6 +34,26 @@ async function updateUser(username, data) {
     }
 }
 
+// This is a generic function that creates a user in the DB
+async function createUser(user) {
+    
+    try {
+        const newUser = new User(user)
+        if(user._id && !await validateUsername(user._id)) {
+            await newUser.save()
+            return false
+        }
+        return "Cannot create this user"
+    }
+    catch(e) {
+        return "An error with the DB has occured!"
+    }
+}
+
+async function getAllUsers() {
+    return await User.find();
+}
+
 async function isAdmin(username) {
     const admin = await User.findOne({_id: username, isAdmin: true})
     return admin != null;
@@ -48,5 +68,7 @@ module.exports = {
     deleteUser,
     isAdmin,
     validateUsername,
-    updateUser
+    updateUser,
+    createUser,
+    getAllUsers
 }
