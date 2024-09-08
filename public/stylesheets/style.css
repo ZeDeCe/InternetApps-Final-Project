@@ -2,10 +2,6 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-div {
-  min-width: 800px
-}
-
 a {
   color: #00B7FF;
 }
