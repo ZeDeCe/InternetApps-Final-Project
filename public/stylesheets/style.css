@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -149,4 +148,24 @@ body{
       display: inline;
       margin-right: 20px;
   }
+  
+.w-15 {
+  width: 15%;
+}
+
+.w-60 {
+  width: 60%;
+}
+
+.main-div {
+  min-width: 700px;
+}
+
+.hover-zoom:hover {
+  transform: scale(1.1);
+  transition: all .05s linear
+}
+
+.zoom-container {
+  overflow: hidden;
 }
