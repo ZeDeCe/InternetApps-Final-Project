@@ -4,7 +4,7 @@ let map,
 
 let branches;
 
-let result_element_id = "map-click-result";
+let result_element_id = "map-result";
 
 async function setBranches() {
   try {
@@ -27,7 +27,7 @@ async function createUserMark(location){
 
   const userTag = document.createElement("div");
 
-  userTag.className = "maps-user-tag";
+  userTag.className = "maps-user-tag bg-primary text-white p-2 position-relative rounded fs-6";
   userTag.textContent = "You";
 
   const marker = new AdvancedMarkerElement({
@@ -36,8 +36,6 @@ async function createUserMark(location){
     content: userTag,
     zIndex: 1
   });
-
-  return;
 }
 
 function CenterCurrentLocation(){
@@ -76,6 +74,7 @@ async function initMap() {
     mapId: "4504f8b37365c3d0",
   });
   
+
   CenterCurrentLocation();
   await setBranches();  
 
@@ -83,7 +82,7 @@ async function initMap() {
 
 function setBranchBlock(content) {
   let infoElement = document.getElementById(result_element_id);
-  let mapElement = document.getElementById("map")
+  let mapElement = document.getElementById("map");
 
   if (!infoElement || !mapElement)
     return;
@@ -93,21 +92,12 @@ function setBranchBlock(content) {
     document.getElementById("branch-phone").innerHTML = content.phone;
     document.getElementById("branch-address").innerHTML = content.address;
   } catch {
-    element.style.display = "none";
+    infoElement.style.display = "none";
     return;
       
   }
   
-  if (mapElement.classList.contains("rounded"))
-    mapElement.classList.remove("rounded");
-  
-  if (!mapElement.classList.contains("rounded-start")){
-    mapElement.classList.add("rounded-start");
-  }
-
   infoElement.style.display = "block";
-  infoElement.style.className = "rounded-start";
-
 }
 
 function addPoint(location, content) {
