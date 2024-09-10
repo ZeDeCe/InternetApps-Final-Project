@@ -17,6 +17,18 @@ async function createUserAsAdmin(req, res, next) {
     }
 }
 
+async function getUser(req, res, next) {
+    if(!req.params.id) {
+        return "Missing id"
+    }
+    try {
+        var user = await userService.getUser(req.params.id)
+        res.send(user)
+    } catch (e) {
+
+    }
+}
+
 function isAdmin(req, res, next) {
     if (req.session.isAdmin) {
         return next()
@@ -30,10 +42,13 @@ async function validateUsername(req, res) {
     res.send(await userService.validateUsername(req.body.username))
 }
 
+
+
 module.exports = {
     deleteUser,
     updateUser,
     isAdmin,
     validateUsername,
-    createUserAsAdmin
+    createUserAsAdmin,
+    getUser
 }

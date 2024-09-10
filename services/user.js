@@ -9,7 +9,6 @@ async function deleteUser(username) {
         if (user == null) {
             return "Cannot find user to delete";
         }
-        return "Success";
     } catch(e) {
         return "An error with the DB has occured!";
     }
@@ -18,9 +17,6 @@ async function deleteUser(username) {
 async function updateUser(username, data) {
     if(await isAdmin(username)) {
         return "Trying to update an admin";
-     }
-    if(data["isAdmin"]) {
-        return "Cannot update isAdmin value";
     }
     try {
         const user = await User.findOneAndUpdate({_id: username}, data);
@@ -28,7 +24,6 @@ async function updateUser(username, data) {
             return "Cannot find user to update";
         }
         await user.save()
-        return "Success"
     } catch(e) {
         return "An error with the DB has occured!"
     }
@@ -41,7 +36,7 @@ async function createUser(user) {
         const newUser = new User(user)
         if(user._id && !await validateUsername(user._id)) {
             await newUser.save()
-            return false
+            return
         }
         return "Cannot create this user"
     }
@@ -52,6 +47,10 @@ async function createUser(user) {
 
 async function getAllUsers() {
     return await User.find();
+}
+
+async function getUser(username) {
+    return await User.find({_id: username})
 }
 
 async function isAdmin(username) {
@@ -70,5 +69,6 @@ module.exports = {
     validateUsername,
     updateUser,
     createUser,
-    getAllUsers
+    getAllUsers,
+    getUser
 }
