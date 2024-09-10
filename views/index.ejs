@@ -3,17 +3,17 @@
     <head>
         <%- include('./partials/head', {title: "Website: Personal Page"}); %>
     </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
     </body>
-        <h3>
-            Username: <%=username%>
-        </h3>
-        <h3>
-            Is admin: <%=isadmin%>
-        </h3>
-        <button id="logout" class="btn btn-primary">Log out</button>
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <h3>
+                Username: <%=username%>
+            </h3>
+            <h3>
+                Is admin: <%=isadmin%>
+            </h3>
+            <button id="logout" class="btn btn-primary">Log out</button>
+        </div>
         <script>
             $(document).ready(function() {
                 $("#logout").click(function() {
@@ -21,5 +21,6 @@
                 })
             })
         </script>
+        <%- include('./partials/footer'); %>
     </body>
 </html>
