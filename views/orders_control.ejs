@@ -3,10 +3,8 @@
     <head>
         <%- include('./partials/head', {title: "Website: Admin Page"}); %>
     </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
     <body>
+        <%- include('./partials/header'); %>
         <div class="container mt-4 main-div">
             <h1 class="mb-4">Admin Dashboard</h1>
             <!-- Order History Section -->
@@ -58,5 +56,6 @@
                     });
                 });
         </script>
+        <%- include('./partials/footer'); %>
     </body>
 </html>

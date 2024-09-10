@@ -3,10 +3,8 @@
     <head>
         <%- include('./partials/head', {title: "Website: Personal Page"}); %>
     </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
     <body>
+        <%- include('./partials/header'); %>
         <div class="main-div">
             <h3>Welcome, <%=admin%></h3><br>
             <div class="container w-75">
@@ -42,5 +40,6 @@
                 })
             })
         </script>
+        <%- include('./partials/footer'); %>
     </body>
 </html>
