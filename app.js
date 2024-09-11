@@ -4,11 +4,14 @@ const express = require('express');
 const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const userpageRouter = require('./routes/user_page')
+const aboutRouter = require('./routes/about')
+const adminRouter = require('./routes/admin')
+const userRouter = require('./routes/user')
+
 const session = require('express-session')
 const mongoose = require("mongoose")
 const MongoStore = require("connect-mongo");
 const items = require('./routes/items')
-
 
 mongoose.connect(process.env.DB_URL)
 const app = express();
@@ -26,7 +29,9 @@ app.use(session({
 
 app.set("view engine", "ejs")
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.static(__dirname + '/public'))
+app.use(express.urlencoded({ extended: true }))
+app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter)

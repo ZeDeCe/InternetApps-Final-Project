@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Sign-In"}); %>
+    </head>
+    <body class="bg-dark p-5 mb-2">
+        <div class="parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light-subtle bg-gradient p-4" style="width: 35%; height: 70%; min-width: 500px;">
+            <div class="w-100">
+                <h1 class="text-start pl-1">
+                    Create your account
+                </h1>
+                <div id="user-tab" class="tab">
+                    <div class="form-data mt-1">
+                        <label for="name">Your name</label>
+                        <input type="text" id="name" class="form-control" name="name" autofocus="autofocus" placeholder="First and last name">
+                    </div>
+                    <div class="form-data mt-1">
+                        <label for="username">Mobile number or email</label>
+                        <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="youremail@email.com">
+                    </div>
+                    <div class="form-data mt-1">
+                        <label for="password">Password</label>
+                        <input type="text" id="password" class="form-control" name="password" autofocus="autofocus" placeholder="At least 6 characters">
+                    </div>
+                    <div class="form-data mt-1">
+                        <label for="password-again">Re-enter password</label>
+                        <input type="text" id="password-again" class="form-control" name="password-again" autofocus="autofocus" placeholder="">
+                    </div>
+                    <br>
+                    <button id="create" class="btn btn-primary w-100">Create account</button>
+                    <br>
+                    <p id="errormsg" class="fw-bold text-danger d-none">Error</p>
+                    <div class="mt-2">
+                        By continuing, you agree to Website's <a href="./conditions">Conditions of Use</a> and <a href="./privacy">Privacy Notice</a>
+                    </div>
+                    <br><br>
+                    <div id="register" class="text-center position-absolute bottom-0 start-50 translate-middle">
+                        Already have an account?
+                        <a href="/login">Sign in</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function displayError(msg) {
+                $("#errormsg").text(msg).removeClass("d-none")
+            }
+            $(document).ready(function(){
+                $("#create").click(function() {
+                    username = $("#username").val()
+                    password = $("#password").val()
+                    passagain = $("#password-again").val()
+                    name = $("#name").val()
+                    if (password != passagain) {
+                        displayError("Passwords do not match!");
+                        return
+                    }
+                    if (name.indexOf(" ") == -1) {
+                        displayError("Must provide first and last name!");
+                        return
+                    }
+                    $.post('/login/register', {username, password, name}).done(function(data) {
+                        if(data == "Success") {
+                            $.post('/login', {username, password})
+                            location.href = "/"
+                        }
+                        else {
+                            displayError(data);
+                        }
+                    })
+                })
+                $(document).on('keypress',function(e) {
+                    if(e.which == 13) { // Pressed enter
+                        $("#create").click()   
+                    }
+                });
+            })
+        </script>
+    </body>
+</html>

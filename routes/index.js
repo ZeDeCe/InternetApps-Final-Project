@@ -9,14 +9,16 @@ router.get('/', function(req, res) {
 router.get('/policies', function(req, res) {
   switch (req.query.page){
     case "shipping_info":
-      res.render('shipping_info.ejs')
+      res.render('policies/shipping_info.ejs')
       break;
     case "return_policy":
-      res.render('return_policy.ejs')
+      res.render('policies/return_policy.ejs')
       break;
     case "privacy_policy":
-      res.render('privacy_policy.ejs')
+      res.render('policies/privacy_policy.ejs')
       break;
+    case "password_qna":
+      res.render('policies/password_qna')
     default:
       res.render('error.ejs')
       break;
