@@ -33,6 +33,9 @@ app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
 app.use('/items', items)
 app.use('/search', items) //כל מי שפונה אליך ל/search תפנה אותו למה שיש בפרמטר items
+app.use('/about', aboutRouter)
+app.use('/admin', adminRouter)
+app.use('/user', userRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
