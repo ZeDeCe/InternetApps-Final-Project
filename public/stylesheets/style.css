@@ -4,20 +4,10 @@
 
 html, body {
   height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 body {
   font: 16px "Poppins Regular", "Heebo";
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-
-}
-
-main {
-  flex: 1;
 }
 
 a {
@@ -34,6 +24,11 @@ a {
 
 .main-div {
   min-width: 700px;
+  
+}
+
+body .main-div {
+  height:100%
 }
 
 .hover-zoom:hover {
