@@ -11,6 +11,7 @@ const userRouter = require('./routes/user')
 const session = require('express-session')
 const mongoose = require("mongoose")
 const MongoStore = require("connect-mongo");
+const items = require('./routes/items')
 
 mongoose.connect(process.env.DB_URL)
 const app = express();
@@ -35,7 +36,9 @@ app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
-app.use('/about', aboutRouter);
+app.use('/items', items)
+app.use('/search', items) //כל מי שפונה אליך ל/search תפנה אותו למה שיש בפרמטר items
+app.use('/about', aboutRouter)
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
 

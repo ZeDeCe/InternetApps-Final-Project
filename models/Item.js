@@ -11,14 +11,25 @@ const Item = new mongoose.Schema ({
     },
     picture: {
         type: String, //Url of item picture
-        required: true
     },
     price: {
         type: Number,
         required: true
 
     },
-    description: String,
+
+    location: {
+        type: String,
+        required: true
+    },
+    rooms: {
+        //מספר החדרים
+        type: Number,
+        required: true
+    },
+
+    description: String
+
     // You may add more features if you'd like :)
 })
 
