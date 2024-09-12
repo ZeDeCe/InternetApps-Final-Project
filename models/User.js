@@ -6,7 +6,11 @@ const User = new mongoose.Schema ({
         type: String,
         required: true
     },
-    isAdmin: Boolean
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    name: String
 })
 
 module.exports = mongoose.model("User", User)

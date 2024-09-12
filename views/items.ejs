@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items List</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+    <%- include('./partials/header'); %>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="my-4 text-center text-dark">Israel Real Estate</h1>
+        <h3 class="my-4 text-center text-dark">
+            <% if (searchName) { %>
+                <% if (items.length === 0) { %>
+                    There are no results for "<%= searchName %>"
+                <% } else { %>
+                    Results for "<%= searchName %>"
+                <% } %>
+            <% } else { %>
+                ALL
+            <% } %>
+        </h3>
+        <div class="row">
+            <% if (items.length > 0) { %>
+                <% items.forEach(item => { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card border-secondary">
+                            <img src="<%= item.picture %>" class="card-img-top img-fluid" alt="Item Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark"><%= item.name %></h5>
+                                <p class="card-text text-warning">★★★★☆</p>
+                                <p class="card-text text-danger"><strong>$<%= item.price %></strong></p>
+                                <p class="card-text text-muted"><strong>Location:</strong> <%= item.location %></p>
+                                <p class="card-text text-muted"><strong>Rooms:</strong> <%= item.rooms %></p>
+                                <a href="#" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

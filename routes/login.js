@@ -7,8 +7,12 @@ router.get('/', function(req, res) {
     res.render('login.ejs');
 });
 
+router.route('/register').get(function(req, res) {
+    res.render('register.ejs')
+})
+
 
 router.route('/').post(loginController.login)
-router.route('/validate_username').post(loginController.validateUsername)
+router.route('/register').post(loginController.register)
 
 module.exports = router;

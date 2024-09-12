@@ -1,36 +1,32 @@
 const User = require("../models/User")
+const userService = require('../services/user')
 
 async function login(username, password) {
     const user = await User.findOne({_id: username, password})
     return user != null;
 }
 
-async function isAdmin(username) {
-    const admin = await User.findOne({_id: username, isAdmin: true})
-    return admin != null;
-}
-
-async function register(username, password) {
-    if(validateUsername(username)) {
+async function register(username, password, name) {
+    var abc = await userService.validateUsername(username);
+    if(abc) {
         throw Error("A user already exists with this username!")
     }
-    const user = new User({
-        _id: username,
-        password,
-        isAdmin: false
-    })
-
-    await user.save()
+    try {
+        const user = new User({
+            _id: username,
+            password,
+            isAdmin: false,
+            name
+        })
+        await user.save()
+    }
+    catch(e) {
+        throw Error("An error with the DB has occured!")
+    }
 }
 
-async function validateUsername(username) {
-    const user = await User.findOne({_id: username})
-    return user != null;
-}
 
 module.exports = {
     login, 
-    register,
-    validateUsername,
-    isAdmin
+    register
 }
