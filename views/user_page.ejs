@@ -3,10 +3,8 @@
     <head>
         <%- include('./partials/head', {title: "Website: Personal Page"}); %>
     </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
     <body class="bg-light">
+        <%- include('./partials/header'); %>
         <div class="position-relative w-100 main-div">
             <div class="container mt-5 position-absolute top-50 start-50 h-100 translate-middle">
                 <div class="row">
@@ -164,5 +162,6 @@
                 })
             })
         </script>
+        <%- include('./partials/footer'); %>
     </body>
 </html>

@@ -5,80 +5,77 @@
         <script type="module" src="/about.js"></script>
         <script src="https://d3js.org/d3.v7.min.js"></script>
     </head>
-    
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
-
     <body>
-        <section class="mt-5 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
-            <h1>
-                About US
-            </h1>
-            <p>
-                Today, there's no need to spend all your precious time finding
-                assets availabe on the market.
-            </p>
-            <p class="mb-5">
-                <b>The Shop Company</b> will help you find the best real Estate
-                which fits you. With a team of the best real estate agents we will
-                help you find the one which fits you the most in the hottest location available!
-            </p>
-
-            <video controls autoplay class="intro-video rounded" style="max-width: 100%;">
-                <source src="/multimedia/intro.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-              </video>
-
-        </section>
-
-        <section class="mt-5">
-            <div class="container-fluid text-center text-center">
-                <div class="row">
-                    <h1>
-                        Statistics
-                    </h1>
-                </div>
-                <div class="row">
-                    <p>In Progress...</p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="mt-5 mb-2 text-center text-wrap text-break" style="max-width: 35vw; margin: 0 auto;">
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <section class="mt-5 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
                 <h1>
-                    Let's Grab A Coffee
+                    About US
                 </h1>
                 <p>
-                    We understand buying real esate online is not for everyone.
-                    feels like you need a coffee time consulting with us?<br>
-                    You are welcome to visit us at the closest branch to your house!
+                    Today, there's no need to spend all your precious time finding
+                    assets availabe on the market.
                 </p>
-                <h5>
-                    Click the closest pointer available at your location to get the branch information
-                </h5>
+                <p class="mb-5">
+                    <b>The Shop Company</b> will help you find the best real Estate
+                    which fits you. With a team of the best real estate agents we will
+                    help you find the one which fits you the most in the hottest location available!
+                </p>
+
+                <video controls autoplay class="intro-video rounded" style="max-width: 100%;">
+                    <source src="/multimedia/intro.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
+
+            </section>
+
+            <section class="mt-5">
+                <div class="container-fluid text-center text-center">
+                    <div class="row">
+                        <h1>
+                            Statistics
+                        </h1>
+                    </div>
+                    <div class="row">
+                        <p>In Progress...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="mt-5 mb-2 text-center text-wrap text-break" style="max-width: 35vw; margin: 0 auto;">
+                    <h1>
+                        Let's Grab A Coffee
+                    </h1>
+                    <p>
+                        We understand buying real esate online is not for everyone.
+                        feels like you need a coffee time consulting with us?<br>
+                        You are welcome to visit us at the closest branch to your house!
+                    </p>
+                    <h5>
+                        Click the closest pointer available at your location to get the branch information
+                    </h5>
+            </section>
+            
+            <div class="container justify-content-center h-50">
+                <div class="rounded h-100" id="map"></div>
             </div>
-        </section>
-        
-        <div class="container justify-content-center h-50">
-            <div class="rounded h-100" id="map"></div>
-        </div>
 
-        <div class="container d-flex my-5 justify-content-center align-items-center">
-            <div class="card w-50 rounded bg-primary border-0" id="map-result" style="display: none;">
-                <div class="card-body text-light">
-                    <h1 class="card-title" id="branch-name"></h1>
+            <div class="container d-flex my-5 justify-content-center align-items-center">
+                <div class="card w-50 rounded bg-primary border-0" id="map-result" style="display: none;">
+                    <div class="card-body text-light">
+                        <h1 class="card-title" id="branch-name"></h1>
 
-                    <div class="d-flex align-items-center mt-4">
-                        <i class="bi bi-geo-alt-fill me-2 fs-5"></i>
-                        <h4 class="mb-0" id="branch-address"></h4>
-                      </div>
+                        <div class="d-flex align-items-center mt-4">
+                            <i class="bi bi-geo-alt-fill me-2 fs-5"></i>
+                            <h4 class="mb-0" id="branch-address"></h4>
+                        </div>
 
-                    <div class="d-flex align-items-center mt-4">
-                        <i class="bi bi-telephone-fill me-2 fs-5"></i>
-                        <h4 class="mb-0" id="branch-phone"></h4>
-                      </div>
-                    
+                        <div class="d-flex align-items-center mt-4">
+                            <i class="bi bi-telephone-fill me-2 fs-5"></i>
+                            <h4 class="mb-0" id="branch-phone"></h4>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>

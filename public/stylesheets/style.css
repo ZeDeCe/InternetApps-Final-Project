@@ -24,6 +24,11 @@ a {
 
 .main-div {
   min-width: 700px;
+  
+}
+
+body .main-div {
+  height:100%
 }
 
 .hover-zoom:hover {
