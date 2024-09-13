@@ -19,9 +19,18 @@ DB_USER=
 DB_PASS=
 DB_URL=
 SESSION_SECRET=
+MAPS_TOKEN=
+TWITTER_ID=
+FACEBOOK_ID=
 ```
 Make sure to have the DB_URL end in a /  
 Session secret can be some random string- this will change in production so it is temporary
+
+TWITTER_ID && FACEBOOK_ID are the id from the link.
+example:
+for twitter = x.com/{TWITTER_ID}
+for facebook = facebook.com/profile.php?id={FACEBOOK_ID}
+MAPS Token is received from Google Cloud Platform by creating API Token for maps.
 
 Open visual studio and in a terminal execute the following:
 ```
