@@ -11,11 +11,21 @@
             <!-- User Management Section -->
             <div class="mb-4">
                 <h2>Manage Users</h2>
-                <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create New User</button>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" id="userSearch" placeholder="Search Users...">
-                    <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                <div class="mt-2">
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                        Create New User
+                    </button>
+                    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        Filter
+                    </button>
                 </div>
+                <div class="collapse mt-1" id="collapseFilter">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="userSearch" placeholder="Search Users...">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                    </div>
+                </div>
+                
                 <table class="table table-striped">
                     <thead>
                         <tr>
