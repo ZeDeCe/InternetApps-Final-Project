@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const Item = new mongoose.Schema ({
     // TODO @TOMER
-    _id: Number,
+    _id: mongoose.Types.ObjectId,
     name: {
         type: String,
         required: true
