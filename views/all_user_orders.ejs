@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+    </head>
+    <body class="bg-light">
+        <%- include('./partials/header'); %>
+        <div class="position-relative w-100 main-div">
+            <div class="w-100 mt-5 position-absolute top-50 start-50 h-100 translate-middle">
+                <div class="row justify-content-center">
+                    <!--User page main tab-->
+                    <div class="col-8 p-0">
+                        <div class="mx-2 p-3 bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <!--Display most recent order-->
+                                <b>SELECT BUTTON</b> <!--TODO: add select button to filter orders by time. for ADMIN add filter by user-->
+                            </div>
+                            <%- include('./partials/ordertable', {orders: orders}) %>
+                        </div>
+                    </div>
+                    <!--Re-purchase tab-->
+                    <div class="col-2 p-0">
+                        <div class="me-2 ms-2 p-3 bg-white">
+                            <b>Re-Purchase</b> <!-- TODO: add random items-->
+                            <ul class="list-group">
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 1
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 2
+                                </li>
+                                <li class="list-group-item bg-transparent border border-0">
+                                    ITEM 3
+                                </li>
+                            </ul>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--Logout button-->
+        <script>
+            $(document).ready(function(){
+                $("#logout").click(function(){
+                    location.href = '/logout'
+                })
+            })
+        </script>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

@@ -5,22 +5,13 @@
     </head>
     </body>
         <%- include('./partials/header'); %>
-        <div class="main-div">
-            <h3>
-                Username: <%=username%>
-            </h3>
-            <h3>
-                Is admin: <%=isadmin%>
-            </h3>
-            <button id="logout" class="btn btn-primary">Log out</button>
+    </header>
+    </body>
+        <div class="position-relative w-100" style="min-width: 700px;">
+            <div class="w-75 h-100 mt-5 bg-transparent position-absolute top-50 start-50 translate-middle">
+                
+            </div>
         </div>
-        <script>
-            $(document).ready(function() {
-                $("#logout").click(function() {
-                    location.href = "/logout"
-                })
-            })
-        </script>
-        <%- include('./partials/footer'); %>
+        <%- include('./partials/footer'); %>    
     </body>
 </html>
