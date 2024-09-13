@@ -9,66 +9,9 @@
     </body>
         <div class="position-relative w-100" style="min-width: 700px;">
             <div class="w-75 h-100 mt-5 bg-transparent position-absolute top-50 start-50 translate-middle">
-                <div class="bg-secondary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
-                    <div class="row">
-                        <div class="col-2">
-                            <b>ORDER ID</b><br>
-                            #123456789 <!-- Will be taken from an order -->
-                        </div>
-                        <div class="col-2">
-                            <b>DATE</b><br>
-                            September 7, 2024 <!-- Will be taken from an order -->
-                        </div>
-                        <div class="col-2">
-                            <b>TOTAL</b><br>
-                            $100 <!-- Will be taken from an order -->
-                        </div>
-                    </div>
-                </div>
-                <div class ="bg-light p-3 border rounded-bottom">
-                    <ul class="list-group"> <!-- Every list item will be created with a for loop that runs over the items array in the order-->
-                        <li class="list-group-item bg-light border border-0"> <!-- Maybe change list to columns?-->
-                            <div class="d-flex py-2 justify-content-between">
-                                <div class="container col-sm-2">
-                                    <center><img src="https://f.media-amazon.com/images/I/61pQHkontlL._AC_SL1500_.jpg" class="img-fluid" style="max-height: 150px;"></img></center>
-                                </div>
-                                <div class="w-75 px-2 align-top">
-                                    Angel Soft Toilet Paper, 16 Mega Rolls = 64 Regular Rolls, Soft and Strong Toilet Tissue
-                                </div>
-                                <div class="w-25 text-center fs-5">                             
-                                    12.49$
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light border border-0">
-                            <div class="d-flex py-2 justify-content-between">
-                                <div class="container col-sm-2">
-                                    <center><img src="https://f.media-amazon.com/images/I/61mK6WP1YkL._AC_UL320_.jpg" class="img-fluid" style="max-height: 150px;"></img></center> 
-                                </div>
-                                <div class="w-75 px-2 align-top">
-                                    Neutrogena Ultra Sheer Dry-Touch Water Resistant and Non-Greasy Sunscreen Lotion with Broad Spectrum SPF 70, 3 Fl Oz (Pack of 1)
-                                </div>
-                                <div class="w-25 text-center fs-5">                             
-                                    8.44$
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item bg-light border border-0"></li>
-                            <div class="d-flex py-2 justify-content-between">
-                                <div class="container col-sm-2">
-                                    <center><img src="https://f.media-amazon.com/images/I/51evW1YGQdL._SX300_SY300_QL70_FMwebp_.jpg" class="img-fluid" style="max-height: 150px;"></img></center> 
-                                </div>
-                                <div class="w-75 px-2 align-top">
-                                    Eakroo 6 Colors Lip Tint Stain Mini Liquid Lipstick, Korean Lip Gloss Moisturizing Natural, Multi-Use Lip and Cheek Tint, Non-Stick Cup, Lightweight, High Pigment, Long-Lasting, Vivid Color
-                                </div>
-                                <div class="w-25 text-center fs-5">                             
-                                    7.99$
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+                
             </div>
-        </div>    
+        </div>
+        <%- include('./partials/footer'); %>    
     </body>
 </html>
