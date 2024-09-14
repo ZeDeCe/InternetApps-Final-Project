@@ -72,7 +72,7 @@
                                 <b>Your Recent Order</b>
                                 <a href="/user_page/all_orders"><small><small>All Orders</small></small></a> <!-- TODO: add link to aal_user_orders page!-->
                             </div>
-                            <%- include('./partials/ordertable', {orders: orders}) %>
+                            <%- include('./partials/ordertable', {userorders: userorders, isAdmin: false}) %>
                         </div>
                     </div>
                     <!--Re-purchase tab-->

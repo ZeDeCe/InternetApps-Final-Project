@@ -13,7 +13,6 @@ const getRandomPriviousItems = async(user) => {
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
     const total = await getTotalOrderPrice(items)
-    console.log(total)
     const order = new Order({
         _id: new mongoose.Types.ObjectId(),
         user : user,
@@ -36,23 +35,35 @@ const getTotalOrderPrice = async (items) => {
 
 //CRUD: Get (read) order from DB by given order id
 const getOrderById = async (id) => {
-    return await Order.findById(id);
+    return await Order.findById(id).populate('items');
 };
 
-//CRUD: Get (read) all orders from DB
+//CRUD: Get (read) all orders from DB grouped by user
 const getOrders = async () => {
-    return await Order.find({});
+    return await Order.aggregate([
+        {$lookup: {
+            from: "items",
+            localField: "items",
+            foreignField: "_id",
+            as: "items"
+        }},
+        {$group: {_id: '$user', orders: {$push: '$$ROOT'}}}
+    ]);
 };
 
 //CRUD: Get (read) all specific user orders from DB
 const getAllUserOrders = async (user) => {
-    return await Order.find({user: user}).populate('items');
+    var orders = await Order.find({user: user}).populate('items');
+    orders = [{_id: (orders[0]).user, orders: orders}]
+    return orders
 };
 
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
     //await createOrder("shaqed", "2230-01-01", [new mongoose.Types.ObjectId("66e42f75ca954256999f419f")])
-    return (await Order.find({user}).sort({date: -1}).limit(1).populate('items'));
+    var order = (await Order.find({user}).sort({date: -1}).limit(1).populate('items'))
+    order = [{_id: (order[0]).user, orders: order}]
+    return order;
 };
 
 //Return the order date in a pretty format. converting "xxxx-xx-xxTxx:xx:xx.xxx+xx:xx" to "month x, xxxx"
