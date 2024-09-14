@@ -11,11 +11,29 @@
                     <!--User page main tab-->
                     <div class="col-8 p-0">
                         <div class="mx-2 p-3 bg-white">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <!--Display most recent order-->
-                                <b>SELECT BUTTON</b> <!--TODO: add select button to filter orders by time. for ADMIN add filter by user-->
+                            
+                            <div class="row">
+                                <div class="col-2 d-flex align-items-center">
+                                    <b>Viewing orders placed in</b>
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select" aria-label="Default select example" id="dateSearch">
+                                        <option value="all" selected>All time</option>
+                                        <option value="7d">Last 7 days</option>
+                                        <option value="30d">Last 30 days</option>
+                                        <option value="3m">Last 3 months</option>
+                                    </select> <!--TODO: add select button to filter orders by time. for ADMIN add filter by user-->
+                                </div>
+                                <% if(isAdmin) {%>
+                                <div class="col-2">
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text" id="addon-wrapping">@</span>
+                                        <input id="userSearch" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+                                      </div>
+                                </div>
+                                <%}%>
                             </div>
-                            <%- include('./partials/ordertable', {orders: orders}) %>
+                            <%- include('./partials/ordertable', {userorders: userorders}) %>
                         </div>
                     </div>
                     <!--Re-purchase tab-->
@@ -42,9 +60,47 @@
         <!--Logout button-->
         <script>
             $(document).ready(function(){
-                $("#logout").click(function(){
-                    location.href = '/logout'
-                })
+                $('#dateSearch').on('change', filterRows)
+                $('#userSearch').on('input', filterRows)
+
+                function filterRows() {
+                    var option = $('#dateSearch').val();
+                    var today = new Date();
+                    var startDate;
+                    switch (option) {
+                        case "3m":
+                            startDate = new Date(today.getTime() - 3 * 30 * 24 * 60 * 60 * 1000);
+                            break;
+                        case "7d":
+                            startDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            break;
+                        case "30d":
+                            startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            break;
+                        default:
+                            startDate = new Date(0);
+                            break;
+                    }
+                    <% if(isAdmin) {%> 
+                    var userSearch = ($('#userSearch').val()).toLowerCase(); 
+                    <%} %>
+                    $("[id^=\"singleorder\"]").each(function() {
+                        var date = new Date($(this).find('#actualDate').text());
+                        
+                        <% if(isAdmin) {%>
+                        var user = $(this).attr('user').toLowerCase() 
+                        <%} %>
+                        if(date >= startDate 
+                            <% if(isAdmin) {%>
+                            && (userSearch === '' || user.includes(userSearch))
+                            <%}%>
+                        ) {
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    })
+                }
             })
         </script>
         <%- include('./partials/footer'); %>
