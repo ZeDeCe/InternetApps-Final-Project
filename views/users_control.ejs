@@ -21,8 +21,25 @@
                 </div>
                 <div class="collapse mt-1" id="collapseFilter">
                     <div class="input-group mb-3">
+                        <span class="input-group-text">@</span>
                         <input type="text" class="form-control" id="userSearch" placeholder="Search Users...">
-                        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+                    </div>
+                    <div class="row justify-content-start mb-3">
+                        <div class="col-2">
+                            <div class="input-group">
+                                <span class="input-group-text">Is Admin</span>
+                                <div class="input-group-text">
+                                    <input id="isadminSearch" class="form-check-input mt-0" type="checkbox" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" data-provide="datepicker">
+                            <div class="input-group">
+                                <span class="input-group-text">Created Between</span>
+                                <input type="date" class="form-control" id="dateStartSearch">
+                                <input type="date" class="form-control" id="dateEndSearch">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -136,13 +153,39 @@
             </div>
         </div>
         <script>
+            
             $(document).ready(function() {
+                $('#isadminSearch').prop("indeterminate", true)
+
                 // Handle search
-                $('#userSearch').on('input', function(data) {
-                    const search = $(this).val()
-                    $("#userTableBody tr").hide()
-                    $("#userTableBody tr").filter(":contains('" + search + "')").show()
-                })
+                $('#userSearch').on('input', filterTable)
+
+                $('#isadminSearch').click(filterTable)
+                $('#dateStartSearch').on('input', filterTable)
+                $('#dateEndSearch').on('input', filterTable)
+
+                function filterTable() {
+                    const searchName = $('#userSearch').val().toLowerCase()
+                    const isAdmin = $('#isadminSearch').is(":checked");
+                    const startDate = new Date($('#dateStartSearch').val())
+                    const endDate = new Date($('#dateEndSearch').val())
+
+                    $('#userTableBody tr').each(function(){
+                        const myName = $(this).find('td:eq(0)').text().toLowerCase() + $(this).find('td:eq(1)').text().toLowerCase();
+                        const myIsAdmin = $(this).find('td:eq(2)').text() === 'true'
+                        const rowDate = new Date($(this).find('td:eq(3)').text());
+
+                        if ((searchName === '' || myName.includes(searchName))
+                            && ($('#isadminSearch').is(':indeterminate') || isAdmin === myIsAdmin)
+                            && ($('#dateStartSearch').val() === '' ||  startDate <= rowDate)
+                            && ($('#dateEndSearch').val() === '' ||  endDate >= rowDate)) {
+                                $(this).show()
+                        }
+                        else {
+                            $(this).hide()
+                        }
+                    })
+                }
 
                 // Handle delete user button click
                 $(document).on('click', '.deleteUser', function() {
