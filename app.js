@@ -7,11 +7,12 @@ const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
 const adminRouter = require('./routes/admin')
 const userRouter = require('./routes/user')
+const items = require('./routes/items')
 
 const session = require('express-session')
 const mongoose = require("mongoose")
 const MongoStore = require("connect-mongo");
-const items = require('./routes/items')
+
 
 mongoose.connect(process.env.DB_URL)
 const app = express();
