@@ -32,18 +32,25 @@
         </div>
     </div>
 </header>
-<script>
-    $(document).ready(function() {
-        $("#userpage-btn").click(function() {
-            location.href = '/user_page'
-        })
-        $("#homepage-btn").click(function(){
-            location.href = '/'
-        })
-        $("#cart-btn").click(function(){
-            location.href = '/cart'
-        })
-    })
 
-    // @Noa please add the search engine routine :)
-</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#homepage-btn").click(function(){
+                location.href = '/items';
+            });
+
+            $("#userpage-btn").click(function() {
+                location.href = '/user_page';
+            });
+
+            $("#cart-btn").click(function(){
+                location.href = '/cart';
+            });
+            
+            $("#searchButton").click(function() {
+                $("#search-form").submit();
+        });
+        });
+    </script>
+
