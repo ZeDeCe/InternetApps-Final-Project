@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+    </head>
+    <header>
+        <%- include('./partials/header'); %>
+    </header>
+    </body>
+        <h3>
+            You are an admin!
+        </h3>
+        <h3>
+            Username: <%=username%>
+        </h3>
+        <button id="logout" class="btn btn-primary">Log out</button>
+
+        
+        <script>
+            $(document).ready(function() {
+                $("#logout").click(function() {
+                    location.href = "/logout"
+                })
+            })
+        </script>
+    </body>
+</html>
