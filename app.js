@@ -7,7 +7,6 @@ const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
 const adminRouter = require('./routes/admin')
 const userRouter = require('./routes/user')
-const items = require('./routes/items')
 
 const session = require('express-session')
 const mongoose = require("mongoose")
