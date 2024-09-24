@@ -8,7 +8,7 @@ async function login(username, password) {
 
 // This function is for the register process
 async function register(username, password, name) {
-    return userService.createUser({_id: username, password, name, isAdmin: false})
+    return userService.createUser({_id: username, password, name, isAdmin: false, createAt: Date.now()})
 }
 
 
