@@ -9,8 +9,6 @@ async function displayUsers(req, res) {
 }
 
 
-
-
 module.exports = {
     displayMainPage,
     displayUsers

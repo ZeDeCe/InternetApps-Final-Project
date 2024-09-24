@@ -49,6 +49,7 @@
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>Is Admin</th>
+                            <th>Created</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -58,6 +59,7 @@
                                 <td><%= user._id %></td>
                                 <td><%= user.name %></td>
                                 <td><%= user.isAdmin %></td>
+                                <td realdate="<%= user.createAt %>"><%= user.createAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%></td>
                                 <td id="actions">
                                     <button class="btn btn-warning btn-sm editUser" data-id="<%= user._id %>">Edit</button>
                                     <button class="btn btn-danger btn-sm deleteUser" data-id="<%= user._id %>">Delete</button>
@@ -155,11 +157,28 @@
         <script>
             
             $(document).ready(function() {
-                $('#isadminSearch').prop("indeterminate", true)
+                // Handle annoying checkbox
+                adminCheckbox = $('#isadminSearch');
+                adminCheckbox.prop("indeterminate", true)
+                checkboxState = 0;
+                adminCheckbox.click(() => {
+                    checkboxState = (checkboxState+1) % 3
+                    console.log(checkboxState)
+                    switch(checkboxState) {
+                        case 0:
+                            adminCheckbox.prop("indeterminate", true);
+                            break;
+                        case 1:
+                            adminCheckbox.prop("checked", true);
+                            break;
+                        case 2: 
+                            adminCheckbox.prop("checked", false);
+                            break;
+                    }
+                })
 
-                // Handle search
+                // Handle search filters
                 $('#userSearch').on('input', filterTable)
-
                 $('#isadminSearch').click(filterTable)
                 $('#dateStartSearch').on('input', filterTable)
                 $('#dateEndSearch').on('input', filterTable)
@@ -173,7 +192,7 @@
                     $('#userTableBody tr').each(function(){
                         const myName = $(this).find('td:eq(0)').text().toLowerCase() + $(this).find('td:eq(1)').text().toLowerCase();
                         const myIsAdmin = $(this).find('td:eq(2)').text() === 'true'
-                        const rowDate = new Date($(this).find('td:eq(3)').text());
+                        const rowDate = new Date($(this).find('td:eq(3)').attr("realdate"));
 
                         if ((searchName === '' || myName.includes(searchName))
                             && ($('#isadminSearch').is(':indeterminate') || isAdmin === myIsAdmin)
