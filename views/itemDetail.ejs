@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= item.name %> - Lego Item</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .item-detail { border: 1px solid #ddd; padding: 20px; }
+        .item-detail img { max-width: 300px; height: auto; }
+    </style>
+</head>
+<body>
+    <div class="item-detail">
+        <h1><%= item.name %></h1>
+        <img src="<%= item.picture %>" alt="<%= item.name %>">
+        <p>Price: $<%= item.price.toFixed(2) %></p>
+        <p>Description: <%= item.description %></p>
+        <p>Average Rating: <%= item.ratings.length > 0 ? (item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length).toFixed(1) : 'No ratings yet' %></p>
+        <a href="/items">Back to All Items</a>
+    </div>
+</body>
+</html>

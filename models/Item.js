@@ -1,25 +1,25 @@
-//@Tomer
+const mongoose = require('mongoose');
 
-const mongoose = require('mongoose')
-
-const Item = new mongoose.Schema ({
-    // TODO @TOMER
-    _id: mongoose.Types.ObjectId,
+const ItemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
     },
+    slug: {
+        type: String,
+        required: true,
+        unique: true
+    },
     picture: {
-        type: String, //Url of item picture
+        type: String,
         required: true
     },
     price: {
         type: Number,
         required: true
-
     },
     description: String,
-    // You may add more features if you'd like :)
-})
+    ratings: [Number]
+});
 
-module.exports = mongoose.model("Item", Item)
+module.exports = mongoose.model('Item', ItemSchema);

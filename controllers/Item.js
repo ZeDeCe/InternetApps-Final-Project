@@ -1,68 +1,72 @@
 const Item = require('../models/Item');
 
 const itemController = {
-    // Get a single item by ID
-    getItem: async (req, res) => {
+    getAllItems: async (req, res) => {
         try {
-            const item = await Item.findById(req.params.id);
-            if (!item) {
-                return res.status(404).json({ message: 'Item not found' });
-            }
-            res.render('item', { item });
+            const items = await Item.find();
+            res.render('items', { items });
         } catch (error) {
-            res.status(500).json({ message: 'Server error', error: error.message });
+            res.status(500).render('error', { message: 'Error fetching items', error: error.message });
         }
     },
 
-    // Create a new item
+    getItem: async (req, res) => {
+        try {
+            const item = await Item.findOne({ slug: req.params.slug });
+            if (!item) {
+                return res.status(404).render('error', { message: 'Item not found' });
+            }
+            res.render('itemDetail', { item });
+        } catch (error) {
+            res.status(500).render('error', { message: 'Server error', error: error.message });
+        }
+    },
+
     createItem: async (req, res) => {
         try {
             const newItem = new Item(req.body);
             await newItem.save();
-            res.status(201).json(newItem);
+            res.redirect('/items');
         } catch (error) {
-            res.status(400).json({ message: 'Error creating item', error: error.message });
+            res.status(400).render('error', { message: 'Error creating item', error: error.message });
         }
     },
 
-    // Update an item
     updateItem: async (req, res) => {
         try {
             const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
             if (!updatedItem) {
-                return res.status(404).json({ message: 'Item not found' });
+                return res.status(404).render('error', { message: 'Item not found' });
             }
-            res.json(updatedItem);
+            res.redirect('/items');
         } catch (error) {
-            res.status(400).json({ message: 'Error updating item', error: error.message });
+            res.status(400).render('error', { message: 'Error updating item', error: error.message });
         }
     },
 
-    // Delete an item
     deleteItem: async (req, res) => {
         try {
             const deletedItem = await Item.findByIdAndDelete(req.params.id);
             if (!deletedItem) {
-                return res.status(404).json({ message: 'Item not found' });
+                return res.status(404).render('error', { message: 'Item not found' });
             }
-            res.json({ message: 'Item deleted successfully' });
+            res.redirect('/items');
         } catch (error) {
-            res.status(500).json({ message: 'Error deleting item', error: error.message });
+            res.status(500).render('error', { message: 'Error deleting item', error: error.message });
         }
     },
 
-    // Add a rating to an item
     addRating: async (req, res) => {
         try {
             const item = await Item.findById(req.params.id);
             if (!item) {
-                return res.status(404).json({ message: 'Item not found' });
+                return res.status(404).render('error', { message: 'Item not found' });
             }
-            item.ratings.push(req.body);
+            item.ratings.push(Number(req.body.rating));
             await item.save();
-            res.json(item);
+            res.redirect(`/items/${req.params.id}`);
         } catch (error) {
-            res.status(400).json({ message: 'Error adding rating', error: error.message });
+            res.status(400).render('error', { message: 'Error adding rating', error: error.message });
         }
     }
 };
