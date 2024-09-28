@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\config",
+    "\\controllers",
+    "\\models",
+    "\\routes",
+    "\\views"
+  ],
+  "SelectedNode": "\\controllers\\Item.js",
+  "PreviewInSolutionExplorer": false
+}
