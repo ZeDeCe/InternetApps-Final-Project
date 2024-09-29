@@ -3,24 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lego Items</title>
+    <title>Items</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .item { border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
-        .item img { max-width: 200px; }
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .item-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .item-card img {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
 </head>
 <body>
-    <h1>Lego Items</h1>
-    <% items.forEach(item => { %>
-        <div class="item">
-            <h2><%= item.name %></h2>
-            <img src="<%= item.picture %>" alt="<%= item.name %>">
-            <p>Price: $<%= item.price.toFixed(2) %></p>
-            <p>Description: <%= item.description %></p>
-            <p>Average Rating: <%= item.ratings.length > 0 ? (item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length).toFixed(1) : 'No ratings yet' %></p>
-            <a href="/items/<%= item._id %>">View Details</a>
-        </div>
-    <% }); %>
+    <h1>Items</h1>
+    <div class="item-grid">
+        <% items.forEach(item => { %>
+            <div class="item-card">
+                <a href="/items/<%= item.slug %>">
+                    <img src="/images/<%= item.picture %>" alt="<%= item.name %>">
+                    <h2><%= item.name %></h2>
+                    <p>Price: $<%= item.price.toFixed(2) %></p>
+                </a>
+            </div>
+        <% }); %>
+    </div>
 </body>
 </html>

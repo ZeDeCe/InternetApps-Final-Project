@@ -3,21 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= item.name %> - Lego Item</title>
+    <title><%= item.name %> - Details</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .item-detail { border: 1px solid #ddd; padding: 20px; }
-        .item-detail img { max-width: 300px; height: auto; }
+        .item-detail {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .item-detail img {
+            max-width: 100%;
+            height: auto;
+        }
+        .rating-form {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="item-detail">
         <h1><%= item.name %></h1>
-        <img src="<%= item.picture %>" alt="<%= item.name %>">
+        <img src="/images/<%= item.picture %>" alt="<%= item.name %>">
         <p>Price: $<%= item.price.toFixed(2) %></p>
         <p>Description: <%= item.description %></p>
-        <p>Average Rating: <%= item.ratings.length > 0 ? (item.ratings.reduce((sum, rating) => sum + rating, 0) / item.ratings.length).toFixed(1) : 'No ratings yet' %></p>
-        <a href="/items">Back to All Items</a>
+        
+        <h2>Ratings</h2>
+        <% if (item.ratings && item.ratings.length > 0) { %>
+            <p>Average Rating: <%= (item.ratings.reduce((a, b) => a + b, 0) / item.ratings.length).toFixed(1) %> / 5</p>
+            <p>Total Ratings: <%= item.ratings.length %></p>
+        <% } else { %>
+            <p>No ratings yet.</p>
+        <% } %>
+
+        <form class="rating-form" action="/items/<%= item._id %>/rate" method="POST">
+            <label for="rating">Rate this item:</label>
+            <select name="rating" id="rating" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="submit">Submit Rating</button>
+        </form>
+
+        <a href="/items">Back to Items</a>
     </div>
 </body>
 </html>

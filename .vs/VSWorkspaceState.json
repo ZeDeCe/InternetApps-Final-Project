@@ -4,9 +4,13 @@
     "\\config",
     "\\controllers",
     "\\models",
+    "\\public",
+    "\\public\\Images",
     "\\routes",
-    "\\views"
+    "\\services",
+    "\\views",
+    "\\views\\partials"
   ],
-  "SelectedNode": "\\controllers\\Item.js",
+  "SelectedNode": "\\CreateSamples.js",
   "PreviewInSolutionExplorer": false
 }

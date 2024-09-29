@@ -27,6 +27,7 @@ app.use(session({
 }))
 
 app.set("view engine", "ejs")
+app.use(express.static('public'));
 app.use(express.json());
 app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
@@ -38,7 +39,7 @@ app.use('/user_page', userpageRouter)
 app.use('/about', aboutRouter);
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
-app.use(express.static('public'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -55,5 +56,4 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
 app.listen(process.env.PORT)
