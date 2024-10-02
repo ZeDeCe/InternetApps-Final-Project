@@ -67,8 +67,7 @@
                 var onPassword = false
                 $("#continue").click(function() {
                     username = $("#username").val()
-                    console.log(username)
-                    $.post('/login/validate_username', {username}).done(function(data) {
+                    $.post('/user/validate_username', {username}).done(function(data) {
                         if(data) {
                             $("#user-tab").addClass("d-none")
                             $("#password-tab").removeClass("d-none")
@@ -96,7 +95,6 @@
                     if(e.which == 13) { // Pressed enter
                         if (!onPassword) {
                             $("#continue").click()
-                            console.log("")
                         } else {
                             $("#sign-in").click()
                         }
