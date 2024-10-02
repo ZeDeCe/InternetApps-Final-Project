@@ -2,18 +2,25 @@ const mongoose = require('mongoose')
 const Order = require('../models/Order')
 const Item = require('../models/Item')
 
-//TODO: Add function that returns 3 random items from past orders (this will show up on a tab "re-purchase")
-const getRandomPriviousItems = async(user) => {
-    const orders = await Order.find({user: user});
-    const random_order = orders[Math.floor(Math.random()*orders.length)];
-    const items = random_order.items
-    const random_item = items[Math.floor(Math.random()*items.length)]; //TODO: finish this
+//TODO: Add function that returns 3 random items that may interest our clients.
+const getRandomItems = async(user) => {
+    try {
+        const randomItems = await Item.aggregate([
+          { $sample: { size: 3 } } 
+        ]);
+    
+        console.log(randomItems);
+        return randomItems;
+      } catch (err) {
+            console.error('Error fetching random items:', err);
+            throw err;
+      }
 };
 
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
-    const total = await getTotalOrderPrice(items)
-    const order = new Order({
+    var total = await getTotalOrderPrice(items)
+    var order = new Order({
         _id: new mongoose.Types.ObjectId(),
         user : user,
         date : date,
@@ -27,7 +34,7 @@ const createOrder = async(user, date, items) => {
 const getTotalOrderPrice = async (items) => {
     var totalPrice = 0;
     for (let i = 0; i < items.length; i++) {
-        const item = await Item.findById(items[i], 'price');
+        var item = await Item.findById(items[i], 'price');
         totalPrice += item.price
     }
     return totalPrice
@@ -54,15 +61,22 @@ const getOrders = async () => {
 //CRUD: Get (read) all specific user orders from DB
 const getAllUserOrders = async (user) => {
     var orders = await Order.find({user: user}).populate('items');
-    orders = [{_id: (orders[0]).user, orders: orders}]
+    if (orders.length == 0){
+        return null
+    }
+    orders = [{_id: (orders[0]).user, orders: orders}];
     return orders
 };
 
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
-    //await createOrder("shaqed", "2230-01-01", [new mongoose.Types.ObjectId("66e42f75ca954256999f419f")])
+    //await createOrder("shaqedmov@gmail.com", "2024-10-02", [new mongoose.Types.ObjectId("66fd1468162c0099b4c5d8ad")])
+    //getRandomItems();
     var order = (await Order.find({user}).sort({date: -1}).limit(1).populate('items'))
-    order = [{_id: (order[0]).user, orders: order}]
+    if (order.length == 0){
+        return null;
+    }
+    order =  [{_id: (order[0]).user, orders: order}];
     return order;
 };
 
@@ -73,7 +87,7 @@ const getOrderPrettyDate = async(order) => {
 
 //CRUD: Update given order data by id
 const updateOrder = async (id, items) => {
-    const order = await getOrderById(id);
+    var order = await getOrderById(id);
     if (!order)
         return null;
 
@@ -86,7 +100,7 @@ const updateOrder = async (id, items) => {
 
 //CRUD: Delete given order by id
 const deleteOrder = async (id) => {
-    const order = await getOrderById(id);
+    var order = await getOrderById(id);
     if(!order)
         return null;
 
@@ -104,5 +118,5 @@ module.exports = {
     getUserLatestOrder,
     getTotalOrderPrice,
     getOrderPrettyDate,
-    getRandomPriviousItems
+    getRandomItems
 }

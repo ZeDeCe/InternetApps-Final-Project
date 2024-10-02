@@ -6,14 +6,19 @@
     <body class="bg-light">
         <%- include('./partials/header'); %>
         <div class="position-relative w-100 main-div">
+            <div class="ms-3 mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                  </svg>
+                <a href="/user_page/" class="text-dark text-decoration-none" >Back</a>
+            </div>
             <div class="w-100 mt-5 position-absolute top-50 start-50 h-100 translate-middle">
                 <div class="row justify-content-center">
                     <!--User page main tab-->
-                    <div class="col-8 p-0">
+                    <div class="col-8 mb-2 p-0">
                         <div class="mx-2 p-3 bg-white">
-                            
                             <div class="row">
-                                <div class="col-2 d-flex align-items-center">
+                                <div class="col-3 d-flex align-items-center">
                                     <b>Viewing orders placed in</b>
                                 </div>
                                 <div class="col-2">
@@ -37,22 +42,25 @@
                         </div>
                     </div>
                     <!--Re-purchase tab-->
-                    <div class="col-2 p-0">
-                        <div class="me-2 ms-2 p-3 bg-white">
-                            <b>Re-Purchase</b> <!-- TODO: add random items-->
-                            <ul class="list-group">
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 1
-                                </li>
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 2
-                                </li>
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 3
-                                </li>
-                            </ul>
-                        </div> 
-                    </div>
+                    <% if(!isAdmin) {%>
+                        <div class="col-2 p-0">
+                            <div class="me-2 ms-2 p-3 bg-white">
+                                <b>You May be intrested in</b> <!-- TODO: add random items-->
+                                <ul class="list-group align-center">
+                                    <% for(let i=0; i < items_rebuy.length; i++) { %>
+                                        <li class="list-group-item bg-transparent border border-0 text-center">
+                                            <div class="py-2 text-truncate align-center">
+                                                <img src= "<%=items_rebuy[i].picture%>" class="img-fluid" style="max-width: 100px; max-height: 125px;"></img>
+                                                <div class="w-75 px-2 align-top">
+                                                    <%=items_rebuy[i].name%> <!--TODO: make item link href to product page-->
+                                                </div>
+                                            </div>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </div> 
+                        </div>
+                    <%}%>
                 </div>
             </div>
         </div>
