@@ -10,7 +10,7 @@ async function deleteUser(username) {
             return "Cannot find user to delete";
         }
     } catch(e) {
-        return "An error with the DB has occured!";
+        return e.errors
     }
 }
 
@@ -25,7 +25,7 @@ async function updateUser(username, data) {
         }
         await user.save()
     } catch(e) {
-        return "An error with the DB has occured!"
+        return e.errors
     }
 }
 
@@ -34,14 +34,12 @@ async function createUser(user) {
     try {
         const newUser = new User(user)
         newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
-        if(user._id && !await validateUsername(user._id) && passwordPolicy(newUser.password)) {
-            await newUser.save()
-            return
-        }
-        return "Cannot create this user"
+
+        await newUser.save()
+        return
     }
     catch(e) {
-        return "An error with the DB has occured!"
+        return e.errors
     }
 }
 
@@ -63,12 +61,7 @@ async function validateUsername(username) {
     return user != null;
 }
 
-function passwordPolicy(password) {
-    if(password.length < 6) {
-        return false
-    }
-    return true
-}
+
 
 module.exports = {
     deleteUser,

@@ -24,11 +24,11 @@
                     </div>
                     <div class="form-data mt-1">
                         <label for="password">Password</label>
-                        <input type="text" id="password" class="form-control" name="password" placeholder="At least 6 characters">
+                        <input type="password" id="password" class="form-control" name="password" placeholder="At least 6 characters">
                     </div>
                     <div class="form-data mt-1">
                         <label for="password-again">Re-enter password</label>
-                        <input type="text" id="password-again" class="form-control" name="password-again" placeholder="One more time">
+                        <input type="password" id="password-again" class="form-control" name="password-again" placeholder="One more time">
                     </div>
                     <br>
                     <button id="create" class="btn btn-primary w-100">Create account</button>
@@ -60,17 +60,18 @@
                         displayError("Passwords do not match!");
                         return
                     }
-                    if (name.indexOf(" ") == -1) {
-                        displayError("Must provide first and last name!");
-                        return
-                    }
                     $.post('/login/register', {username, password, name, email}).done(function(data) {
                         if(data == "Success") {
                             $.post('/login', {username, password})
                             location.href = "/"
                         }
                         else {
-                            displayError(data);
+                            console.log(data)
+                            for (var e in data) {
+                                displayError(data[e].message); // We'll display the first error out of the bunch
+                                return
+                            }
+                            
                         }
                     })
                 })
