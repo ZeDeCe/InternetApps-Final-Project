@@ -45,7 +45,10 @@
                 <div id="password-tab" class="tab d-none">
                     <div class="form-data mt-1">
                         <label for="password">Password</label>
-                        <input id="password" type="password" class="form-control" name="password">
+                        <div class="input-group mt-2 align-items-center">    
+                            <input id="password" type="password" class="form-control" name="password">
+                            <button class="bi bi-eye-slash btn btn-outline-secondary" type="button" id="togglePasswordDisplay"></button>
+                        </div>
                     </div>
                     <div class="input-group mt-2 align-items-center">
                         <input id="keepsignedin" class="form-check-input mt-0 me-2" type="checkbox" value="">
@@ -99,6 +102,16 @@
                         }
                     }
                 });
+                current = "bi-eye-slash"
+                $("#togglePasswordDisplay").click(function() {
+                    old = current
+                    current = current == "bi-eye-slash" ? "bi-eye" : "bi-eye-slash"
+                    passwordType = current == "bi-eye-slash" ? "password" : "text"
+                    $(this).removeClass(old);
+                    $(this).addClass(current);
+                    $("#password").attr("type", passwordType);
+                    
+                })
             })
         </script>
     </body>
