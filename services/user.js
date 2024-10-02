@@ -34,7 +34,7 @@ async function createUser(user) {
     try {
         const newUser = new User(user)
         newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
-        if(user._id && !await validateUsername(user._id)) {
+        if(user._id && !await validateUsername(user._id) && passwordPolicy(newUser.password)) {
             await newUser.save()
             return
         }
@@ -61,6 +61,13 @@ async function isAdmin(username) {
 async function validateUsername(username) {
     const user = await User.findOne({_id: username})
     return user != null;
+}
+
+function passwordPolicy(password) {
+    if(password.length < 6) {
+        return false
+    }
+    return true
 }
 
 module.exports = {

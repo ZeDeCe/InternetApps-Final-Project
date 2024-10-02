@@ -11,20 +11,24 @@
                 </h1>
                 <div id="user-tab" class="tab">
                     <div class="form-data mt-1">
-                        <label for="name">Your name</label>
-                        <input type="text" id="name" class="form-control" name="name" autofocus="autofocus" placeholder="First and last name">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="Your username">
                     </div>
                     <div class="form-data mt-1">
-                        <label for="username">Mobile number or email</label>
-                        <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="youremail@email.com">
+                        <label for="name">Your name</label>
+                        <input type="text" id="name" class="form-control" name="name" placeholder="First and last name">
+                    </div>
+                    <div class="form-data mt-1">
+                        <label for="email">Your email</label>
+                        <input type="text" id="email" class="form-control" name="email" placeholder="youremail@email.com">
                     </div>
                     <div class="form-data mt-1">
                         <label for="password">Password</label>
-                        <input type="text" id="password" class="form-control" name="password" autofocus="autofocus" placeholder="At least 6 characters">
+                        <input type="text" id="password" class="form-control" name="password" placeholder="At least 6 characters">
                     </div>
                     <div class="form-data mt-1">
                         <label for="password-again">Re-enter password</label>
-                        <input type="text" id="password-again" class="form-control" name="password-again" autofocus="autofocus" placeholder="">
+                        <input type="text" id="password-again" class="form-control" name="password-again" placeholder="One more time">
                     </div>
                     <br>
                     <button id="create" class="btn btn-primary w-100">Create account</button>
@@ -48,6 +52,7 @@
             $(document).ready(function(){
                 $("#create").click(function() {
                     username = $("#username").val()
+                    email = $("#email").val()
                     password = $("#password").val()
                     passagain = $("#password-again").val()
                     name = $("#name").val()
@@ -59,7 +64,7 @@
                         displayError("Must provide first and last name!");
                         return
                     }
-                    $.post('/login/register', {username, password, name}).done(function(data) {
+                    $.post('/login/register', {username, password, name, email}).done(function(data) {
                         if(data == "Success") {
                             $.post('/login', {username, password})
                             location.href = "/"
