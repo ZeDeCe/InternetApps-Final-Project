@@ -24,7 +24,10 @@
                     </div>
                     <div class="form-data mt-1">
                         <label for="password">Password</label>
-                        <input type="password" id="password" class="form-control" name="password" placeholder="At least 6 characters">
+                        <div class="input-group mt-2 align-items-center">
+                            <input type="password" id="password" class="form-control" name="password" placeholder="At least 6 characters">
+                            <button class="bi bi-eye-slash btn btn-outline-secondary" type="button" id="togglePasswordDisplay"></button>
+                        </div>
                     </div>
                     <div class="form-data mt-1">
                         <label for="password-again">Re-enter password</label>
@@ -50,6 +53,16 @@
                 $("#errormsg").text(msg).removeClass("d-none")
             }
             $(document).ready(function(){
+                current = "bi-eye-slash"
+                $("#togglePasswordDisplay").click(function() {
+                    old = current
+                    current = current == "bi-eye-slash" ? "bi-eye" : "bi-eye-slash"
+                    passwordType = current == "bi-eye-slash" ? "password" : "text"
+                    $(this).removeClass(old);
+                    $(this).addClass(current);
+                    $("#password").attr("type", passwordType);
+                    $("#password-again").attr("type", passwordType);
+                })
                 $("#create").click(function() {
                     username = $("#username").val()
                     email = $("#email").val()
