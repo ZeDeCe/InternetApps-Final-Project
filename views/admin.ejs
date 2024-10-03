@@ -29,10 +29,17 @@
     
         <script>
             $(document).ready(function() {
+                $("#users_manage").click(function() {
+                    location.href = "/admin/users"
+                })
+                $("#orders_manage").click(function() {
+                    location.href = "/admin/orders"
+                })
                 $("#logout").click(function() {
                     location.href = "/logout"
                 })
             })
         </script>
+        <%- include('./partials/footer'); %>
     </body>
 </html>
