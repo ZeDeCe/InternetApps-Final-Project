@@ -10,7 +10,8 @@ const User = new mongoose.Schema ({
         type: Boolean,
         default: false
     },
-    name: String
+    name: String,
+    createAt: Date
 })
 
 module.exports = mongoose.model("User", User)
