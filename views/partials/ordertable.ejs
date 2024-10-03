@@ -36,13 +36,13 @@
                             <li class="list-group-item border border-0">
                                 <div class="d-flex py-2 justify-content-between">
                                     <div class="container col-sm-2">
-                                        <img src= "<%=order.items[i].picture%>" class="img-fluid" style="max-height: 150px;"></img>
+                                        <img src= "<%=order.items[i].item.picture%>" class="img-fluid" style="max-height: 150px;"></img>
                                     </div>
                                     <div class="w-75 px-2 align-top">
-                                        <%=order.items[i].name%> <!--TODO: make item link href to product page-->
+                                        <%=order.items[i].item.name%> <!--TODO: make item link href to product page-->
                                     </div>
                                     <div class="w-25 text-center fs-5">                             
-                                        $<%=order.items[i].price%>
+                                        $<%=order.items[i].item.price%>
                                     </div>
                                 </div>
                             </li>

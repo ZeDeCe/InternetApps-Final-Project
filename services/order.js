@@ -9,7 +9,6 @@ const getRandomItems = async(user) => {
           { $sample: { size: 3 } } 
         ]);
     
-        console.log(randomItems);
         return randomItems;
       } catch (err) {
             console.error('Error fetching random items:', err);
@@ -19,6 +18,8 @@ const getRandomItems = async(user) => {
 
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
+    console.log(items)
+    console.log(items.length)
     var total = await getTotalOrderPrice(items)
     var order = new Order({
         _id: new mongoose.Types.ObjectId(),
@@ -34,8 +35,14 @@ const createOrder = async(user, date, items) => {
 const getTotalOrderPrice = async (items) => {
     var totalPrice = 0;
     for (let i = 0; i < items.length; i++) {
-        var item = await Item.findById(items[i], 'price');
-        totalPrice += item.price
+        var item = items[i]
+        console.log(item)
+        var count = item.quantity
+        console.log(count)
+        var itemPrice = await Item.findById(item.item, 'price');
+        console.log(itemPrice)
+        totalPrice += itemPrice.price*count;
+        console.log(totalPrice)
     }
     return totalPrice
 };
@@ -48,19 +55,39 @@ const getOrderById = async (id) => {
 //CRUD: Get (read) all orders from DB grouped by user
 const getOrders = async () => {
     return await Order.aggregate([
-        {$lookup: {
-            from: "items",
-            localField: "items",
-            foreignField: "_id",
-            as: "items"
-        }},
-        {$group: {_id: '$user', orders: {$push: '$$ROOT'}}}
+        { $unwind: "$items" },
+        {
+            $lookup: {
+                from: "items",
+                localField: "items.item",
+                foreignField: "_id",
+                as: "items.item"
+            }
+        },
+        {
+            $unwind: {
+                path: "$items.item",
+                preserveNullAndEmptyArrays: true
+            }
+        },
+        {
+            $group: {
+                _id: "$_id",
+                user: { $first: "$user" },
+                items: { $push: "$items" },
+                total_price: { $first: "$total_price" }
+            }
+        },
+        { $group: { _id: '$user', orders: { $push: '$$ROOT' } } }
     ]);
 };
 
 //CRUD: Get (read) all specific user orders from DB
 const getAllUserOrders = async (user) => {
-    var orders = await Order.find({user: user}).populate('items');
+    var orders = await Order.find({user: user}).populate({
+        path: "items.item",
+        model: "Item"
+    });
     if (orders.length == 0){
         return null
     }
@@ -70,9 +97,16 @@ const getAllUserOrders = async (user) => {
 
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
-    //await createOrder("shaqedmov@gmail.com", "2024-10-02", [new mongoose.Types.ObjectId("66fd1468162c0099b4c5d8ad")])
+    //await createOrder("shaqedmov@gmail.com", "2024-10-02",[{item: new mongoose.Types.ObjectId("66fd4d2f045f1cac4ec42f5d"), quantity: 6}, {item: new mongoose.Types.ObjectId("66e45a5f62c032dadd379aec"), quantity: 1}])
     //getRandomItems();
-    var order = (await Order.find({user}).sort({date: -1}).limit(1).populate('items'))
+    var order = await Order.find({ user })
+    .sort({ date: -1 })
+    .limit(1)
+    .populate({
+        path: "items.item",
+        model: "Item"
+    });
+    console.log(order[0].items)
     if (order.length == 0){
         return null;
     }
