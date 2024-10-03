@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', {title: "Cart"}); %>
+    <style>
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        .quantity-select {
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/header'); %>
+    <div class="main-div">
+        <div class="container mt-5">
+            <h1 class="mb-4">Your Shopping Cart</h1>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Items</h5>
+                            <ul class="list-group list-group-flush" id="cartItems">
+                                <%for (let i = 0; i< items.length; i++) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <img src=<%= items[i]._id.picture %> alt=<%= items[i]._id.name %> class="product-image">
+                                            <a href="#" class="text-decoration-none text-dark"><%= items[i]._id.name %></a>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="price">$<%= items[i]._id.price * items[i].quantity %></span>
+                                            <select class="form-select quantity-select mx-3" name="update-item" data-item-id="<%= items[i]._id._id%>">
+                                                <%for (let j = 1; j <= 10; j++) { %>
+                                                    <option value="<%= j%>" <%= items[i].quantity === j ? 'selected' : '' %> ><%= j%></option>
+                                                <% } %>
+                                            </select>
+                                            <button class="btn btn-danger btn-sm" name="remove-item" data-item-id="<%= items[i]._id._id%>">Remove</button>
+                                        </div>
+                                    </li>        
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Subtotal</span>
+                                    <strong>$<%=orderPrice%></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Shipping</span>
+                                    <strong><%= items.length ? "$" + shippingPrice : "---" %></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total</span>
+                                    <strong>$<%=orderPrice+shippingPrice%></strong>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary btn-lg w-100 <%= items.length ? "" : "disabled" %>" id="checkout-btn">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/footer'); %>
+    <script>
+
+        $(document).ready(function() {
+            $("#checkout-btn").click(function() {
+                location.href = '/cart/checkout'
+            })
+        })
+
+        document.getElementsByName("remove-item").forEach(btn => btn.onclick = async() => {
+            event.preventDefault()
+
+            const id = btn.getAttribute("data-item-id");
+            await fetch('/cart/delete', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: id  })
+            }).then(window.location.reload(true));
+        });
+
+        document.getElementsByName("update-item").forEach(select => select.onchange = async() => {
+            event.preventDefault()
+            
+            const id = select.getAttribute("data-item-id");
+            const newQuantity = Number(select.value);
+            
+            await fetch('/cart/update', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ id: id, quantity: newQuantity })
+            }).then(window.location.reload(true));
+        });
+
+    </script>
+</body>
+</html>

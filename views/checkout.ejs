@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head', {title: "Cart"}); %>
+</head>
+<body class="bg-light">
+    <div class="container mt-4 mb-5">
+        <h1 class="mb-4">Checkout</h1>
+        <form id="checkoutForm">
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <!-- Shipping Information -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-light fw-bold py-3">
+                            Shipping Information
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="first-name" placeholder="First name" required>
+                                        <label for="first-name">First name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="last-name" placeholder="Last name" required>
+                                        <label for="last-name">Last name</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                                        <label for="email">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
+                                        <label for="phone">Phone Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="address" placeholder="Address" required>
+                                        <label for="address">Address</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="city" placeholder="City" required>
+                                        <label for="city">City</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating mb-3">
+                                        <select class="form-select" id="country" required>
+                                            <option value="Israel">Israel</option>
+                                        </select>
+                                        <label for="country">Country</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="zip" placeholder="Zip Code" required>
+                                        <label for="zip">Zip Code</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Information -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light fw-bold py-3">
+                            Payment Information
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="card-owner" placeholder="Name on card" required>
+                                        <label for="card-owner">Name on card</label>
+                                        <small class="text-muted">Full name as displayed on card</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating mb-3 position-relative">
+                                        <input type="text" class="form-control" id="card-number" name="card-number" maxlength="16" placeholder="Card number" required>
+                                        <label for="card-number">Card number</label>
+                                        <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-inline-block" style="display:inline-block;">
+                                                <embed class="card-type-view" id="visa" name="card-type-image" src="/multimedia/visa.svg"/>
+                                                <embed class="card-type-view" id="mastercard" name="card-type-image" src="/multimedia/mastercard.svg"/>
+                                                <embed class="card-type-view" id="amex" name="card-type-image" src="/multimedia/amex.svg"/>                                            
+										</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="expiration" name="card-expiration" placeholder="MM/YY" maxlength="5" required>
+                                        <label for="expiration">Expiration (MM/YY)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="cvv" name="card-cvv" maxlength="4" placeholder="CVV" required>
+                                        <label for="cvv">CVV</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light fw-bold py-3">
+                            Order Summary
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <% for (let i = 0; i< items.length; i++) { %>
+                                <li class="list-group-item d-flex justify-content-between align-items-start py-3">
+                                    <div class="d-flex">
+                                        <img src="<%= items[i]._id.picture %>" alt="<%= items[i]._id.name %>" class="rounded me-2" width="60" height="60" style="object-fit: cover;">
+                                        <div>
+                                            <h6 class="my-0 fw-semibold"><%= items[i]._id.name %></h6>
+                                            <small class="text-muted">Quantity: <%= items[i].quantity %></small>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted">$<%= items[i]._id.price * items[i].quantity %></span>
+                                </li>
+                                <% } %>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Subtotal</span>
+                                    <strong>$<%= orderPrice %></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Shipping</span>
+                                    <strong>$<%= shippingPrice %></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span class="fw-bold">Total (USD)</span>
+                                    <strong>$<%= orderPrice + shippingPrice %></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-lg w-100 mt-4" id="checkout-btn" type="submit">Place Order</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const showElement = (element) => element.style.display = "inline-block";
+        const hideElement = (element) => element.style.display = "none";
+
+        document.getElementsByName("card-type-image").forEach(hideElement);
+	
+		document.getElementsByName("card-number").forEach(input => input.oninput = async() => {
+			input.value = input.value.replace(/\D/g, '');
+			const creditCard = input.value;
+			
+			 const patterns = {
+                visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                mastercard: /^5[1-5][0-9]{14}$/,
+                amex: /^3[47][0-9]{13}$/
+            };
+			
+            document.getElementsByName("card-type-image").forEach(hideElement);
+			for (let card in patterns) {
+                    if (patterns[card].test(creditCard)) {
+                        document.getElementById(card).style.display = "inline-block";
+						return;
+                    }
+                }
+		});
+
+        document.getElementsByName("card-expiration").forEach(input => input.oninput = async() => {
+            let val = input.value.replace(/\D/g, '');
+                if (val.length > 2) {
+                    val = val.slice(0, 2) + '/' + val.slice(2);
+                }
+                input.value = val;
+        });
+
+        document.getElementsByName("card-cvv").forEach(input => input.oninput = async() => {
+            input.value = input.value.replace(/\D/g, '');
+        }); 
+
+        
+        $("#checkout-btn").click(async() => {
+            event.preventDefault();
+            const firstName = document.getElementById("first-name").value;
+            const lastName = document.getElementById("last-name").value;
+            const email = document.getElementById("email").value;
+            const phone = document.getElementById("phone").value;
+            const address = document.getElementById("address").value;
+            const city = document.getElementById("city").value;
+            const zip = document.getElementById("zip").value;
+            
+            const cardOwner = document.getElementById("card-owner").value;
+            const cardNumber = document.getElementById("card-number").value;
+            const cardExpiration = document.getElementById("expiration").value;
+            const cardCVV = document.getElementById("cvv").value;
+            
+
+            await fetch('/cart/order', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ 
+                    shippingDetails: {
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        phone: phone,
+                        address: address,
+                        city: city,
+                        zip: zip
+                    },
+                    paymentDetails: {
+                        owner: cardOwner,
+                        number: cardNumber,
+                        expiration: cardExpiration,
+                        cvv: cardCVV
+                    }
+                 })
+            }).then();
+        })
+
+
+	
+    </script>
+</body>
+</html>

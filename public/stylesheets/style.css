@@ -8,6 +8,21 @@ html, body {
 
 body {
   font: 16px "Poppins Regular", "Heebo";
+  min-height: 100%;
+}
+
+.card-type-view {
+  max-height: 50px;
+  max-width: 50px;
+}
+
+.content-wrapper {
+  flex: 1 0 auto;
+  padding-bottom: 60px; /* Adjust based on your footer height */
+}
+
+footer {
+  flex-shrink: 0;
 }
 
 a {
