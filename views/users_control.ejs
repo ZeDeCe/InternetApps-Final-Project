@@ -63,13 +63,9 @@
                                 <td><%= user.email%></td>
                                 <td realdate="<%= user.createAt %>"><%= user.createAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%></td>
                                 <td id="actions">
-                                    <% if(user.isAdmin) { %>
-                                    <button class="btn btn-warning btn-sm" data-id="<%= user._id %>" disabled>Edit</button>
-                                    <button class="btn btn-danger btn-sm" data-id="<%= user._id %>" disabled>Delete</button>
-                                    <%}else{%>
-                                    <button class="btn btn-warning btn-sm editUser" data-id="<%= user._id %>">Edit</button>
-                                    <button class="btn btn-danger btn-sm deleteUser" data-id="<%= user._id %>">Delete</button>        
-                                    <%}%>
+                                    
+                                    <button class="btn btn-warning btn-sm editUser" data-id="<%= user._id %>"<%= user.isAdmin && user._id !== admin ? 'disabled' : ''%>>Edit</button>
+                                    <button class="btn btn-danger btn-sm deleteUser" data-id="<%= user._id %>"<%= user.isAdmin ? 'disabled' : ''%>>Delete</button>        
                                 </td>
                             </tr>
                         <% }); %>
@@ -240,13 +236,15 @@
                 $('#confirmDeleteUser').click(function() {
                     const userId = $(this).data('id');
                     $.post('/user/delete', {username: userId}).done(function(data) {
-                        if(data) {
-                            // Display error
-                            console.log(data)
-                        }
-                        else {
+                       
+                        $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
+                        $('#deleteUserModal').modal('hide');
+                    }).fail(function(err) {
+                        if(err.responseText === "Failed deleting user") { // User already deleted
                             $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
                             $('#deleteUserModal').modal('hide');
+                        } else {
+                            location.href = "/error.ejs"
                         }
                     })
                 });
@@ -273,8 +271,8 @@
                                     <td>${newUser.email}</td>
                                     <td realdate=\"${newUser.createAt}\">${newUser.createAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm editUser" data-id="${newUser._id}">Edit</button>
-                                        <button class="btn btn-danger btn-sm deleteUser" data-id="${newUser._id}">Delete</button>
+                                        <button class="btn btn-warning btn-sm editUser" data-id="${newUser._id}" ${newUser.isAdmin ? "disabled" : ""}>Edit</button>
+                                        <button class="btn btn-danger btn-sm deleteUser" data-id="${newUser._id}" ${newUser.isAdmin ? "disabled" : ""}>Delete</button>
                                     </td>
                                 </tr>
                             `);
@@ -331,10 +329,14 @@
                             return
                         }
                         const row = $('#userTableBody').find(`.editUser[data-id="${userId}"]`).closest('tr');
+                        const user = "<%= admin%>"
                         row.find('td:eq(1)').text(userdata.name);
                         row.find('td:eq(2)').text(userdata.isAdmin);
                         row.find('td:eq(3)').text(userdata.email);
-                        row.find('td:eq(5)').children("button").each(function() {
+                        row.find('td:eq(5)').children(".editUser").each(function() {
+                            $(this).prop("disabled", userdata.isAdmin && userId !== user)
+                        })
+                        row.find('td:eq(5)').children(".deleteUser").each(function() {
                             $(this).prop("disabled", userdata.isAdmin)
                         })
                         $('#editUserModal').modal('hide');
