@@ -53,8 +53,20 @@
         <script>
             $(document).ready(function(){
                 $('#dateSearch').on('change', filterRows)
-                $('#userSearch').on('input', filterRows)
-
+                <%if(isAdmin) {%>
+                $('#userSearch').on('input', function() {
+                    var userSearch = ($('#userSearch').val()).toLowerCase(); 
+                    $("[id^=\"userdiv\"]").each(function() {
+                        var user = $(this).attr('user')
+                        console.log(user)
+                        if (userSearch === '' || user.includes(userSearch)) {
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    })
+                })
+                <%}%>
                 function filterRows() {
                     var option = $('#dateSearch').val();
                     var today = new Date();
@@ -73,20 +85,12 @@
                             startDate = new Date(0);
                             break;
                     }
-                    <% if(isAdmin) {%> 
-                    var userSearch = ($('#userSearch').val()).toLowerCase(); 
-                    <%} %>
+                    
+                    var show = false
                     $("[id^=\"singleorder\"]").each(function() {
                         var date = new Date($(this).find('#actualDate').text());
-                        
-                        <% if(isAdmin) {%>
-                        var user = $(this).attr('user').toLowerCase() 
-                        <%} %>
-                        if(date >= startDate 
-                            <% if(isAdmin) {%>
-                            && (userSearch === '' || user.includes(userSearch))
-                            <%}%>
-                        ) {
+                        if(date >= startDate) {
+                            show = true
                             $(this).show()
                         } else {
                             $(this).hide()

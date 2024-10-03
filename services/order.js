@@ -18,8 +18,6 @@ const getRandomItems = async(user) => {
 
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
-    console.log(items)
-    console.log(items.length)
     var total = await getTotalOrderPrice(items)
     var order = new Order({
         _id: new mongoose.Types.ObjectId(),
@@ -36,20 +34,19 @@ const getTotalOrderPrice = async (items) => {
     var totalPrice = 0;
     for (let i = 0; i < items.length; i++) {
         var item = items[i]
-        console.log(item)
         var count = item.quantity
-        console.log(count)
         var itemPrice = await Item.findById(item.item, 'price');
-        console.log(itemPrice)
         totalPrice += itemPrice.price*count;
-        console.log(totalPrice)
     }
     return totalPrice
 };
 
 //CRUD: Get (read) order from DB by given order id
 const getOrderById = async (id) => {
-    return await Order.findById(id).populate('items');
+    return await Order.findById(id).populate({
+        path: "items.item",
+        model: "Item"
+    });
 };
 
 //CRUD: Get (read) all orders from DB grouped by user
@@ -75,7 +72,8 @@ const getOrders = async () => {
                 _id: "$_id",
                 user: { $first: "$user" },
                 items: { $push: "$items" },
-                total_price: { $first: "$total_price" }
+                total_price: { $first: "$total_price" },
+                date: {$first: "$date"}
             }
         },
         { $group: { _id: '$user', orders: { $push: '$$ROOT' } } }
@@ -91,7 +89,7 @@ const getAllUserOrders = async (user) => {
     if (orders.length == 0){
         return null
     }
-    orders = [{_id: (orders[0]).user, orders: orders}];
+    orders = [{_id: user, orders: orders}];
     return orders
 };
 
@@ -106,7 +104,6 @@ const getUserLatestOrder = async (user) => {
         path: "items.item",
         model: "Item"
     });
-    console.log(order[0].items)
     if (order.length == 0){
         return null;
     }

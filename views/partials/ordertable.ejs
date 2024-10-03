@@ -2,55 +2,57 @@
     <% for (let j = 0; j < userorders.length; j++) { %>
         <%const orders = userorders[j].orders;%>
         <%const user = userorders[j]._id;%>
-        <% if(isAdmin) {%>
-        <div class="mt-2">
-            <% if (orders.length != 0) {%>
-                <br>
-                <b>Orders preformed by: </b><%=user%>
+        <div id="userdiv" user="<%=user%>">
+            <% if(isAdmin) {%>
+            <div class="mt-2">
+                <% if (orders.length != 0) {%>
+                    <br>
+                    <b>Orders preformed by: </b><%=user%>
+                <%}%>
+            </div>
+            <%}%>
+            <%for (let i = 0; i < orders.length; i++) { const order = orders[i]%>
+                <div class="bg-transparent mt-3" id="singleorder">
+                    <div class="bg-primary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
+                        <div class="row">
+                            <div class="col-2">
+                                <b>DATE</b><br>
+                                <div id="actualDate" hidden><%=order.date%></div>
+                                <%=order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%>
+                            </div>
+                            <div class="col-6">
+                                <b>TOTAL</b><br>
+                                $<%=order.total_price%>
+                            </div>
+                            <div class="col-4 text-break">
+                                <b>ORDER ID</b><br>
+                                <%=order._id%>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class ="bg-transparent p-3 border rounded-bottom">
+                        <ul class="list-group"> 
+                            <% for(let i=0; i < order.items.length; i++) { %>
+                                <li class="list-group-item border border-0">
+                                    <div class="d-flex py-2 justify-content-between">
+                                        <div class="container col-sm-2">
+                                            <img src= "<%=order.items[i].item.picture%>" class="img-fluid" style="max-height: 150px;"></img>
+                                        </div>
+                                        <div class="w-75 px-2 align-top">
+                                            <%=order.items[i].item.name%> <!--TODO: make item link href to product page-->
+                                        </div>
+                                        <div class="w-25 text-center fs-5">                             
+                                            $<%=order.items[i].item.price%>
+                                        </div>
+                                    </div>
+                                </li>
+                            <% } %>   
+                        </ul>
+                    </div>
+                </div>
             <%}%>
         </div>
-        <%}%>
-        <%for (let i = 0; i < orders.length; i++) { const order = orders[i]%>
-            <div class="bg-transparent mt-3" id="singleorder" user="<%=user%>">
-                <div class="bg-primary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
-                    <div class="row">
-                        <div class="col-2">
-                            <b>DATE</b><br>
-                            <div id="actualDate" hidden><%=order.date%></div>
-                            <%=order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%>
-                        </div>
-                        <div class="col-6">
-                            <b>TOTAL</b><br>
-                            $<%=order.total_price%>
-                        </div>
-                        <div class="col-4 text-break">
-                            <b>ORDER ID</b><br>
-                            <%=order._id%>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class ="bg-transparent p-3 border rounded-bottom">
-                    <ul class="list-group"> 
-                        <% for(let i=0; i < order.items.length; i++) { %>
-                            <li class="list-group-item border border-0">
-                                <div class="d-flex py-2 justify-content-between">
-                                    <div class="container col-sm-2">
-                                        <img src= "<%=order.items[i].item.picture%>" class="img-fluid" style="max-height: 150px;"></img>
-                                    </div>
-                                    <div class="w-75 px-2 align-top">
-                                        <%=order.items[i].item.name%> <!--TODO: make item link href to product page-->
-                                    </div>
-                                    <div class="w-25 text-center fs-5">                             
-                                        $<%=order.items[i].item.price%>
-                                    </div>
-                                </div>
-                            </li>
-                        <% } %>   
-                    </ul>
-                </div>
-            </div>
-        <%}%>
     <%}%>
 <%} else { %>
     
