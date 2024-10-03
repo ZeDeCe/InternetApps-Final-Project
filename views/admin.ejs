@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+        <%- include('./partials/head', {title: "Admin Page"}); %>
     </head>
     <header>
-        <%- include('./partials/header'); %>
+        <div class="home-icon">
+            <a href="/"><i class="bi bi-house-door-fill"></i></a>
+        </div>
     </header>
-    </body>
-        <h3>
-            You are an admin!
-        </h3>
-        <h3>
-            Username: <%=username%>
-        </h3>
-        <button id="logout" class="btn btn-primary">Log out</button>
-
-        
+    <body class="admin-page">
+        <div class="admin-sidebar">
+            <h5><b>Management</b></h5>
+            <ul>
+                <li><button onclick="location.href='/items/create'" class="btn btn-outline-success">Create Item</button></li>
+                <li><button onclick="location.href=''" class="btn btn-outline-primary">Statistics</button></li>
+                <li><button onclick="location.href=''" class="btn btn-outline-warning">Users</button></li>
+                <li><button onclick="location.href=''" class="btn btn-outline-danger">Orders</button></li>
+            </ul>
+        </div>
+    
+        <div class="content-area">
+            <h3><%=username%>, Welcome to the Admin Panel!</h3>
+            <p class="welcome-message">This is your management area where you can manage products and users.</p>
+            <p>If you need assistance, please contact support.</p>
+    
+            <button id="logout" class="btn btn-danger">Log out</button>
+        </div>
+    
         <script>
             $(document).ready(function() {
                 $("#logout").click(function() {
