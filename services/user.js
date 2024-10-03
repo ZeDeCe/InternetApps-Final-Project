@@ -31,10 +31,12 @@ async function updateUser(username, data) {
 
 // This is a generic function that creates a user in the DB
 async function createUser(user) {
+    if(await validateUsername(user._id)) {
+        return {"user" : {"message": "User already exists with this name!"}}
+    }
     try {
         const newUser = new User(user)
         newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
-
         await newUser.save()
         return
     }

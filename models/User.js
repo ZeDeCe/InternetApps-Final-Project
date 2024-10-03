@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const User = new mongoose.Schema ({
-    _id: String,
+    _id: String, 
     password: {
         type: String,
         validate: [validatePassword, 'Password does not confirm to policy'],
@@ -19,13 +19,14 @@ const User = new mongoose.Schema ({
     },
     name: {
         type: String,
-        match:[/^\w+ \w+$/, 'Must provide first and last name']
+        match:[/^\w+ \w+$/, 'Must provide first and last name'],
+        required: true
     },
     createAt: Date
 })
 
 function validatePassword(password) {
-    return password.length>6
+    return password.length>=6
 }
 
 module.exports = mongoose.model("User", User)
