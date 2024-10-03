@@ -26,9 +26,14 @@ async function register(req, res) {
     const {username, password, name} = req.body
 
     try {
-        await loginService.register(username, password, name)
-        req.session.username = username
-        res.send("Success")
+        var ret = await loginService.register(username, password, name)
+        if(!ret) {
+            req.session.username = username
+            res.send("Success")
+        }
+        else {
+            res.status(404).send(ret)
+        }
     }
     catch (e) {
         res.send("An error with the DB has occured")

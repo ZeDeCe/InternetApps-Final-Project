@@ -6,23 +6,9 @@ async function login(username, password) {
     return user != null;
 }
 
+// This function is for the register process
 async function register(username, password, name) {
-    var abc = await userService.validateUsername(username);
-    if(abc) {
-        throw Error("A user already exists with this username!")
-    }
-    try {
-        const user = new User({
-            _id: username,
-            password,
-            isAdmin: false,
-            name
-        })
-        await user.save()
-    }
-    catch(e) {
-        throw Error("An error with the DB has occured!")
-    }
+    return userService.createUser({_id: username, password, name, isAdmin: false, createAt: Date.now()})
 }
 
 
