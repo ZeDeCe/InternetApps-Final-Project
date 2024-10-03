@@ -1,12 +1,16 @@
 const cartService = require('../services/cart'); 
 const orderService = require('../services/order'); 
+const socialService = require('../services/social');
 
 async function getCart(req, res) {
     const username = req.session.username;
     const items = await cartService.getUserItems(username);
-    const orderPrice = await cartService.getCartTotalPrice(items);
+    const orderPrice = await orderService.getTotalOrderPrice(items);
     const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0
     res.render('cart.ejs', {items, orderPrice, shippingPrice});
+
+    if (items.length)
+        socialService.shareNewItem("Bdika!", items[0].item.picture, "https://localhost/");
 }
 
 async function getCheckout(req, res){
@@ -15,35 +19,22 @@ async function getCheckout(req, res){
     if (!items.length)
         res.redirect("/cart");
 
-    const orderPrice = await cartService.getCartTotalPrice(items);
+    const orderPrice = await orderService.getTotalOrderPrice(items);
     const shippingPrice = await cartService.getCartShippingPrice(orderPrice);
 
     res.render('checkout.ejs', {items, orderPrice, shippingPrice});
 }
 
-async function addUpdateCart(username, id, quantity, append){
-    if (typeof(id) !== "string" || typeof(quantity) !== "number" || quantity <= 0) 
-        return;
-
-    const item = await cartService.addToCart(username, id, quantity, append);
-    if (!item)
-        return;
-
-    
-    return true;
-}
 
 async function addToCart(req, res){
     const username = req.session.username;
-    const id = req.body.id;
-    const quantity = req.body.quantity;
-
-    if (!await addUpdateCart(username, id, quantity, true)) {
-        res.status(400).send("Invalid Request");
+    const item = req.params.item;
+    if (!await cartService.addToCart(username, item)) {
+        res.status(400).send();
         return;
     }
 
-    res.status(200).send("OK");
+    res.status(200).send();
 }
 
 async function updateCartItem(req, res){
@@ -51,8 +42,8 @@ async function updateCartItem(req, res){
     const id = req.body.id;
     const quantity = req.body.quantity;
 
-    if (!await addUpdateCart(username, id, quantity, false)) {
-        res.status(400).send("Invalid Request");
+    if (!await cartService.updateCartItem(username, id, quantity)) {
+        res.status(400).send();
         return;
     }
 
@@ -61,8 +52,9 @@ async function updateCartItem(req, res){
 
 async function deleteFromCart(req, res) {
     const username = req.session.username;
-    const item_id = req.body.id;
-    if (!await cartService.deleteFromCart(username, item_id)){
+    const item = req.params.item;
+
+    if (!await cartService.deleteFromCart(username, item)){
         res.status(400).send("Couldn't delete item from cart.");
         return;
     }
@@ -71,10 +63,24 @@ async function deleteFromCart(req, res) {
 }
 
 async function purchaseCart(req, res) {
+    const username = req.session.username;
     const shippingDetails = req.body.shippingDetails;
     const paymentDetails = req.body.paymentDetails;
 
+    const items = await cartService.getUserItems(username);
+    if (!items.length){
+        res.redirect("/cart");
+        return;
+    }
+        
 
+    if (!await orderService.createOrder(username, new Date(), items)) {
+        res.status(400).send("Failed.");
+        return;
+    }
+
+    cartService.deleteCart(username);
+    res.status(200).send("OK");
 
 }
 

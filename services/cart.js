@@ -11,16 +11,6 @@ const createCart = async(user) => {
     return await cart.save();
 }
 
-const getCartTotalPrice = async (items) => {
-    var totalPrice = 0;
-    for (let i = 0; i < items.length; i++) {
-        const item = await Item.findById(items[i]._id, 'price');
-        totalPrice += item.price * items[i].quantity;
-    }
-
-    return totalPrice
-};
-
 const deleteCart = async (user) => {
     const cart = await getCartById(user);
     if (!cart)
@@ -30,11 +20,14 @@ const deleteCart = async (user) => {
 }
 
 const getCartById = async (user) => {
-    return await Cart.findById(user);
+    return await Cart.findById(user).populate({
+        path: "items.item",
+        model: "Item"
+    });
 }
 
 const getCartShippingPrice = async(totalPrice) => {
-    if (totalPrice >= 50)
+    if (totalPrice >= process.env.MIN_FREE_SHIPPING)
         return 0;
 
     return 5;
@@ -44,26 +37,29 @@ const getUserItems = async (user) => {
     const cart = await getCartById(user);
     if (!cart)
         return [];
-    await cart.populate('items._id');
     return cart.items;
 }
 
-const addToCart = async (user, item, quantity, append) => {
-    const cart = await getCartById(user);
-    if (!cart)
+const addToCart = async (user, item) => {
+    var cart = await getCartById(user);
+    if (!cart) {
+        cart = await createCart(user);
+        if (!cart)
+            return;
+    }
+        
+    const itemData = Item.findById(item);
+    if (!itemData)
         return;
 
-    const existingItem = cart.items.find(cartItem => cartItem._id.toString() === item);
+    const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
 
     if (existingItem) {
-        if (append)
-            quantity += existingItem.quantity;
-
-        existingItem.quantity = quantity;
+        existingItem.quantity++;
     } else {
         cart.items.push({
-            _id: item,
-            quantity: quantity
+            item: item,
+            quantity: 1
         });
     }
 
@@ -79,15 +75,38 @@ const deleteFromCart = async (user, item) => {
     const cart = await getCartById(user);
     if (!cart){
         return;
-        
     }
 
-    if (!await cart.items.find(cartItem => cartItem._id.toString() === item))
+    if (!await cart.items.find(cartItem => cartItem.item._id.toString() === item))
         return;
 
-    console.log(cart.items.remove({_id: item}));
-    return await cart.save();
+    if (cart.items.length - 1){
+        cart.items.remove({_item: item});
+        return await cart.save();
+    }
+        
+    return await deleteCart(user);
 };
+
+const updateCartItem = async (user, item, quantity) => {
+    const cart = await getCartById(user);
+    if (!cart)
+        return;
+
+    const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
+
+    if (!existingItem)
+        return;
+
+    existingItem.quantity = quantity;
+
+    try {
+        return await cart.save();
+    } catch (error) {
+        return;
+    }
+
+}
 
 module.exports = {
     createCart,
@@ -96,6 +115,6 @@ module.exports = {
     addToCart,
     deleteFromCart,
     deleteCart,
-    getCartTotalPrice,
-    getCartShippingPrice
+    getCartShippingPrice,
+    updateCartItem
 }

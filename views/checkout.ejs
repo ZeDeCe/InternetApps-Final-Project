@@ -123,13 +123,13 @@
                                 <% for (let i = 0; i< items.length; i++) { %>
                                 <li class="list-group-item d-flex justify-content-between align-items-start py-3">
                                     <div class="d-flex">
-                                        <img src="<%= items[i]._id.picture %>" alt="<%= items[i]._id.name %>" class="rounded me-2" width="60" height="60" style="object-fit: cover;">
+                                        <img src="<%= items[i].item.picture %>" alt="<%= items[i].item.name %>" class="rounded me-2" width="60" height="60" style="object-fit: cover;">
                                         <div>
-                                            <h6 class="my-0 fw-semibold"><%= items[i]._id.name %></h6>
+                                            <h6 class="my-0 fw-semibold"><%= items[i].item.name %></h6>
                                             <small class="text-muted">Quantity: <%= items[i].quantity %></small>
                                         </div>
                                     </div>
-                                    <span class="text-muted">$<%= items[i]._id.price * items[i].quantity %></span>
+                                    <span class="text-muted">$<%= items[i].item.price * items[i].quantity %></span>
                                 </li>
                                 <% } %>
                                 <li class="list-group-item d-flex justify-content-between">
