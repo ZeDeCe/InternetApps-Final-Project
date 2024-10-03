@@ -4,6 +4,11 @@
 
 const mongoose = require('mongoose')
 
+const ItemTuple = new mongoose.Schema ({
+    item: {type: mongoose.Schema.Types.ObjectId, ref: "Item"},
+    quantity: Number
+})
+
 const Order = new mongoose.Schema ({
     user: {
         type: String,
@@ -13,7 +18,7 @@ const Order = new mongoose.Schema ({
         type: Date,
         required: true
     },
-    items: [{type: mongoose.Schema.Types.ObjectId, ref: 'Item'}], // TODO: add item count for each item (tuple array?)
+    items: [ItemTuple], // TODO: add item count for each item (tuple array?)
     total_price: {
         type: Number,
         required: true

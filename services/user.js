@@ -9,18 +9,14 @@ async function deleteUser(username) {
         if (user == null) {
             return "Cannot find user to delete";
         }
-        return "Success";
     } catch(e) {
-        return "An error with the DB has occured!";
+        return e.errors
     }
 }
 
 async function updateUser(username, data) {
     if(await isAdmin(username)) {
         return "Trying to update an admin";
-     }
-    if(data["isAdmin"]) {
-        return "Cannot update isAdmin value";
     }
     try {
         const user = await User.findOneAndUpdate({_id: username}, data);
@@ -28,10 +24,33 @@ async function updateUser(username, data) {
             return "Cannot find user to update";
         }
         await user.save()
-        return "Success"
     } catch(e) {
-        return "An error with the DB has occured!"
+        return e.errors
     }
+}
+
+// This is a generic function that creates a user in the DB
+async function createUser(user) {
+    if(await validateUsername(user._id)) {
+        return {"user" : {"message": "User already exists with this name!"}}
+    }
+    try {
+        const newUser = new User(user)
+        newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
+        await newUser.save()
+        return
+    }
+    catch(e) {
+        return e.errors
+    }
+}
+
+async function getAllUsers() {
+    return await User.find();
+}
+
+async function getUser(username) {
+    return await User.find({_id: username})
 }
 
 async function isAdmin(username) {
@@ -44,9 +63,14 @@ async function validateUsername(username) {
     return user != null;
 }
 
+
+
 module.exports = {
     deleteUser,
     isAdmin,
     validateUsername,
-    updateUser
+    updateUser,
+    createUser,
+    getAllUsers,
+    getUser
 }

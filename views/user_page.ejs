@@ -5,9 +5,9 @@
     </head>
     <body class="bg-light">
         <%- include('./partials/header'); %>
-        <div class="position-relative w-100 main-div">
-            <div class="w-100 mt-5 position-absolute top-50 start-50 h-100 translate-middle">
-                <div class="row justify-content-center">
+        <div class="main-div">
+            <div class="mt-5 w-100">
+                <div class="row g-0 justify-content-center">
                     <!--User personal center tab-->
                     <div class="col-2 p-0">
                         <div class="me-2 p-3 bg-white">
@@ -76,22 +76,7 @@
                         </div>
                     </div>
                     <!--Re-purchase tab-->
-                    <div class="col-2 p-0">
-                        <div class="me-2 ms-2 p-3 bg-white">
-                            <b>Re-Purchase</b> <!-- TODO: add random items-->
-                            <ul class="list-group">
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 1
-                                </li>
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 2
-                                </li>
-                                <li class="list-group-item bg-transparent border border-0">
-                                    ITEM 3
-                                </li>
-                            </ul>
-                        </div> 
-                    </div>
+                    <%- include('./partials/randomitems', {items_rebuy}) %>
                 </div>
             </div>
         </div>
