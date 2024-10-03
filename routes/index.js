@@ -18,7 +18,8 @@ router.get('/policies', function(req, res) {
       res.render('policies/privacy_policy.ejs')
       break;
     case "password_qna":
-      res.render('policies/password_qna')
+      res.render('policies/password_qna.ejs')
+      break;
     default:
       res.render('error.ejs')
       break;
