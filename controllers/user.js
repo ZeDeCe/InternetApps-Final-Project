@@ -52,6 +52,10 @@ async function deleteAccount(req, res) {
     }
 }
 
+async function updateAccount(req, res) {
+    res.send(await userService.updateUser(req.session.username, req.body.data)) // if not error will send null
+}
+
 
 
 module.exports = {
@@ -61,5 +65,6 @@ module.exports = {
     validateUsername,
     createUserAsAdmin,
     getUser,
-    deleteAccount
+    deleteAccount,
+    updateAccount
 }
