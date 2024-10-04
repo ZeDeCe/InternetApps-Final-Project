@@ -3,8 +3,8 @@
     <head>
         <%- include('./partials/head', {title: "TONNS Lego Store: Sign-In"}); %>
     </head>
-    <body class="bg-dark p-5 mb-2">
-        <div class="main-div parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light-subtle bg-gradient p-4" style="width: 35%; height: 70%; min-width: 500px; min-height: 600px;">
+    <body class="p-5 mb-2" style="background-image: url('/multimedia/loginBackground.jpg')">
+        <div class="main-div parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light p-4" style="width: 35%; height: 70%; min-width: 500px; min-height: 600px;">
             <div class="w-100 h-100">
                 <h1 class="text-start pl-1">
                     Sign in
@@ -26,7 +26,7 @@
                         <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
                             Need help?
                         </button>
-                        <div class="collapse mt-1" id="collapseHelp">
+                        <div class="collapse mt-1 mb-1" id="collapseHelp">
                             <a href="./help">
                                 Forgot your password?
                             </a>
@@ -51,10 +51,11 @@
                         </div>
                     </div>
                     <a class="mb-3" href="./help">
+                        <br>
                         Forgot your password?
                     </a>
                     <br>
-                    <button id="sign-in" class="btn btn-warning w-100">Sign in</button>
+                    <button id="sign-in" class="btn btn-warning w-100 mt-2">Sign in</button>
                     <br><br>
                     <p id="wrongpassword" class="text-danger fw-bold d-none">Wrong password!</p>
                 </div>
