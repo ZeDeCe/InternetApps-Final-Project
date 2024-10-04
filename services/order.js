@@ -95,7 +95,7 @@ const getAllUserOrders = async (user) => {
 
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
-    //await createOrder("shaqedmov@gmail.com", "2024-10-02",[{item: new mongoose.Types.ObjectId("66fd4d2f045f1cac4ec42f5d"), quantity: 6}, {item: new mongoose.Types.ObjectId("66e45a5f62c032dadd379aec"), quantity: 1}])
+    //await createOrder("test", "2024-10-02",[{item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 6}, {item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 1}])
     //getRandomItems();
     var order = await Order.find({ user })
     .sort({ date: -1 })

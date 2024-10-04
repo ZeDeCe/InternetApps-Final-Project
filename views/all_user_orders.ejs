@@ -57,19 +57,10 @@
         <script>
             $(document).ready(function(){
                 $('#dateSearch').on('change', filterRows)
+
                 <%if(isAdmin) {%>
-                $('#userSearch').on('input', function() {
-                    var userSearch = ($('#userSearch').val()).toLowerCase(); 
-                    $("[id^=\"userdiv\"]").each(function() {
-                        var user = $(this).attr('user')
-                        console.log(user)
-                        if (userSearch === '' || user.includes(userSearch)) {
-                            $(this).show()
-                        } else {
-                            $(this).hide()
-                        }
-                    })
-                })
+                $('#userSearch').on('input', filterRows)
+
                 // Handle delete order button click
                 $(document).on('click', '.deleteOrder', function() {
                     const orderid = $(this).data('id');
@@ -110,11 +101,26 @@
                             break;
                     }
                     
-                    var show = false
-                    $("[id^=\"singleorder\"]").each(function() {
-                        var date = new Date($(this).find('#actualDate').text());
-                        if(date >= startDate) {
-                            show = true
+                    $("[id^=\"userdiv\"]").each(function() {
+                        var show = false
+                        $(this).children("[id^=\"singleorder\"]").each(function() {
+                            var date = new Date($(this).find('#actualDate').text());
+                            if(date >= startDate) {
+                                show = true
+                                $(this).show()
+                            } else {
+                                $(this).hide()
+                            }
+                        })
+                        <%if(isAdmin) {%>
+                        var user = $(this).attr('user')
+                        var userSearch = $('#userSearch').val()
+                        <%}%>
+                        if(show 
+                            <%if(isAdmin) {%>
+                            && (userSearch === '' || user.includes(userSearch))
+                            <%}%>
+                        ) {
                             $(this).show()
                         } else {
                             $(this).hide()
