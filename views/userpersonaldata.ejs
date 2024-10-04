@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+    </head>
+    <body class="bg-light">
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <div class="mt-5 w-100">
+                <div class="row g-0 justify-content-center">
+                    <div class="col-10 p-0  bg-white">
+                        <div class="row p-3 fs-3 lego-font">
+                            <b>Your Account</b>
+                        </div>
+                        <div class="row p-3">
+                            <b>Your Username:</b>
+                            <div class="input-group flex-nowrap">
+                                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping" value="<%=user._id%>" disabled>
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <b>Your Full Name:</b>
+                            <div class="input-group flex-nowrap">
+                                <input type="text" class="form-control" placeholder="Full name" aria-label="Full name" aria-describedby="addon-wrapping" value="<%=user.name%>">
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <b>Your Password:</b>
+                            <div class="input-group flex-nowrap">
+                                <input type="text" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="addon-wrapping">
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <b>Your Email address:</b>
+                            <div class="input-group flex-nowrap">
+                                <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="addon-wrapping" value="<%=user.email%>">
+                            </div>
+                        </div>
+                        <div class="row p-3">
+                            <b>Creation Date:</b>
+                            <span class="ms-2"><%=user.createAt%></span>
+                        </div>
+                        <div class="list-group m-0 list-group-horizontal p-3">
+                            <li class="list-group-item border-0">
+                                <button type="button" class="btn btn-primary saveChanges">Save Changes</button>
+                            </li>
+                            <li class="list-group-item border-0">
+                                <button type="button" class="btn btn-danger deleteAccount">Delete Account</button>
+                            </li>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <%-include('./partials/confirm', {message: "Are you sure you want to delete your account?", title: "Delete Account"})%>
+        <script>
+            $(document).ready(function() {
+                // Handle delete user button click
+                $(document).on('click', '.deleteAccount', function() {
+                    const userId = $(this).data('id');
+                    $('#confirmDelete').data('id', userId);
+                    $('#deleteModal').modal('show');
+                });
+
+                // Confirm delete user
+                $('#confirmDelete').click(function() {
+                    const userId = $(this).data('id');
+                    $.post('/user/deleteAccount').done(function(data) {
+                        if(data.includes("<html")) {
+                            location.href = "/"
+                        }
+                        else {
+                            location.href = "/error"
+                        }
+                    })
+                });
+            })
+        </script>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

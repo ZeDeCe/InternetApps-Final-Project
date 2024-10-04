@@ -1,4 +1,5 @@
 const userService = require("../services/user")
+const loginController = require("./login")
 
 async function deleteUser(req, res) {
     res.send(await userService.deleteUser(req.body.username))
@@ -42,6 +43,15 @@ async function validateUsername(req, res) {
     res.send(await userService.validateUsername(req.body.username))
 }
 
+async function deleteAccount(req, res) {
+    var errors = await userService.deleteUser(req.session.username)
+    if(errors) {
+        res.send(errors)
+    } else {
+        await loginController.logout(req, res)
+    }
+}
+
 
 
 module.exports = {
@@ -50,5 +60,6 @@ module.exports = {
     isAdmin,
     validateUsername,
     createUserAsAdmin,
-    getUser
+    getUser,
+    deleteAccount
 }
