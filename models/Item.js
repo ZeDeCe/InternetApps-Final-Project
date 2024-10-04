@@ -1,5 +1,36 @@
 const mongoose = require('mongoose');
 
+const RatingSchema = new mongoose.Schema({
+    value: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+const CommentSchema = new mongoose.Schema({
+    text: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    rating: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
 const ItemSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -19,7 +50,10 @@ const ItemSchema = new mongoose.Schema({
         required: true
     },
     description: String,
-    ratings: [Number]
+    ratings: [RatingSchema],
+    comments: [CommentSchema]
 });
 
-module.exports = mongoose.model('Item', ItemSchema);
+const Item = mongoose.model('Item', ItemSchema);
+
+module.exports = Item;
