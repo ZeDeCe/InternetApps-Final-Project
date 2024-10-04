@@ -47,7 +47,10 @@
                     <%}%>
                 </div>
             </div>
-            <%-include('./partials/confirm', {message: "Are you sure you want to delete this order?", title: "Delete Order"})%>
+            <!--Delete modal-->
+            <% if(!isAdmin) {%>
+                <%-include('./partials/confirm', {message: "Are you sure you want to delete this order?", title: "Delete Order"})%>
+            <%}%>
         </div>
         
         <!--Logout button-->
@@ -67,14 +70,14 @@
                         }
                     })
                 })
-                // Handle delete user button click
+                // Handle delete order button click
                 $(document).on('click', '.deleteOrder', function() {
                     const orderid = $(this).data('id');
                     $('#confirmDelete').data('id', orderid);
                     $('#deleteModal').modal('show');
                 });
 
-                // Confirm delete user
+                // Confirm delete order
                 $('#confirmDelete').click(function() {
                     const orderid = $(this).data('id');
                     $.post('/order/delete', {orderid}).done(function(data) {
