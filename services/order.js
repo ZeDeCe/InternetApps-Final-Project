@@ -19,6 +19,7 @@ const getRandomItems = async(user) => {
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
     var total = await getTotalOrderPrice(items)
+    date = date ? date : Date.now()
     var order = new Order({
         _id: new mongoose.Types.ObjectId(),
         user : user,
@@ -97,6 +98,11 @@ const getAllUserOrders = async (user) => {
     return orders
 };
 
+const getUserForOrder = async (id) => {
+    var order = await Order.findById({_id: id}, 'user')
+    return order.user
+}
+
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
     //await createOrder("test", Date.now(),[{item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 6}, {item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 1}])
@@ -162,5 +168,6 @@ module.exports = {
     getUserLatestOrder,
     getTotalOrderPrice,
     getOrderPrettyDate,
-    getRandomItems
+    getRandomItems,
+    getUserForOrder
 }
