@@ -10,7 +10,7 @@ async function deleteUser(username) {
             return "Cannot find user to delete";
         }
     } catch(e) {
-        return "An error with the DB has occured!";
+        return e.errors
     }
 }
 
@@ -25,23 +25,23 @@ async function updateUser(username, data) {
         }
         await user.save()
     } catch(e) {
-        return "An error with the DB has occured!"
+        return e.errors
     }
 }
 
 // This is a generic function that creates a user in the DB
 async function createUser(user) {
+    if(await validateUsername(user._id)) {
+        return {"user" : {"message": "User already exists with this name!"}}
+    }
     try {
         const newUser = new User(user)
         newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
-        if(user._id && !await validateUsername(user._id)) {
-            await newUser.save()
-            return
-        }
-        return "Cannot create this user"
+        await newUser.save()
+        return
     }
     catch(e) {
-        return "An error with the DB has occured!"
+        return e.errors
     }
 }
 
@@ -62,6 +62,8 @@ async function validateUsername(username) {
     const user = await User.findOne({_id: username})
     return user != null;
 }
+
+
 
 module.exports = {
     deleteUser,

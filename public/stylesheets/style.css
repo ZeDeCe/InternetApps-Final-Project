@@ -56,3 +56,206 @@ h1 {
   border-right: 8px solid transparent;
   border-top: 8px solid #0d6efd;
 }
+
+body {
+  margin: 0;
+}
+
+.custom-background {
+  background-color: #fff318; 
+  color: white; /* Change text color if needed */
+}
+
+.lego-font {
+font-family: 'Press Start 2P', cursive;
+}
+
+/*Filter sudebar: */
+
+/* Sidebar when hidden (default state) */
+.sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+  color: white;
+}
+
+/* Sidebar when visible */
+.sidebar-open {
+  width: 200px; /* Width when the sidebar is open */
+}
+
+/* Sidebar close button */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  color: #fff318;
+}
+
+.sidebar h5 {
+  padding-left: 10%;
+  color:rgb(52, 110, 219);
+  margin-top: 10px;
+}
+
+.sidebar label,h4 {
+  padding-left: 10%;
+}
+
+.apply-button {
+  background-color: #fff318;
+  color: black;
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  margin-top: 20px;
+  padding: 10px; /* Padding */
+  cursor: pointer; /* Pointer cursor for button */
+  font-size: 16px; /* Font size */
+  width: 60%; /* Full width */
+  margin-left: 10%;
+}
+
+/* Admin Page: */
+
+body.admin-page {
+  background-color: rgb(250, 255, 102);
+}
+
+.admin-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding-top: 20px;
+  border-right: 2px solid #ddd;
+  z-index: 1;
+}
+
+.admin-sidebar h5 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.admin-sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.admin-sidebar li {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.admin-sidebar li button {
+  width: 80%;
+}
+
+/* Content area styles */
+.content-area {
+  margin-left: 220px; /* Push the content to the right of the sidebar */
+  padding: 20px;
+}
+
+.home-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+}
+
+.home-icon a {
+  color: rgb(255, 0, 0); 
+  text-decoration: none;
+  position: relative;
+}
+
+.home-icon a:hover::after {
+  content: "Back to homepage";
+  position: absolute;
+  right: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.home-icon a:hover {
+  color: #00B7FF; 
+}
+
+
+/* Create Item Page*/
+
+body.create-item-page {
+  background-image: url('https://t4.ftcdn.net/jpg/06/81/46/47/360_F_681464734_hYY9fhBhMNdJSN4SJB4v8N87HNaglF0k.jpg');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat; 
+  min-height: 100vh; 
+  padding: 5px;
+}
+
+body.create-item-page h3 {
+  color: #ffea00;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive; 
+}
+
+body.create-item-page form {
+  max-width: 550px; 
+  max-height: 610px;
+  margin: 0 auto; 
+  padding: 20px; 
+  background-color: #fff; 
+  border-radius: 8px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.create-item-page div {
+  margin-bottom: 7px; /* Space between form elements */
+}
+
+body.create-item-page label {
+  display: block; /* Block display for labels */
+  margin-bottom: 5px; /* Space below the label */
+  font-weight: bold; /* Bold labels */
+}
+
+body.create-item-page input, 
+body.create-item-page textarea {
+  width: 100%; /* Full width inputs */
+  padding: 10px; /* Padding inside inputs */
+  border: 2px solid #62a3ff;
+  border-radius: 4px; /* Rounded corners for inputs */
+}
+
+body.create-item-page button {
+  margin-top: 10px;
+  background-color: #f73b3bd2; /* Button background */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  padding: 10px 15px; /* Padding for the button */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 16px; /* Font size */
+  transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+body.create-item-page button:hover {
+  background-color: #f91f1f; /* Darker on hover */
+}
