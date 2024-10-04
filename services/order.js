@@ -26,7 +26,11 @@ const createOrder = async(user, date, items) => {
         items : items,
         total_price: total
     })
-    return await order.save();
+    try {
+        return await order.save();
+    } catch(e) {
+        return e.errors
+    }
 };
 
 //Calculate given order total price (going through all items in the order and sums up their price)
@@ -95,7 +99,7 @@ const getAllUserOrders = async (user) => {
 
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
-    //await createOrder("test", "2024-10-02",[{item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 6}, {item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 1}])
+    //await createOrder("test", Date.now(),[{item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 6}, {item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 1}])
     //getRandomItems();
     var order = await Order.find({ user })
     .sort({ date: -1 })
@@ -117,15 +121,22 @@ const getOrderPrettyDate = async(order) => {
 };
 
 //CRUD: Update given order data by id
-const updateOrder = async (id, items) => {
-    var order = await getOrderById(id);
+const updateOrder = async (orderid, tupleid, quantity) => {
+    var order = await getOrderById(orderid);
     if (!order)
         return null;
-
-    order.id = id;
-    order.items;
-    order.total_price = await getTotalOrderPrice(items);
-    await order.save();
+    for(var i = 0; i < order.items.length; ++i) {
+        if (order.items[i]._id.toString() === tupleid) {
+            order.items[i].quantity = quantity
+            break
+        }
+    }
+    order.total_price = await getTotalOrderPrice(order.items);
+    try {
+        await order.save();
+    } catch(e) {
+        return e.errors
+    }
     return order;
 };
 

@@ -23,7 +23,9 @@
                                 </div>
                                 <div class="col-5">
                                     <b>TOTAL</b><br>
-                                    $<%=order.total_price%>
+                                    <div id="totalprice" orderid="<%=order._id%>">
+                                        $<%=order.total_price%>
+                                    </div>
                                 </div>
                                 <div class="col-3 text-break">
                                     <b>ORDER ID</b><br>
@@ -42,7 +44,7 @@
                                 </div>
                                 <div class="col-6">
                                     <b>TOTAL</b><br>
-                                    $<%=order.total_price%>
+                                    <div id="totalprice" orderid="<%=order._id%>">$<%=order.total_price%></div>
                                 </div>
                                 <div class="col-4 text-break">
                                     <b>ORDER ID</b><br>
@@ -55,21 +57,21 @@
                         <ul class="list-group"> 
                             <% for(let i=0; i < order.items.length; i++) { %>
                                 <li class="list-group-item border border-0">
-                                    <div class="d-flex py-2 justify-content-between">
+                                    <div class="d-flex py-2 justify-content-between align-items-center">
                                         <div class="container col-sm-2">
                                             <img src= "<%=order.items[i].item.picture%>" class="img-fluid" style="max-height: 150px;"></img>
                                         </div>
-                                        <div class="w-75 px-2 align-top">
+                                        <div class="w-70 px-2 align-self-start">
                                             <%=order.items[i].item.name%> <!--TODO: make item link href to product page-->
                                         </div>
-                                        <div class="w-25 text-center fs-5">
-                                            <div class="d-flex justify-content-around">
-                                                <div class="">
-                                                    $<%= order.items[i].item.price %>
-                                                </div>
-                                                <div class="">
-                                                    x<%= order.items[i].quantity %>
-                                                </div>
+                                        <div class="w-30 text-center">
+                                            <div class="d-flex justify-content-center align-items-center">
+                                                <div class="fs-5 w-50">$<%= order.items[i].item.price %></div>
+                                                <select class="form-select w-50" id="quantity" data-itemid="<%=order.items[i]._id%>" data-orderid="<%=order._id%>" <%= user.isAdmin ? 'disabled' : ((new Date() - order.date <= 30 * 60 * 1000) ? '' : 'disabled') %>>
+                                                    <%for(var num = 1; num<=10; num++) {%>
+                                                        <option value="<%=num%>" <%= order.items[i].quantity === num ? 'selected' : '' %>><%=num%></option>
+                                                    <%}%>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>                                        
@@ -99,5 +101,18 @@
 
 
 <script>
-
+  $(document).ready(function () {
+    $('#quantity').change(function () {
+      var quantity = $(this).val();
+      var tupleid = $(this).data("itemid")
+      var orderid = $(this).data("orderid")
+      $.post('/order/update', { orderid, tupleid, quantity }).done(function (response) {
+        var totalprice = response.total_price
+        console.log($('#totalprice[orderid="' + orderid + '"]'))
+        $('#totalprice[orderid="' + orderid + '"]').text("$" + totalprice)
+      }).fail(function () {
+        
+      });
+    });
+  });
 </script>

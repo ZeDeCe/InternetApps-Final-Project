@@ -6,6 +6,6 @@ const loginController = require('../controllers/login')
 
 router.route('/delete').post(userController.isAdmin, orderController.deleteOrder)
 router.route('/create').post(loginController.isLoggedIn, orderController.createOrder)
-
+router.route('/update').post(loginController.isLoggedIn, orderController.updateOrder)
 
 module.exports = router;

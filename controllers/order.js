@@ -9,7 +9,12 @@ async function createOrder(req, res) {
     res.send(await orderService.createOrder(req.body.data))
 }
 
+async function updateOrder(req, res) {
+    res.send(await orderService.updateOrder(req.body.orderid, req.body.tupleid, req.body.quantity))
+}
+
 module.exports = {
     deleteOrder,
-    createOrder
+    createOrder,
+    updateOrder
 }
