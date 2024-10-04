@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Admin Page"}); %>
+    </head>
+    <body>
+        <%- include('./partials/header'); %>
+        <div class="container mt-4 main-div">
+            <h1 class="mb-4">Admin Dashboard</h1>
+            <!-- Order History Section -->
+            <div class="mb-4">
+                <h2>Order History</h2>
+                <div class="mb-3">
+                    <label for="userSelect" class="form-label">Select User</label>
+                    <select class="form-select" id="userSelect">
+                        <% users.forEach(user => { %>
+                            <option value="<%= user.id %>"><%= user._id %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div id="orderHistoryContainer">
+                    <% orders.forEach(order => { %>
+                        <div class="order-container mb-3" data-order-id="<%= order.orderId %>">
+                            <h4>Order ID: <%= order._id %></h4>
+                            <% if (order.items.length > 0) { %>
+                                <ul class="list-unstyled">
+                                    <% order.items.forEach(item => { %>
+                                        <li class="d-flex align-items-center mb-2">
+                                            <img src="<%= item.picture %>" alt="<%= item.name %>" class="me-3" style="width: 50px; height: 50px;">
+                                            <div class="flex-grow-1">
+                                                <strong><%= item.name %></strong><br>
+                                                <small><%= item.description %></small>
+                                            </div>
+                                            <span class="ms-3"><%= item.price %></span>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                            <% } else { %>
+                                <p>No items in this order.</p>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Handle user selection for order history
+            $('#userSelect').change(function() {
+                    const userId = $(this).val();
+                    $('.order-container').each(function() {
+                        if ($(this).data('order-id') == userId) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                });
+        </script>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

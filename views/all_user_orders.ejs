@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+    </head>
+    <body class="bg-light">
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <div class="ms-3 mt-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+                  </svg>
+                <a href="/user_page/" class="text-dark text-decoration-none" >Back</a>
+            </div>
+            <div class="w-100 mt-4">
+                <div class="g-0 row justify-content-center">
+                    <!--User page main tab-->
+                    <div class="col-8 mb-2 p-0">
+                        <div class="mx-2 p-3 bg-white">
+                            <div class="row g-2 w-75 align-items-center">
+                                <div class="col-3">
+                                    <b>Viewing orders placed in</b>
+                                </div>
+                                <div class="col-3">
+                                    <select class="form-select" aria-label="Default select example" id="dateSearch">
+                                        <option value="all" selected>All time</option>
+                                        <option value="7d">Last 7 days</option>
+                                        <option value="30d">Last 30 days</option>
+                                        <option value="3m">Last 3 months</option>
+                                    </select> <!--TODO: add select button to filter orders by time. for ADMIN add filter by user-->
+                                </div>
+                                <% if(isAdmin) {%>
+                                <div class="col-4">
+                                    <div class="input-group flex-nowrap">
+                                        <span class="input-group-text" id="addon-wrapping">@</span>
+                                        <input id="userSearch" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="addon-wrapping">
+                                      </div>
+                                </div>
+                                <%}%>
+                            </div>
+                            <%- include('./partials/ordertable', {userorders: userorders}) %>
+                        </div>
+                    </div>
+                    <!--Re-purchase tab-->
+                    <% if(!isAdmin) {%>
+                        <%- include('./partials/randomitems', {items_rebuy}) %>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+        
+        <!--Logout button-->
+        <script>
+            $(document).ready(function(){
+                $('#dateSearch').on('change', filterRows)
+                <%if(isAdmin) {%>
+                $('#userSearch').on('input', function() {
+                    var userSearch = ($('#userSearch').val()).toLowerCase(); 
+                    $("[id^=\"userdiv\"]").each(function() {
+                        var user = $(this).attr('user')
+                        console.log(user)
+                        if (userSearch === '' || user.includes(userSearch)) {
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    })
+                })
+                <%}%>
+                function filterRows() {
+                    var option = $('#dateSearch').val();
+                    var today = new Date();
+                    var startDate;
+                    switch (option) {
+                        case "3m":
+                            startDate = new Date(today.getTime() - 3 * 30 * 24 * 60 * 60 * 1000);
+                            break;
+                        case "7d":
+                            startDate = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            break;
+                        case "30d":
+                            startDate = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+                            break;
+                        default:
+                            startDate = new Date(0);
+                            break;
+                    }
+                    
+                    var show = false
+                    $("[id^=\"singleorder\"]").each(function() {
+                        var date = new Date($(this).find('#actualDate').text());
+                        if(date >= startDate) {
+                            show = true
+                            $(this).show()
+                        } else {
+                            $(this).hide()
+                        }
+                    })
+                }
+            })
+        </script>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

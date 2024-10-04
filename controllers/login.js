@@ -23,12 +23,17 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-    const {username, password, name} = req.body
+    const {username, password, name, email} = req.body
 
     try {
-        await loginService.register(username, password, name)
-        req.session.username = username
-        res.send("Success")
+        var ret = await loginService.register(username, password, name, email)
+        if(!ret) {
+            req.session.username = username
+            res.send("Success")
+        }
+        else {
+            res.send(ret) // sends an array of errors
+        }
     }
     catch (e) {
         res.send("An error with the DB has occured")
