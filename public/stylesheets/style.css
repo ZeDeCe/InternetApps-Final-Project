@@ -61,11 +61,6 @@ body {
   margin: 0;
 }
 
-.custom-background {
-  background-color: #fff318; 
-  color: white; /* Change text color if needed */
-}
-
 /*Filter sidebar: */
 
 /* Sidebar when hidden (default state) */
