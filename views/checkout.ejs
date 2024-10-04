@@ -28,12 +28,6 @@
                                         <label for="last-name">Last name</label>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
-                                        <label for="email">Email</label>
-                                    </div>
-                                </div>
                                 <div class="col-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="phone" placeholder="Phone Number" required>
@@ -195,7 +189,6 @@
             event.preventDefault();
             const firstName = document.getElementById("first-name").value;
             const lastName = document.getElementById("last-name").value;
-            const email = document.getElementById("email").value;
             const phone = document.getElementById("phone").value;
             const address = document.getElementById("address").value;
             const city = document.getElementById("city").value;
@@ -216,7 +209,6 @@
                     shippingDetails: {
                         firstName: firstName,
                         lastName: lastName,
-                        email: email,
                         phone: phone,
                         address: address,
                         city: city,
