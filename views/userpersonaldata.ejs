@@ -61,7 +61,6 @@
             $(document).ready(function() {
                 var response = $("#response")
                 function respond(message, error) {
-                    console.log(message)
                     response.text(message).removeClass("d-none")
                     if(error) {
                         response.addClass("text-danger")

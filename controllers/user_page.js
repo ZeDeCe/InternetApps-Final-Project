@@ -24,7 +24,6 @@ async function getOrdersPage (req, res) {
 async function getPersonalPage (req, res) {
     var user = (await userService.getUser(req.session.username))[0];
     user.password = ""
-    console.log(user)
     res.render("userpersonaldata.ejs", {user});
 };
 
