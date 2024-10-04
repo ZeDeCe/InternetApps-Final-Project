@@ -14,22 +14,42 @@
             <%for (let i = 0; i < orders.length; i++) { const order = orders[i]%>
                 <div class="bg-transparent mt-3" id="singleorder">
                     <div class="bg-primary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
-                        <div class="row">
-                            <div class="col-2">
-                                <b>DATE</b><br>
-                                <div id="actualDate" hidden><%=order.date%></div>
-                                <%=order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%>
+                        <% if(isAdmin) {%>
+                            <div class="row">
+                                <div class="col-2">
+                                    <b>DATE</b><br>
+                                    <div id="actualDate" hidden><%=order.date%></div>
+                                    <%=order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%>
+                                </div>
+                                <div class="col-5">
+                                    <b>TOTAL</b><br>
+                                    $<%=order.total_price%>
+                                </div>
+                                <div class="col-3 text-break">
+                                    <b>ORDER ID</b><br>
+                                    <%=order._id%>
+                                </div>
+                                <div class="col-2 d-flex justify-content-end">
+                                    <button type="button" class="btn btn-danger deleteOrder">Delete</button>
+                                </div>
                             </div>
-                            <div class="col-6">
-                                <b>TOTAL</b><br>
-                                $<%=order.total_price%>
+                        <%} else { %>
+                            <div class="row">
+                                <div class="col-2">
+                                    <b>DATE</b><br>
+                                    <div id="actualDate" hidden><%=order.date%></div>
+                                    <%=order.date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%>
+                                </div>
+                                <div class="col-6">
+                                    <b>TOTAL</b><br>
+                                    $<%=order.total_price%>
+                                </div>
+                                <div class="col-4 text-break">
+                                    <b>ORDER ID</b><br>
+                                    <%=order._id%>
+                                </div>
                             </div>
-                            <div class="col-4 text-break">
-                                <b>ORDER ID</b><br>
-                                <%=order._id%>
-                            </div>
-                        </div>
-                        
+                        <%}%> 
                     </div>
                     <div class ="bg-transparent p-3 border rounded-bottom">
                         <ul class="list-group"> 
@@ -42,10 +62,17 @@
                                         <div class="w-75 px-2 align-top">
                                             <%=order.items[i].item.name%> <!--TODO: make item link href to product page-->
                                         </div>
-                                        <div class="w-25 text-center fs-5">                             
-                                            $<%=order.items[i].item.price%>
+                                        <div class="w-25 text-center fs-5">
+                                            <div class="d-flex justify-content-around">
+                                                <div class="">
+                                                    $<%= order.items[i].item.price %>
+                                                </div>
+                                                <div class="">
+                                                    X<%= order.items[i].quantity %>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </div>                                        
                                 </li>
                             <% } %>   
                         </ul>
@@ -69,3 +96,8 @@
             </div>
     </div>
 <%}%>
+
+
+<script>
+
+</script>
