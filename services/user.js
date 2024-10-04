@@ -1,9 +1,6 @@
 const User = require("../models/User")
 
 async function deleteUser(username) {
-    if(await isAdmin(username)) {
-       return "Trying to delete an admin";
-    }
     try {
         const user = await User.findOneAndDelete({_id: username})
         if (user == null) {
@@ -15,15 +12,12 @@ async function deleteUser(username) {
 }
 
 async function updateUser(username, data) {
-    if(await isAdmin(username)) {
-        return "Trying to update an admin";
-    }
     try {
         const user = await User.findOneAndUpdate({_id: username}, data);
         if (user == null) {
-            return "Cannot find user to update";
+            return {"user" : {"message": "Cannot find user to update"}}
         }
-        await user.save()
+        return
     } catch(e) {
         return e.errors
     }

@@ -25,6 +25,11 @@ const User = new mongoose.Schema ({
     createAt: Date
 })
 
+User.pre('findOneAndUpdate', function(next) {
+    this.options.runValidators = true;
+    next();
+  });
+
 function validatePassword(password) {
     return password.length>=6
 }
