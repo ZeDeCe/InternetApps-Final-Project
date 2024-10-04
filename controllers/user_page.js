@@ -1,5 +1,5 @@
 const orderService = require("../services/order.js")
-
+const userService = require("../services/user.js")
 async function getUserPage (req, res) {
     if (req.session.isAdmin) {
         res.redirect('/admin')
@@ -20,9 +20,18 @@ async function getOrdersPage (req, res) {
     res.render("all_user_orders.ejs", {username: user, userorders: orders, isAdmin: isadmin, items_rebuy: items});
 
 };
+
+async function getPersonalPage (req, res) {
+    var user = (await userService.getUser(req.session.username))[0];
+    user.password = ""
+    res.render("userpersonaldata.ejs", {user});
+};
+
+
 module.exports = {
     getUserPage,
-    getOrdersPage
+    getOrdersPage,
+    getPersonalPage
 }
 
 

@@ -19,6 +19,7 @@ const getRandomItems = async(user) => {
 //CRUD: Create new order in DB
 const createOrder = async(user, date, items) => {
     var total = await getTotalOrderPrice(items)
+    date = date ? date : Date.now()
     var order = new Order({
         _id: new mongoose.Types.ObjectId(),
         user : user,
@@ -26,7 +27,11 @@ const createOrder = async(user, date, items) => {
         items : items,
         total_price: total
     })
-    return await order.save();
+    try {
+        return await order.save();
+    } catch(e) {
+        return e.errors
+    }
 };
 
 //Calculate given order total price (going through all items in the order and sums up their price)
@@ -93,9 +98,14 @@ const getAllUserOrders = async (user) => {
     return orders
 };
 
+const getUserForOrder = async (id) => {
+    var order = await Order.findById({_id: id}, 'user')
+    return order.user
+}
+
 //CRUD: Get (read)  the most recent order of specific user from DB
 const getUserLatestOrder = async (user) => {
-    //await createOrder("shaqedmov@gmail.com", "2024-10-02",[{item: new mongoose.Types.ObjectId("66fd4d2f045f1cac4ec42f5d"), quantity: 6}, {item: new mongoose.Types.ObjectId("66e45a5f62c032dadd379aec"), quantity: 1}])
+    //await createOrder("test", Date.now(),[{item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 6}, {item: new mongoose.Types.ObjectId("66ff1678045f1cac4ec42fa0"), quantity: 1}])
     //getRandomItems();
     var order = await Order.find({ user })
     .sort({ date: -1 })
@@ -117,26 +127,35 @@ const getOrderPrettyDate = async(order) => {
 };
 
 //CRUD: Update given order data by id
-const updateOrder = async (id, items) => {
-    var order = await getOrderById(id);
+const updateOrder = async (orderid, tupleid, quantity) => {
+    var order = await getOrderById(orderid);
     if (!order)
         return null;
-
-    order.id = id;
-    order.items;
-    order.total_price = await getTotalOrderPrice(items);
-    await order.save();
+    for(var i = 0; i < order.items.length; ++i) {
+        if (order.items[i]._id.toString() === tupleid) {
+            order.items[i].quantity = quantity
+            break
+        }
+    }
+    order.total_price = await getTotalOrderPrice(order.items);
+    try {
+        await order.save();
+    } catch(e) {
+        return e.errors
+    }
     return order;
 };
 
 //CRUD: Delete given order by id
 const deleteOrder = async (id) => {
-    var order = await getOrderById(id);
-    if(!order)
-        return null;
-
-    await order.remove();
-    return order;
+    try {
+        const order = await Order.findOneAndDelete({_id: id})
+        if (order == null) {
+            return "Cannot find order to delete";
+        }
+    } catch(e) {
+        return e.errors
+    }
 };
 
 module.exports = {
@@ -149,5 +168,6 @@ module.exports = {
     getUserLatestOrder,
     getTotalOrderPrice,
     getOrderPrettyDate,
-    getRandomItems
+    getRandomItems,
+    getUserForOrder
 }
