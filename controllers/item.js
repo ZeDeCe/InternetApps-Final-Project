@@ -21,8 +21,7 @@ const createItem = async (req, res) => {
         await itemService.createItem(name, description, price, picture, theme, pieces);
         res.redirect('/items'); 
     } catch (error) {
-        res.status(500).send("Error creating items")
-
+        // Render the form with the error message and preserve input values
         res.render('createItem', {
             error: error.message, 
             name,
