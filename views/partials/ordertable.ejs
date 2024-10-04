@@ -12,7 +12,7 @@
             </div>
             <%}%>
             <%for (let i = 0; i < orders.length; i++) { const order = orders[i]%>
-                <div class="bg-transparent mt-3" id="singleorder">
+                <div class="bg-transparent mt-3" id="singleorder" data-id="<%=order._id%>">
                     <div class="bg-primary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
                         <% if(isAdmin) {%>
                             <div class="row">
@@ -30,7 +30,7 @@
                                     <%=order._id%>
                                 </div>
                                 <div class="col-2 d-flex justify-content-end">
-                                    <button type="button" class="btn btn-danger deleteOrder">Delete</button>
+                                    <button type="button" class="btn btn-danger deleteOrder" data-id="<%=order._id%>">Delete</button>
                                 </div>
                             </div>
                         <%} else { %>
@@ -68,7 +68,7 @@
                                                     $<%= order.items[i].item.price %>
                                                 </div>
                                                 <div class="">
-                                                    X<%= order.items[i].quantity %>
+                                                    x<%= order.items[i].quantity %>
                                                 </div>
                                             </div>
                                         </div>

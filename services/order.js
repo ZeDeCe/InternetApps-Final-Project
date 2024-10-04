@@ -131,12 +131,14 @@ const updateOrder = async (id, items) => {
 
 //CRUD: Delete given order by id
 const deleteOrder = async (id) => {
-    var order = await getOrderById(id);
-    if(!order)
-        return null;
-
-    await order.remove();
-    return order;
+    try {
+        const order = await Order.findOneAndDelete({_id: id})
+        if (order == null) {
+            return "Cannot find order to delete";
+        }
+    } catch(e) {
+        return e.errors
+    }
 };
 
 module.exports = {
