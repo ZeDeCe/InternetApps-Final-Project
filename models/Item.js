@@ -1,5 +1,3 @@
-//@Tomer
-
 const mongoose = require('mongoose')
 
 const Item = new mongoose.Schema ({
@@ -15,6 +13,16 @@ const Item = new mongoose.Schema ({
     },
     price: {
         type: Number,
+        required: true
+
+    },
+    pieces: {
+        type: Number,
+        required: true
+
+    },
+    theme: {
+        type: String,
         required: true
 
     },

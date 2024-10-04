@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <%- include('./partials/head', {title: "Create Item"}); %>
+</head>
+<body class="create-item-page">
+    <div class="ms-3 mt-2">
+        <a href="/user_page/" class="text-dark text-decoration-none" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+          <b>Back</b></a>
+    </div>
+    <h3>Create New Item</h3>
+    <form action="/items/create" method="POST">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <div>
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" required>
+        </div>
+        <div>
+            <label for="picture">Picture URL:</label>
+            <input type="text" id="picture" name="picture" required>
+        </div>
+        <div>
+            <label for="theme">Theme:</label>
+            <input type="text" id="theme" name="theme" required>
+        </div>
+        <div>
+            <label for="pieces">Number of Pieces:</label>
+            <input type="number" id="pieces" name="pieces" required>
+        </div>
+        <button type="submit" class="btn btn-success">Create Item</button>
+    </form>
+</body>
+</html>
