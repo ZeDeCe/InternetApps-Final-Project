@@ -49,6 +49,7 @@
                             <th>Username</th>
                             <th>Full Name</th>
                             <th>Is Admin</th>
+                            <th>Email</th>
                             <th>Created</th>
                             <th>Actions</th>
                         </tr>
@@ -59,15 +60,12 @@
                                 <td><%= user._id %></td>
                                 <td><%= user.name %></td>
                                 <td><%= user.isAdmin %></td>
+                                <td><%= user.email%></td>
                                 <td realdate="<%= user.createAt %>"><%= user.createAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });%></td>
                                 <td id="actions">
-                                    <% if(user.isAdmin) { %>
-                                    <button class="btn btn-warning btn-sm" data-id="<%= user._id %>" disabled>Edit</button>
-                                    <button class="btn btn-danger btn-sm" data-id="<%= user._id %>" disabled>Delete</button>
-                                    <%}else{%>
-                                    <button class="btn btn-warning btn-sm editUser" data-id="<%= user._id %>">Edit</button>
-                                    <button class="btn btn-danger btn-sm deleteUser" data-id="<%= user._id %>">Delete</button>        
-                                    <%}%>
+                                    
+                                    <button class="btn btn-warning btn-sm editUser" data-id="<%= user._id %>"<%= user.isAdmin && user._id !== admin ? 'disabled' : ''%>>Edit</button>
+                                    <button class="btn btn-danger btn-sm deleteUser" data-id="<%= user._id %>"<%= user.isAdmin ? 'disabled' : ''%>>Delete</button>        
                                 </td>
                             </tr>
                         <% }); %>
@@ -97,10 +95,15 @@
                                     <input type="password" class="form-control" id="userPassword" required>
                                 </div>
                                 <div class="mb-3">
+                                    <label for="userEmail" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="userEmail" required>
+                                </div>
+                                <div class="mb-3">
                                     <label for="isAdmin" class="form-check-label">Is Admin</label>
                                     <input type="checkbox" class="form-check-input" id="isAdmin" checked="true">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Create User</button>
+                                <p id="errormsgcreate" class="fw-bold text-danger d-none">Error</p>
                             </form>
                         </div>
                     </div>
@@ -130,10 +133,15 @@
                                     <input type="password" class="form-control" id="editUserPassword">
                                 </div>
                                 <div class="mb-3">
+                                    <label for="editEmail" class="form-label">Email</label>
+                                    <input type="text" class="form-control" id="editEmail">
+                                </div>
+                                <div class="mb-3">
                                     <label for="editIsAdmin" class="form-check-label">Is Admin</label>
                                     <input type="checkbox" class="form-check-input" id="editIsAdmin" checked="true">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <p id="errormsgedit" class="fw-bold text-danger d-none">Error</p>
                             </form>
                         </div>
                     </div>
@@ -169,7 +177,14 @@
                 $('#isadminSearch').click(filterTable)
                 $('#dateStartSearch').on('input', filterTable)
                 $('#dateEndSearch').on('input', filterTable)
-
+                
+                function displayError(modal, data) {
+                    for (var e in data) {
+                        $("#errormsg"+modal).text(data[e].message).removeClass("d-none")
+                        return
+                    }
+                    
+                }
                 function filterTable() {
                     const searchName = $('#userSearch').val().toLowerCase()
                     const isAdmin = $('#isadminSearch').is(":checked");
@@ -204,38 +219,43 @@
                 $('#confirmDelete').click(function() {
                     const userId = $(this).data('id');
                     $.post('/user/delete', {username: userId}).done(function(data) {
-                        if(data) {
-                            // Display error
-                            console.log(data)
-                        }
-                        else {
+                       
+                        $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
+                        $('#deleteUserModal').modal('hide');
+                    }).fail(function(err) {
+                        if(err.responseText === "Failed deleting user") { // User already deleted
                             $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
-                            $('#deleteModal').modal('hide');
+                            $('#deleteUserModal').modal('hide');
+                        } else {
+                            location.href = "/error.ejs"
                         }
                     })
                 });
 
                 // Handle create user form submission
                 $('#createUserForm').submit(function(event) {
+                    $("#errormsgcreate").addClass("d-none")
                     event.preventDefault();
                     const newUser = {
                         _id: $('#userName').val(),
                         name: $('#userFullName').val(),
+                        email: $('#userEmail').val(),
                         password: $("#userPassword").val(),
                         isAdmin: ($("#isAdmin:checked").val() === "on"),
                         createAt: new Date(Date.now())
                     };
                     $.post('/user/create', {user: newUser}).done(function(data) {
-                        if(data) {
+                        if(!data) {
                             $('#userTableBody').append(`
                                 <tr>
                                     <td>${newUser._id}</td>
                                     <td>${newUser.name}</td>
                                     <td>${newUser.isAdmin}</td>
+                                    <td>${newUser.email}</td>
                                     <td realdate=\"${newUser.createAt}\">${newUser.createAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm editUser" data-id="${newUser._id}">Edit</button>
-                                        <button class="btn btn-danger btn-sm deleteUser" data-id="${newUser._id}">Delete</button>
+                                        <button class="btn btn-warning btn-sm editUser" data-id="${newUser._id}" ${newUser.isAdmin ? "disabled" : ""}>Edit</button>
+                                        <button class="btn btn-danger btn-sm deleteUser" data-id="${newUser._id}" ${newUser.isAdmin ? "disabled" : ""}>Delete</button>
                                     </td>
                                 </tr>
                             `);
@@ -243,7 +263,7 @@
                             $('#createUserForm')[0].reset();
                         } else {
                             // Display error
-                            console.log("BAD!")
+                            displayError("create", data)
                         }
                     })
                     
@@ -252,11 +272,14 @@
                 // Handle edit user button click
                 $(document).on('click', '.editUser', function() {
                     const userId = $(this).data('id');
+                    $("#errormsgedit").addClass("d-none")
                     $.get('/user/' + userId).done(function(user) {
                         if (typeof(user)==="object") {
                             user = user[0]
                             $('#editUserName').val(user._id);
                             $('#editName').val(user.name);
+                            $('#editEmail').val(user.email);
+                            $("#editUserPassword").val("")
                             if(!user.isAdmin) {
                                 $('#editIsAdmin').removeAttr("checked");
                             } else {
@@ -265,6 +288,8 @@
                             $('#editUserModal').modal('show');
                         } else {
                             console.log("Cannot find a user in DB")
+                            location.reload() // If we failed to find user, it probably does not exist anymore
+                                            // Just reload the page so the chart comes back to life
                         }
                     })
                     
@@ -275,19 +300,28 @@
                     const userId = $('#editUserName').val()
                     var userdata = {
                         name: $('#editName').val(),
-                        isAdmin: $('#editIsAdmin').attr("checked") !== undefined
+                        email: $('#editEmail').val(),
+                        isAdmin: $('#editIsAdmin').is(":checked")
                     }
-                    if ($('#editPassword').val() !== undefined) {
-                        userdata.password = $('#editPassword').val()
+                    if ($('#editUserPassword').val() !== "") {
+                        userdata.password = $('#editUserPassword').val()
                     }
                     $.post('/user/update', {username: userId, data: userdata}).done(function(data) {
                         if(data) {
-                            console.log(data)
+                            displayError("edit", data)
                             return
                         }
                         const row = $('#userTableBody').find(`.editUser[data-id="${userId}"]`).closest('tr');
+                        const user = "<%= admin%>"
                         row.find('td:eq(1)').text(userdata.name);
                         row.find('td:eq(2)').text(userdata.isAdmin);
+                        row.find('td:eq(3)').text(userdata.email);
+                        row.find('td:eq(5)').children(".editUser").each(function() {
+                            $(this).prop("disabled", userdata.isAdmin && userId !== user)
+                        })
+                        row.find('td:eq(5)').children(".deleteUser").each(function() {
+                            $(this).prop("disabled", userdata.isAdmin)
+                        })
                         $('#editUserModal').modal('hide');
                     })
                     
