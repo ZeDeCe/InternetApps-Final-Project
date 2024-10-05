@@ -72,44 +72,43 @@
 
     <!-- Sidebar JavaScript -->
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // Open the sidebar when the menu button is clicked
-        document.getElementById("filter-btn").onclick = function() {
-          document.getElementById("sidebar").classList.add("sidebar-open");
-        };
-
-        
-        document.querySelector(".closebtn").onclick = function() {
-          document.getElementById("sidebar").classList.remove("sidebar-open");
-        };
-
-        document.getElementById("apply-btn").onclick = function() {
-          document.getElementById("sidebar").classList.remove("sidebar-open");
-
-          const priceRange = [];
-          const themes = [];
-          const piecesRange = [];
-
-        document.querySelectorAll('input[type="checkbox"]:checked').forEach((checkbox) => {
-          if (checkbox.dataset.type === "price") {
-            priceRange.push(checkbox.value);
-          } else if (checkbox.dataset.type === "theme") {
-            themes.push(checkbox.value);
-          } else if (checkbox.dataset.type === "pieces") {
-            piecesRange.push(checkbox.value);
-          }
-        });
-
-        const queryString = new URLSearchParams({
-          priceRange: priceRange.join(','),
-          themes: themes.join(','),
-          piecesRange: piecesRange.join(',')
-        }).toString();
-
-        // Redirect to the filter route
-        window.location.href = `/items/filter?${queryString}`;
-      };
+      $(document).ready(function() {
+          $('#filter-btn').click(function() {
+              $('#sidebar').addClass('sidebar-open');
+          });
+  
+          $('.closebtn').click(function() {
+              $('#sidebar').removeClass('sidebar-open');
+          });
+  
+          $('#apply-btn').click(function() {
+              $('#sidebar').removeClass('sidebar-open');
+  
+              const priceRange = [];
+              const themes = [];
+              const piecesRange = [];
+  
+              $('input[type="checkbox"]:checked').each(function() {
+                  const type = $(this).data('type');
+                  if (type === "price") {
+                      priceRange.push($(this).val());
+                  } else if (type === "theme") {
+                      themes.push($(this).val());
+                  } else if (type === "pieces") {
+                      piecesRange.push($(this).val());
+                  }
+              });
+  
+              const queryString = $.param({
+                  priceRange: priceRange.join(','),
+                  themes: themes.join(','),
+                  piecesRange: piecesRange.join(',')
+              });
+  
+              // Redirect to the filter route
+              window.location.href = `/items/filter?${queryString}`;
+          });
       });
-    </script>
+  </script>
   </body>
 </html>
