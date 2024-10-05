@@ -8,10 +8,12 @@ const aboutRouter = require('./routes/about')
 const adminRouter = require('./routes/admin')
 const userRouter = require('./routes/user')
 const orderRouter = require('./routes/order')
+const items = require('./routes/items')
 
 const session = require('express-session')
 const mongoose = require("mongoose")
 const MongoStore = require("connect-mongo");
+
 
 mongoose.connect(process.env.DB_URL)
 const app = express();
@@ -36,7 +38,9 @@ app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
-app.use('/about', aboutRouter);
+app.use('/items', items)
+app.use('/search', items) 
+app.use('/about', aboutRouter)
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
 app.use('/order', orderRouter)
