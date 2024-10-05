@@ -47,10 +47,12 @@ const shareTwitter = async (text, mediaId) => {
     }
 };
 
-const shareNewItem = async (product_name, product_image_url, product_link) => {
+const shareNewItem = async (item) => {
+    if (!item)
+        return;
     try {
-       const text = `${product_name} is now available on our site! \n\n${product_link}`
-       const mediaId = await uploadImage(product_image_url);
+       const text = `${item.name} is now available on our site!`
+       const mediaId = await uploadImage(item.picture);
        return await shareTwitter(text, mediaId);
 
     } catch (error) {
