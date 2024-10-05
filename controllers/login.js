@@ -23,16 +23,16 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-    const {username, password, name} = req.body
+    const {username, password, name, email} = req.body
 
     try {
-        var ret = await loginService.register(username, password, name)
+        var ret = await loginService.register(username, password, name, email)
         if(!ret) {
             req.session.username = username
             res.send("Success")
         }
         else {
-            res.status(404).send(ret)
+            res.send(ret) // sends an array of errors
         }
     }
     catch (e) {
@@ -43,7 +43,6 @@ async function register(req, res) {
 async function logout(req, res) {
     req.session.destroy((err) => {
         if (err) {
-            console.error(err);
             res.status(500).send('Error logging out');
         } else {
             res.redirect("/");

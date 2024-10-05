@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%- include('./partials/head', {title: "Website: Sign-In"}); %>
+        <%- include('./partials/head', {title: "TONNS Lego Store: Sign-In"}); %>
     </head>
-    <body class="bg-dark p-5 mb-2">
-        <div class="parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light-subtle bg-gradient p-4" style="width: 35%; height: 70%; min-width: 500px;">
-            <div class="w-100">
+    <body class="p-5 mb-2" style="background-image: url('/multimedia/loginBackground.jpg')">
+        <div class="main-div parent container border border-secondary-subtle border-2 text-start position-absolute top-50 start-50 translate-middle d-flex flex-column justify-content-top align-items-center parent container rounded bg-light p-4" style="width: 35%; height: 70%; min-width: 500px; min-height: 600px;">
+            <div class="w-100 h-100">
                 <h1 class="text-start pl-1">
                     Sign in
                 </h1>
                 <div id="user-tab" class="tab">
                     <div class="form-data mt-1">
-                        <label for="username">Email or mobile phone number</label>
+                        <label for="username">Your Username</label>
                         <input type="text" id="username" class="form-control" name="username" autofocus="autofocus" placeholder="Username">
                     </div>
                     <br>
-                    <button id="continue" class="btn btn-primary w-100">Continue</button>
+                    <button id="continue" class="btn btn-warning w-100">Continue</button>
                     <br>
                     <p id="wronguser" class="fw-bold text-danger d-none">Username does not exist!</p>
                     <div class="mt-2">
-                        By continuing, you agree to Website's <a href="/policies?page=privacy_policy">Privacy Policy</a>
+                        By continuing, you agree to TONNS Lego Store's <a href="/policies?page=privacy_policy">Privacy Policy</a>
                     </div>
                     <br><br>
                     <div class="mt-2">
-                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
+                        <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
                             Need help?
                         </button>
-                        <div class="collapse mt-1" id="collapseHelp">
+                        <div class="collapse mt-1 mb-1" id="collapseHelp">
                             <a href="./help">
                                 Forgot your password?
                             </a>
@@ -38,8 +38,8 @@
                     </div>
                     <br><br>
                     <div id="register" class="text-center position-absolute bottom-0 start-50 translate-middle">
-                        <p>New to Website?</p>
-                        <a class="btn btn-primary" role="button" href="/login/register">Create your Website account</a>
+                        <p>New to TONNS Lego Store?</p>
+                        <a class="btn btn-warning" role="button" href="/login/register">Create your TONNS Lego Store account</a>
                     </div>
                 </div>
                 <div id="password-tab" class="tab d-none">
@@ -50,12 +50,12 @@
                             <button class="bi bi-eye-slash btn btn-outline-secondary" type="button" id="togglePasswordDisplay"></button>
                         </div>
                     </div>
-                    <div class="input-group mt-2 align-items-center">
-                        <input id="keepsignedin" class="form-check-input mt-0 me-2" type="checkbox" value="">
-                        Keep me signed in?
-                    </div>
+                    <a class="mb-3" href="./help">
+                        <br>
+                        Forgot your password?
+                    </a>
                     <br>
-                    <button id="sign-in" class="btn btn-primary w-100">Sign in</button>
+                    <button id="sign-in" class="btn btn-warning w-100 mt-2">Sign in</button>
                     <br><br>
                     <p id="wrongpassword" class="text-danger fw-bold d-none">Wrong password!</p>
                 </div>
