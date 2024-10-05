@@ -32,6 +32,11 @@ const CommentSchema = new mongoose.Schema({
 });
 
 const ItemSchema = new mongoose.Schema({
+    _id: mongoose.Types.ObjectId,
+    name: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
@@ -47,18 +52,32 @@ const ItemSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: true,
+        validate: {
+            validator: function (value) {
+                return value >= 1 && value <= 10000;
+            },
+            message: 'Price must be between 1 and 10,000'
+        }
     },
     description: String,
     pieceCount: {
         type: Number,
         required: true,
-        min: 1
+        validate: {
+            validator: function (value) {
+                return value >= 1 && value <= 10000;
+            },
+            message: 'Pieces number must be between 1 and 10,000'
+        }
     },
     theme: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        set: function (value) {
+            return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+        }
     },
     ratings: [RatingSchema],
     comments: [CommentSchema]
