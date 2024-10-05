@@ -20,15 +20,17 @@
     <div class="main-div">
         <div class="container mt-5">
             <h1 class="mb-4">Your Shopping Cart</h1>
-            <h5 class="mb-3 text-secondary">
-                <% if (items.length && shippingPrice) { %>
-                    $<%= process.env.MIN_FREE_SHIPPING - orderPrice %> Remaining for FREE shipping!
-                <% } else if (items.length && !shippingPrice) { %>
-                    Your order is eligible for FREE Shipping!
-                <% } else { %>
-                    FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>
-                <% } %>
-            </h5>
+            <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
+                <h5 class="mb-3 text-secondary">
+                    <% if (items.length && shippingPrice) { %>
+                        $<%= process.env.MIN_FREE_SHIPPING - orderPrice %> Remaining for FREE shipping!
+                    <% } else if (items.length && !shippingPrice) { %>
+                        Your order is eligible for FREE Shipping!
+                    <% } else { %>
+                        FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>
+                    <% } %>
+                </h5>
+            <%} %>
             
             <div class="row">
                 <div class="col-md-8">

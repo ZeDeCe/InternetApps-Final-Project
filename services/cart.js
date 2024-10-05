@@ -27,10 +27,10 @@ const getCartById = async (user) => {
 }
 
 const getCartShippingPrice = async(totalPrice) => {
-    if (totalPrice >= process.env.MIN_FREE_SHIPPING)
+    if (process.env.MIN_FREE_SHIPPING > 0 && totalPrice >= process.env.MIN_FREE_SHIPPING)
         return 0;
 
-    return 5;
+    return process.env.GLOBAL_SHIPPING_FEE;
 }
 
 const getUserItems = async (user) => {
