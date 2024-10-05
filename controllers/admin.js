@@ -5,7 +5,7 @@ function displayMainPage(req, res) {
 }
 
 async function displayUsers(req, res) {
-    res.render('users_control.ejs', {users: await userService.getAllUsers()});
+    res.render('users_control.ejs', {admin: req.session.username, users: await userService.getAllUsers()});
 }
 
 

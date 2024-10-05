@@ -7,6 +7,7 @@ const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
 const adminRouter = require('./routes/admin')
 const userRouter = require('./routes/user')
+const orderRouter = require('./routes/order')
 
 const session = require('express-session')
 const mongoose = require("mongoose")
@@ -38,6 +39,7 @@ app.use('/user_page', userpageRouter)
 app.use('/about', aboutRouter);
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
+app.use('/order', orderRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
