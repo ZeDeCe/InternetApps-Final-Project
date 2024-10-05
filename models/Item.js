@@ -30,8 +30,7 @@ const CommentSchema = new mongoose.Schema({
         default: Date.now
     }
 });
-
-const ItemSchema = new mongoose.Schema({
+const Item = new mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     name: {
         type: String,

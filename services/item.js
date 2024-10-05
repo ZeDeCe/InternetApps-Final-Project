@@ -42,7 +42,7 @@ async function createItem(name, description, price, picture, theme, pieces) {
         console.error('Error creating item:', error.message);
         throw error;
     }
-}
+};
 
 const getFilteredItems = async (filters) => {
     const query = {};
@@ -79,6 +79,54 @@ const getUniqueThemes = async () => {
     }
 };
 
+const updateItem = async (id, updateData) => {
+    try {
+        return await Item.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+        console.error('Error updating item:', error.message);
+        throw error;
+    }
+};
+
+const deleteItem = async (id) => {
+    try {
+        return await Item.findByIdAndDelete(id);
+    } catch (error) {
+        console.error('Error deleting item:', error.message);
+        throw error;
+    }
+};
+
+const addRating = async (id, rating) => {
+    try {
+        const item = await Item.findById(id);
+        item.ratings.push({ value: rating });
+        return await item.save();
+    } catch (error) {
+        console.error('Error adding rating:', error.message);
+        throw error;
+    }
+};
+
+const addComment = async (id, rating, comment) => {
+    try {
+        const item = await Item.findById(id);
+        if (comment) {
+            item.comments.push({
+                rating: rating,
+                text: comment
+            });
+        }
+        if (rating) {
+            item.ratings.push({ value: rating });
+        }
+        return await item.save();
+    } catch (error) {
+        console.error('Error adding comment or rating:', error.message);
+        throw error;
+    }
+};
+
 module.exports = {
     getItems,
     getItemById,
@@ -86,5 +134,9 @@ module.exports = {
     searchItemsByName,
     createItem,
     getFilteredItems,
-    getUniqueThemes
+    getUniqueThemes,
+    updateItem,
+    deleteItem,
+    addRating,
+    addComment
 };
