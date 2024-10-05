@@ -24,7 +24,6 @@ const uploadImage = async (url) => {
 
         return mediaId;
     } catch (error) {
-        console.log(error);
         return;
     }
 }; 
@@ -34,7 +33,6 @@ const shareTwitter = async (text, mediaId) => {
         var body = {
             text: text
         }
-        console.log(mediaId);
         if (mediaId){
             body.media = {media_ids: [mediaId]};
         }

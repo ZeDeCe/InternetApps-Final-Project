@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <%- include('./partials/head', {title: "Cart"}); %>
+    <%- include('./partials/head', {title: "Website: Cart"}); %>
     <style>
         .product-image {
             width: 50px;
@@ -94,10 +95,22 @@
             event.preventDefault()
 
             const id = btn.getAttribute("data-item-id");
-            console.log('/cart/delete/' + id);
-            await fetch('/cart/delete/' + id, {
+
+            try{
+                const result = await fetch('/cart/delete/' + id, {
                 method: "DELETE"
-            }).then(window.location.reload(true));
+            });
+
+            if (result.ok){
+                window.location.reload(true);
+            } else {
+                console.error("Error Deleting:", result.statusText);
+            }
+            } catch (e) {
+                console.error(e);
+            }
+            
+
         });
 
         document.getElementsByName("update-item").forEach(select => select.onchange = async() => {
@@ -105,14 +118,25 @@
             
             const id = select.getAttribute("data-item-id");
             const newQuantity = Number(select.value);
-            
-            await fetch('/cart/update', {
+            try {
+                const result = await fetch('/cart/update', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ id: id, quantity: newQuantity })
-            }).then(window.location.reload(true));
+            });
+
+            if (result.ok){
+                window.location.reload();
+            } else {
+                console.error(result.statusText);
+            }
+                
+            }
+            catch (e){
+                console.error(e);
+            }
         });
 
     </script>

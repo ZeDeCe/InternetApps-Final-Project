@@ -1,6 +1,5 @@
 const cartService = require('../services/cart'); 
-const orderService = require('../services/order'); 
-const socialService = require('../services/social');
+const orderService = require("../services/order")
 
 async function getCart(req, res) {
     const username = req.session.username;
@@ -8,16 +7,16 @@ async function getCart(req, res) {
     const orderPrice = await orderService.getTotalOrderPrice(items);
     const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0
     res.render('cart.ejs', {items, orderPrice, shippingPrice});
-
-    if (items.length)
-        socialService.shareNewItem("Bdika!", items[0].item.picture, "https://localhost/");
 }
 
 async function getCheckout(req, res){
     const username = req.session.username;
     const items = await cartService.getUserItems(username);
-    if (!items.length)
+    if (!items.length){
         res.redirect("/cart");
+        return;
+    }
+        
 
     const orderPrice = await orderService.getTotalOrderPrice(items);
     const shippingPrice = await cartService.getCartShippingPrice(orderPrice);
@@ -62,33 +61,11 @@ async function deleteFromCart(req, res) {
     res.status(200).send('ok');
 }
 
-async function purchaseCart(req, res) {
-    const username = req.session.username;
-    const shippingDetails = req.body.shippingDetails;
-    const paymentDetails = req.body.paymentDetails;
-
-    const items = await cartService.getUserItems(username);
-    if (!items.length){
-        res.redirect("/cart");
-        return;
-    }
-        
-
-    if (!await orderService.createOrder(username, new Date(), items)) {
-        res.status(400).send("Failed.");
-        return;
-    }
-
-    cartService.deleteCart(username);
-    res.status(200).send("OK");
-
-}
 
 module.exports = {
     getCart,
     getCheckout,
     addToCart,
     deleteFromCart,
-    updateCartItem,
-    purchaseCart
+    updateCartItem
 };
