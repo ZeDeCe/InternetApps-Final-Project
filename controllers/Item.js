@@ -24,7 +24,16 @@ async function getItem(req, res) {
 
 async function createItem(req, res) {
     try {
-        const newItem = new Item(req.body);
+        const { name, slug, picture, price, description, pieceCount, theme } = req.body;
+        const newItem = new Item({
+            name,
+            slug,
+            picture,
+            price: Number(price),
+            description,
+            pieceCount: Number(pieceCount),
+            theme
+        });
         await newItem.save();
         res.redirect('/items');
     } catch (error) {
@@ -34,7 +43,20 @@ async function createItem(req, res) {
 
 async function updateItem(req, res) {
     try {
-        const updatedItem = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const { name, slug, picture, price, description, pieceCount, theme } = req.body;
+        const updatedItem = await Item.findByIdAndUpdate(
+            req.params.id,
+            {
+                name,
+                slug,
+                picture,
+                price: Number(price),
+                description,
+                pieceCount: Number(pieceCount),
+                theme
+            },
+            { new: true }
+        );
         if (!updatedItem) {
             return res.status(404).render('error', { message: 'Item not found' });
         }

@@ -50,6 +50,16 @@ const ItemSchema = new mongoose.Schema({
         required: true
     },
     description: String,
+    pieceCount: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+    theme: {
+        type: String,
+        required: true,
+        trim: true
+    },
     ratings: [RatingSchema],
     comments: [CommentSchema]
 });

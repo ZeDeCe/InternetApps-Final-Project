@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <%- include('./partials/head', {title: "Item Details Page"}); %>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= item.name %> - Details</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
@@ -97,25 +99,29 @@
     </div>
 
     <script>
-        // Client-side validation and star rating interactivity
-        document.addEventListener('DOMContentLoaded', () => {
-            const ratingForms = document.querySelectorAll('form');
-            ratingForms.forEach(form => {
-                const stars = form.querySelectorAll('input[name="rating"]');
-                stars.forEach((star, index) => {
-                    star.addEventListener('change', () => {
-                        for (let i = 0; i <= index; i++) {
-                            stars[i].nextElementSibling.querySelector('svg').classList.add('text-yellow-400');
-                            stars[i].nextElementSibling.querySelector('svg').classList.remove('text-gray-300');
-                        }
-                        for (let i = index + 1; i < stars.length; i++) {
-                            stars[i].nextElementSibling.querySelector('svg').classList.remove('text-yellow-400');
-                            stars[i].nextElementSibling.querySelector('svg').classList.add('text-gray-300');
-                        }
-                    });
+    $(document).ready(function() {
+        $('form').each(function() {
+            const $form = $(this);
+            const $stars = $form.find('input[name="rating"]');
+            
+            $stars.on('change', function() {
+                const $checkedStar = $(this);
+                const checkedIndex = $stars.index($checkedStar);
+                
+                $stars.each(function(index) {
+                    const $star = $(this);
+                    const $svg = $star.next().find('svg');
+                    
+                    if (index <= checkedIndex) {
+                        $svg.removeClass('text-gray-300').addClass('text-yellow-400');
+                    } else {
+                        $svg.removeClass('text-yellow-400').addClass('text-gray-300');
+                    }
                 });
             });
         });
+    });
     </script>
+    <%- include('./partials/footer'); %>
 </body>
 </html>
