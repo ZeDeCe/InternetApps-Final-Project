@@ -47,6 +47,7 @@ const ItemSchema = new mongoose.Schema({
         unique: true
     },
     picture: {
+        type: String, // URL of item picture
         type: String,
         required: true
     },
@@ -54,18 +55,17 @@ const ItemSchema = new mongoose.Schema({
         type: Number,
         required: true,
         validate: {
-            validator: function (value) {
+            validator: function(value) {
                 return value >= 1 && value <= 10000;
             },
             message: 'Price must be between 1 and 10,000'
         }
     },
-    description: String,
-    pieceCount: {
+    pieces: {
         type: Number,
         required: true,
         validate: {
-            validator: function (value) {
+            validator: function(value) {
                 return value >= 1 && value <= 10000;
             },
             message: 'Pieces number must be between 1 and 10,000'
@@ -74,15 +74,11 @@ const ItemSchema = new mongoose.Schema({
     theme: {
         type: String,
         required: true,
-        trim: true,
-        set: function (value) {
+        set: function(value) {
             return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
         }
     },
-    ratings: [RatingSchema],
-    comments: [CommentSchema]
+    description: String,
 });
 
-const Item = mongoose.model('Item', ItemSchema);
-
-module.exports = Item;
+module.exports = mongoose.model("Item", Item);
