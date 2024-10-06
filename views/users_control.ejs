@@ -222,11 +222,11 @@
                     $.post('/user/delete', {username: userId}).done(function(data) {
                        
                         $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
-                        $('#deleteUserModal').modal('hide');
+                        $('#deleteModal').modal('hide');
                     }).fail(function(err) {
                         if(err.responseText === "Failed deleting user") { // User already deleted
                             $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
-                            $('#deleteUserModal').modal('hide');
+                            $('#deleteModal').modal('hide');
                         } else {
                             location.href = "/error.ejs"
                         }
