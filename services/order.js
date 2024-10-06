@@ -131,17 +131,19 @@ const updateOrder = async (orderid, tupleid, quantity) => {
     var order = await getOrderById(orderid);
     if (!order)
         return null;
-    for(var i = 0; i < order.items.length; ++i) {
-        if (order.items[i]._id.toString() === tupleid) {
-            order.items[i].quantity = quantity
-            break
+    if(new Date() - order.date <= 30 * 60 * 1000){
+        for(var i = 0; i < order.items.length; ++i) {
+            if (order.items[i]._id.toString() === tupleid) {
+                order.items[i].quantity = quantity
+                break
+            }
         }
-    }
-    order.total_price = await getTotalOrderPrice(order.items);
-    try {
-        await order.save();
-    } catch(e) {
-        return e.errors
+        order.total_price = await getTotalOrderPrice(order.items);
+        try {
+            await order.save();
+        } catch(e) {
+            return e.errors
+        }
     }
     return order;
 };
