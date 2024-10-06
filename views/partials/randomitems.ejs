@@ -7,7 +7,10 @@
                     <div class="py-2 align-center">
                         <img src= "<%=items_rebuy[i].picture%>" class="img-fluid" style="max-width: 100px; max-height: 125px;"></img>
                         <div class="px-2">
-                            <%=items_rebuy[i].name.substring(0,75)%>
+                            <!-- href will be - /item/<%=items_rebuy[i]._id%>-->                       
+                            <a href="/">
+                                <%=items_rebuy[i].name.substring(0,75)%>
+                            </a>
                         </div>
                     </div>
                 </li>
