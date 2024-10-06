@@ -4,8 +4,8 @@ const xss = require('xss');
 const getItems = async (req, res) => {
     try {
         const items = await itemService.getItems();
-        const uniqueThemes = await itemService.getUniqueThemes();
-        res.render('items', { items: items, searchName: '', uniqueThemes });
+        const uniqueThemes = await itemService.getUniqueThemes(); // Fetch unique themes
+        res.render('items', { items: items, searchName: '', uniqueThemes }); 
     } catch (error) {
         res.status(500).send('Error fetching items');
     }
@@ -106,33 +106,23 @@ const deleteItem = async (req, res) => {
 
 const addRating = async (req, res) => {
     try {
-        const item = await itemService.getItemById(req.params.id);
-        if (!item) {
-            return res.status(404).render('error', { message: 'Item not found' });
-        }
-        const rating = Number(req.body.rating);
-        if (isNaN(rating) || rating < 1 || rating > 5) {
-            return res.status(400).render('error', { message: 'Invalid rating value' });
-        }
-        await itemService.addRating(req.params.id, rating);
-        res.redirect(`/items/${req.params.id}`);
+        const { id } = req.params;
+        const { rating } = req.body;
+        await itemService.addRating(id, Number(rating));
+        res.redirect(`/items/${id}`);
     } catch (error) {
-        res.status(400).render('error', { message: 'Error adding rating', error: error.message });
+        res.status(500).render('error', { message: 'Error adding rating', error: error.message });
     }
 };
 
 const addComment = async (req, res) => {
     try {
-        const item = await itemService.getItemById(req.params.id);
-        if (!item) {
-            return res.status(404).render('error', { message: 'Item not found' });
-        }
+        const { id } = req.params;
         const { rating, comment } = req.body;
-        const sanitizedComment = comment ? xss(comment) : null;
-        await itemService.addComment(req.params.id, Number(rating), sanitizedComment);
-        res.redirect(`/items/${req.params.id}`);
+        await itemService.addComment(id, Number(rating), comment);
+        res.redirect(`/items/${id}`);
     } catch (error) {
-        res.status(400).render('error', { message: 'Error adding comment or rating', error: error.message });
+        res.status(500).render('error', { message: 'Error adding comment', error: error.message });
     }
 };
 

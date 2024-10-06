@@ -30,23 +30,14 @@ const CommentSchema = new mongoose.Schema({
         default: Date.now
     }
 });
-const Item = new mongoose.Schema({
+
+const ItemSchema = new mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     name: {
         type: String,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
-    slug: {
-        type: String,
-        required: true,
-        unique: true
-    },
     picture: {
-        type: String, // URL of item picture
         type: String,
         required: true
     },
@@ -78,6 +69,8 @@ const Item = new mongoose.Schema({
         }
     },
     description: String,
+    ratings: [RatingSchema],
+    comments: [CommentSchema]
 });
 
-module.exports = mongoose.model("Item", Item);
+module.exports = mongoose.model("Item", ItemSchema);
