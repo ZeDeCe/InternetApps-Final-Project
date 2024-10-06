@@ -43,7 +43,7 @@
                 </div>
             </div>
             <!--Delete modal-->
-            <% if(!isAdmin) {%>
+            <% if(isAdmin) {%>
                 <%-include('./partials/confirm', {message: "Are you sure you want to delete this order?", title: "Delete Order"})%>
             <%}%>
         </div>
