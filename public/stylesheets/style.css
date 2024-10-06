@@ -16,6 +16,22 @@ body {
   max-width: 50px;
 }
 
+.product-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+.quantity-select {
+  width: 80px;
+}
+
+#checkout-item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
 .content-wrapper {
   flex: 1 0 auto;
   padding-bottom: 60px; /* Adjust based on your footer height */
