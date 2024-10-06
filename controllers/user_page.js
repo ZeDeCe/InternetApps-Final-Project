@@ -8,7 +8,6 @@ async function getUserPage (req, res) {
     const user = req.session.username;
     var order = await orderService.getUserLatestOrder(user);
     const items = await orderService.getRandomItems();
-    // TODO: Add function that returns 3 random items from past orders (in service page) and call it here.
     res.render("user_page.ejs", {username: user, userorders: order, items_rebuy: items});
 };
 
