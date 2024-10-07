@@ -98,15 +98,19 @@
                 $("#users_manage").click(function() {
                     location.href = "/admin/users"
                 })
+                $("#stats").click(function() {
+                    location.href = "/admin/stats"
+                })
+                $("#locations").click(function() {
+                    location.href = "/admin/branches"
+                })
                 $("#orders_manage").click(function() {
                     location.href = "/admin/orders"
                 })
                 $("#items_manage").click(function() {
                     location.href = "/admin/items"
                 })
-                $("#logout").click(function() {
-                    location.href = "/logout"
-                })
+          
             })
         </script>
         <%- include('./partials/footer'); %>

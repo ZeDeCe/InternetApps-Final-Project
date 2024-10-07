@@ -41,7 +41,13 @@ async function deleteBranch(req, res){
 }
 
 async function updateBranch(req, res){
-    res.send(await branchService.updateBranch(req.body.branch, req.body.data))
+    const result = await branchService.updateBranch(req.body.branch, req.body.data);
+    if (!result){
+        res.status(400).send("Couldn't update branch.");
+        return;
+    }
+
+    res.send(result);
 }
 
 module.exports = {

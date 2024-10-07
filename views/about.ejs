@@ -35,25 +35,6 @@
                     </video>
 
             </section>
-
-            <section class="mt-5 text-center text-wrap text-break" style="min-width:650px; max-width: 35%; margin: 0 auto;">
-                <h1>
-                    Statistics
-                </h1>
-                
-
-                <div class="card p-3 rounded text-primary border-0">
-                    <div class="card-body">
-                        <%- include('./partials/graph_sales_week'); %>        
-                    </div>
-                </div>
-                <div class="card p-3 rounded text-primary border-0">
-                    <div class="card-body">
-                        <%- include('./partials/graph_themes_week'); %>        
-                    </div>
-                </div>
-
-            </section>
             
             <section class="mt-5 mb-2 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
                     <h1>
@@ -231,18 +212,18 @@
                     const p_value = weather.current.precipitation;
                     const p_unit = weather.current_units.precipitation; 
                     
-                    document.getElementById("branch-weather").innerHTML = `${t_value}${t_unit}`;
-                    document.getElementById("branch-precipitation").innerHTML = `Precipitation: ${p_value}${p_unit}`;
+                    $("#branch-weather").text(`${t_value}${t_unit}`)
+                    $("#branch-precipitation").text(`Precipitation: ${p_value}${p_unit}`)
                 } else {
-                    document.getElementById("branch-weather").innerHTML = "Error getting Branch Weather";
+                    $("#branch-weather").text("Error getting Branch Weather");
                 }
                 
             })
 
             try{
-                document.getElementById("branch-name").innerHTML = branch.name;
-                document.getElementById("branch-phone").innerHTML = branch.phone;
-                document.getElementById("branch-address").innerHTML = branch.location.address;
+                $("#branch-name").text(branch.name);
+                $("#branch-phone").text(branch.phone);
+                $("#branch-address").text(branch.location.address);
             } catch {
                 infoElement.style.display = "none";
                 return;

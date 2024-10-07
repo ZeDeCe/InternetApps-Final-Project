@@ -17,11 +17,12 @@ const createBranch = async(branch) => {
 
 const updateBranch = async(id, data) => {
     try {
-        const user = await Branch.findOneAndUpdate({_id: id}, data);
-        if (user == null) {
-            return "Cannot find branches to update";
+        const user = await Branch.findOneAndUpdate({_id: id}, data,{ new: true, runValidators: true });
+        if (!user) {
+            return;
         }
-        await user.save()
+
+        return user;
     } catch(e) {
         return;
     }    

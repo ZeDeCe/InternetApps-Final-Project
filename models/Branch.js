@@ -26,8 +26,8 @@ const Branch = new mongoose.Schema ({
     },
     phone: {
         type: String,
-        min: 8,
-        max: 10,
+        minLength: 8,
+        maxLength: 10,
         required: true,
         validate: {
             validator: function(value) {
