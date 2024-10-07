@@ -86,17 +86,17 @@
             }
 
             function setOrderSummary(result) {
-                $('#subtotal_price').html("$"+result.orderPrice);
-                $('#shipping_price').html("$"+result.shippingPrice);
+                $('#subtotal_price').html("$"+String(result.orderPrice));
+                $('#shipping_price').html("$"+String(result.shippingPrice));
                 const total_price = Number(result.orderPrice)+Number(result.shippingPrice);
-                $('#total_price').html("$"+total_price);
+                $('#total_price').html("$"+String(total_price));
 
                 <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
                     var message = "";
                     if ($("[id^='list_']").length > 0){
                         if (Number(result.shippingPrice) > 0){
                             const value = <%= process.env.MIN_FREE_SHIPPING %> - Number(result.orderPrice);
-                            message = `$${value} Remaining for FREE shipping!`;
+                            message = `$${String(value)} Remaining for FREE shipping!`;
                         } else if (Number(result.shippingPrice) === 0) {
                             message = "Your order is eligible for FREE Shipping!";
                         }
