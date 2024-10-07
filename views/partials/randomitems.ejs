@@ -1,14 +1,13 @@
 <div class="col-2 p-0">
-    <div class="me-2 ms-2 p-3 bg-white">
+    <div class="me-2 ms-2 p-3 bg-white shadow rounded">
         <b>You may be interested in</b>
         <ul class="list-group align-center">
             <% for(let i=0; i < items_rebuy.length; i++) { %>
                 <li class="list-group-item bg-transparent border border-0 text-center">
                     <div class="py-2 align-center">
                         <img src= "<%=items_rebuy[i].picture%>" class="img-fluid" style="max-width: 100px; max-height: 125px;"></img>
-                        <div class="px-2">
-                            <!-- href will be - /item/<%=items_rebuy[i]._id%>-->                       
-                            <a href="/">
+                        <div class="px-2">                       
+                            <a href="/items/<%=items_rebuy[i]._id%>">
                                 <%=items_rebuy[i].name.substring(0,75)%>
                             </a>
                         </div>
