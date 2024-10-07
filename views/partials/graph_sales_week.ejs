@@ -1,0 +1,156 @@
+<div id="chart_sales"></div>
+
+<script>
+  // Data
+
+
+$(document).ready(function() {
+        getData().then(data => {
+            set_graph(data);
+        });
+    
+        
+        
+
+        function getData() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/about/graph?id=1',
+                    type: 'GET',
+                    success: function(result, textStatus, xhr) {
+                        if (xhr.status === 200 && typeof(result) === "object") {
+                            resolve(result);
+                        } else {
+                            reject(new Error('Invalid data format')); // Reject if the format is invalid
+                        }
+                    },
+                    error: function(err) {
+                        reject(err); // Reject the promise on error
+                    }
+                });
+            });
+        }
+
+        function set_graph(data){
+        // Calculate total sales and find min/max values
+        const totalSales = data.reduce((sum, item) => sum + item.sales, 0);
+        const maxSales = Math.max(...data.map(d => d.sales));
+        const minSales = Math.min(...data.map(d => d.sales));
+
+        // Set up dimensions
+        const margin = { top: 40, right: 40, bottom: 40, left: 80 };
+        const width = Math.max(document.getElementById('chart_sales').clientWidth, 650) - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        // Create SVG container
+        const svg = d3.select("#chart_sales")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        // X scale
+        const x = d3.scaleBand()
+            .domain(data.map(d => d.date))
+            .range([0, width])
+            .padding(0.2);
+
+        // Y scale
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.sales) * 1.1])
+            .range([height, 0]);
+
+        // Add X axis
+        const xAxis = svg.append("g")
+            .attr("class", "axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(d3.axisBottom(x));
+
+        xAxis.selectAll("text")
+            .style("font-size", "14px")
+            .style("font-weight", "600")
+            .style("fill", "currentColor");
+
+        xAxis.selectAll("line")
+            .style("stroke", "currentColor");
+
+        xAxis.selectAll("path")
+            .style("stroke", "currentColor");
+
+        // Add Y axis
+        const yAxis = svg.append("g")
+            .attr("class", "axis")
+            .call(d3.axisLeft(y)
+                .ticks(5)
+                .tickFormat(d => `$${d.toLocaleString()}`));
+
+        yAxis.selectAll("text")
+            .style("font-size", "14px")
+            .style("font-weight", "600")
+            .style("fill", "currentColor");
+
+        yAxis.selectAll("line")
+            .style("stroke", "currentColor");
+
+        yAxis.selectAll("path")
+            .style("stroke", "currentColor");
+
+            // Add the bars
+            svg.selectAll("rect")
+                .data(data)
+                .join("rect")
+                .attr("x", d => x(d.date))
+                .attr("y", d => y(d.sales))
+                .attr("width", x.bandwidth())
+                .attr("height", d => height - y(d.sales))
+                .attr("fill", d => {
+                    if (d.sales === maxSales) return "#FF0000";
+                    if (d.sales === minSales) return "#FF0000";
+                    return "#FFD700";
+                })
+                .attr("rx", 4);
+
+            // Add value labels on top of bars
+            svg.selectAll(".value-label")
+                .data(data)
+                .join("text")
+                .attr("class", "value-label")
+                .attr("x", d => x(d.date) + x.bandwidth() / 2)
+                .attr("y", d => y(d.sales) - 5)
+                .attr("text-anchor", "middle")
+                .text(d => `$${d.sales.toLocaleString()}`)
+                .style("font-size", "14px")
+                .style("font-weight", "600")
+                .style("fill", "currentColor");
+
+            // Add title with total sales
+            svg.append("text")
+                .attr("class", "title-text")
+                .attr("x", width / 2)
+                .attr("y", -margin.top / 2)
+                .attr("text-anchor", "middle")
+                .style("font-size", "20px")
+                .style("font-weight", "bold")
+                .style("fill", "currentColor")
+                .text(`Total Sales: $${totalSales.toLocaleString()}`);
+
+            d3.select("#chart_sales")
+            .append("div")
+            .attr("class", "chart-description")
+            .style("text-align", "center")
+            .style("font-weight", "500")
+            .style("font-size", "20px")
+            .style("margin-top", "20px")
+            .style("font-family", "Poppins")
+            .html(`This chart shows the sales data over the past ${data.length} days,<br>highlighting the highest and lowest sales days in red.`);
+
+            svg.selectAll("text")
+                .style("font-family", "Poppins");
+        }
+
+    })
+
+
+
+</script>

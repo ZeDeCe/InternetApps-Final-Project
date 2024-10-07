@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Website: Admin Page"}); %>
+    </head>
+    <body>
+        <%- include('./partials/header'); %>
+        <div class="container mt-4 main-div">
+            <h1 class="mb-4">Branch Management Dashboard</h1>
+
+            <!-- Branch Management Section -->
+            <div class="mb-4">
+                <h2>Manage Branches</h2>
+                <div class="mt-2">
+                    <button class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createBranchModal">
+                        Create New Branch
+                    </button>
+                    <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
+                        Filter
+                    </button>
+                </div>
+                <div class="collapse mt-1" id="collapseFilter">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="branchSearch" placeholder="Search Branches...">
+                    </div>
+                    <div class="row justify-content-start mb-3">
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text">Phone</span>
+                                <input type="text" class="form-control" id="phoneSearch" placeholder="Search by phone...">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text">Address</span>
+                                <input type="text" class="form-control" id="addressSearch" placeholder="Search by address...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="branchTableBody">
+                        <% branches.forEach(branch => { %>
+                            <tr>
+                                <td><%= branch.name %></td>
+                                <td><%= branch.location.address %></td>
+                                <td><%= branch.phone %></td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm editBranch" data-id="<%= branch._id %>">Edit</button>
+                                    <button class="btn btn-danger btn-sm deleteBranch" data-id="<%= branch._id %>">Delete</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Create Branch Modal -->
+            <div class="modal fade" id="createBranchModal" tabindex="-1" aria-labelledby="createBranchModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createBranchModalLabel">Create New Branch</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="createBranchForm">
+                                <div class="mb-3">
+                                    <label for="branchName" class="form-label">Branch Name</label>
+                                    <input type="text" class="form-control" id="branchName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="branchAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="branchAddress" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="branchPhone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="branchPhone" required>
+                                </div>
+                                <h5 class="text-danger" id="create-error-message"></h5>
+                                <button type="submit" class="btn btn-primary">Create Branch</button>
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Branch Modal -->
+            <div class="modal fade" id="editBranchModal" tabindex="-1" aria-labelledby="editBranchModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editBranchModalLabel">Edit Branch</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editBranchForm">
+                                <input type="hidden" id="editBranchId">
+                                <div class="mb-3">
+                                    <label for="editBranchName" class="form-label">Branch Name</label>
+                                    <input type="text" class="form-control" id="editBranchName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editBranchAddress" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="editBranchAddress" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editBranchPhone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="editBranchPhone" required>
+                                </div>
+                                <h5 class="text-danger" id="edit-error-message"></h5>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Branch Confirmation Modal -->
+            <div class="modal fade" id="deleteBranchModal" tabindex="-1" aria-labelledby="deleteBranchModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteBranchModalLabel">Delete Branch</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this branch?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" id="confirmDeleteBranch">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+
+            
+            $(document).ready(function() {
+                // Handle search filters
+                $('#branchSearch, #phoneSearch, #addressSearch').on('input', filterTable);
+
+                async function getCordsByAddress(address) {
+                try {
+                    const encodedAddress = encodeURIComponent(address + " Israel");
+                    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=<%= process.env.MAPS_TOKEN %>`;
+
+                    const data = await new Promise((resolve, reject) => {
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            success: function(result) {
+                                if (result.results && result.results.length > 0) {
+                                    const location = result.results[0].geometry.location;
+                                    resolve({
+                                        lat: location.lat,
+                                        lng: location.lng
+                                    });
+                                } else {
+                                    reject(new Error('No results found for this address'));
+                                }
+                            },
+                            error: function(err) {
+                                reject(err); // Reject if there is an error in the AJAX request
+                            }
+                        });
+                    });
+
+                    return data;
+                } catch (error) {
+                    console.error(error); // Log the error for debugging
+                    return null; // Return null in case of error
+                }
+            }
+
+                function filterTable() {
+                    const searchName = $('#branchSearch').val().toLowerCase();
+                    const searchPhone = $('#phoneSearch').val().toLowerCase();
+                    const searchAddress = $('#addressSearch').val().toLowerCase();
+
+                    $('#branchTableBody tr').each(function(){
+                        const branchName = $(this).find('td:eq(0)').text().toLowerCase();
+                        const branchAddress = $(this).find('td:eq(1)').text().toLowerCase();
+                        const branchPhone = $(this).find('td:eq(2)').text().toLowerCase();
+
+                        if ((searchName === '' || branchName.includes(searchName))
+                            && (searchPhone === '' || branchPhone.includes(searchPhone))
+                            && (searchAddress === '' || branchAddress.includes(searchAddress))) {
+                            $(this).show();
+                        } else {
+                            $(this).hide();
+                        }
+                    });
+                }
+
+                // Handle delete branch button click
+                $(document).on('click', '.deleteBranch', function() {
+                    const branchId = $(this).data('id');
+                    $('#confirmDeleteBranch').data('id', branchId);
+                    $('#deleteBranchModal').modal('show');
+                });
+
+                // Confirm delete branch
+                $('#confirmDeleteBranch').click(function() {
+                    const branchId = $(this).data('id');
+                    $.ajax({
+                            url: '/branch/delete/' + branchId,
+                            type: 'DELETE',
+                            success: function(data) {
+                                if (data) {
+                                    console.error("Error Deleting Branch");
+                                } else {
+                                    $('#branchTableBody').find(`.deleteBranch[data-id="${branchId}"]`).closest('tr').remove();
+                                    $('#deleteBranchModal').modal('hide');
+                                }
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error("Error deleting branch:", textStatus, errorThrown);
+                            }
+                        });
+
+                });
+
+                // Handle create branch form submission
+                $('#createBranchForm').submit(function(event) {
+                    event.preventDefault();
+                    const coords = getCordsByAddress($('#branchAddress').val()).then(coords => {
+                        if (!coords){
+                            $("#create-error-message").text("Error getting coords of Location");
+                            return;
+                        }
+
+                        const newBranch = {
+                            name: $('#branchName').val(),
+                            location: {
+                                lat: coords.lat,
+                                lng: coords.lng,
+                                address: $('#branchAddress').val()
+                            },
+                            phone: $('#branchPhone').val()
+                        };
+                        $.post('/branch/create', {branch: newBranch}).done(function(data) {
+                            if(data) {
+                                $('#branchTableBody').append(`
+                                    <tr>
+                                        <td>${newBranch.name}</td>
+                                        <td>${newBranch.location.address}</td>
+                                        <td>${newBranch.phone}</td>
+                                        <td>
+                                            <button class="btn btn-warning btn-sm editBranch" data-id="${data._id}">Edit</button>
+                                            <button class="btn btn-danger btn-sm deleteBranch" data-id="${data._id}">Delete</button>
+                                        </td>
+                                    </tr>
+                                `);
+                                $('#createBranchModal').modal('hide');
+                                $('#createBranchForm')[0].reset();
+                            } else {
+                                $("#create-error-message").text("Error Creating Branch");
+                                return;
+                            }
+
+                        });
+                    })                  
+                });
+
+                // Handle edit branch button click
+                $(document).on('click', '.editBranch', function() {
+                    const branchId = $(this).data('id');
+                    $.get('/branch/' + branchId).done(function(branch) {
+                        if (branch) {
+                            $('#editBranchId').val(branch._id);
+                            $('#editBranchName').val(branch.name);
+                            $('#editBranchAddress').val(branch.location.address);
+                            $('#editBranchPhone').val(branch.phone);
+                            $('#editBranchModal').modal('show');
+                        } else {
+                            console.log("Cannot find Branch in DB.");
+                        }
+                    });
+                });
+
+                // Handle edit branch form submission
+                $('#editBranchForm').submit(function(event) {
+                    event.preventDefault();
+                    const coords = getCordsByAddress($('#editBranchAddress').val()).then(coords => 
+                    {
+                        if (!coords){
+                            $("#edit-error-message").text("Error getting Coords Of Location.");
+                            return;
+                        }
+                            
+                        const branchId = $('#editBranchId').val();
+                        const branchData = {
+                            name: $('#editBranchName').val(),
+                            location: {
+                                lat: coords.lat,
+                                lng: coords.lng, 
+                                address: $('#editBranchAddress').val()
+                            },
+                            phone: $('#editBranchPhone').val()
+                        };
+
+                        $.post('/branch/update', {branch: branchId, data: branchData}).done(function(data) {
+                            if(!data) {
+                                const row = $('#branchTableBody').find(`.editBranch[data-id="${branchId}"]`).closest('tr');
+                                row.find('td:eq(0)').text(branchData.name);
+                                row.find('td:eq(1)').text(branchData.location.address);
+                                row.find('td:eq(2)').text(branchData.phone);
+                                $('#editBranchModal').modal('hide');
+                            } else {
+                                $("#edit-error-message").text("Error updating branch.");
+                            }
+                        });
+                    });
+                });
+                    
+                  
+            });
+
+
+        $("#branchPhone").on("input", function() {
+            $(this).val($(this).val().replace(/\D/g, ''));
+        });
+
+        $("#editBranchPhone").on("input", function() {
+            $(this).val($(this).val().replace(/\D/g, ''));
+        });
+        </script>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

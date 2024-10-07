@@ -259,3 +259,29 @@ body.create-item-page button {
 body.create-item-page button:hover {
   background-color: #f91f1f; /* Darker on hover */
 }
+
+.slogan {
+  column-count: 3;
+  column-gap: 20px; /* Optional: Controls the space between columns */
+  text-align: center; /* Centers the text in each column */
+}
+
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  pointer-events: none;
+}
+.total-label {
+  font-size: 24px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+.theme-label {
+  font-size: 14px;
+  text-anchor: middle;
+}

@@ -1,9 +1,264 @@
 <!DOCTYPE html>
 <html>
-    <head>
+<head>
+    <%- include('./partials/head', {title: "Website: Admin Page"}); %>
+</head>
+<body style="background-color: #87CEEB"></body>
+    <%- include('./partials/header'); %>    
+    <div class="main-div">
+        <canvas id="legoCanvas"></canvas>
+    </div>
 
-    </head>
-    <body>
-        404
-    </body>
+    <%- include('./partials/footer'); %>
+    <script>
+        const canvas = document.getElementById('legoCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = Math.max(700, document.body.clientWidth);
+            canvas.height = document.body.clientHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        const LEGO_COLORS = [
+            '#FFD700', // Yellow
+            '#4CAF50', // Green
+            '#2196F3', // Blue
+            '#9C27B0', // Purple
+            '#FF9800', // Orange
+            '#795548', // Brown
+            '#607D8B', // Blue Grey
+        ];
+
+        class LegoPart {
+            constructor() {
+                this.reset();
+                this.color = LEGO_COLORS[Math.floor(Math.random() * LEGO_COLORS.length)];
+                this.type = Math.floor(Math.random() * 3);
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = (Math.random() - 0.5) * 0.02;
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 50;
+                this.speed = 1 + Math.random() * 2;
+            }
+
+            update() {
+                this.y -= this.speed;
+                this.rotation += this.rotationSpeed;
+                if (this.y < -50) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                
+                switch(this.type) {
+                    case 0:
+                        this.drawBrick();
+                        break;
+                    case 1:
+                        this.drawPlate();
+                        break;
+                    case 2:
+                        this.drawTile();
+                        break;
+                }
+                
+                ctx.restore();
+            }
+
+            drawStud(x, y, radius) {
+                // Base stud in brick color
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Highlight
+                const highlight = ctx.createRadialGradient(
+                    x - radius/3, y - radius/3, 0,
+                    x - radius/3, y - radius/3, radius
+                );
+                highlight.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+                highlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+                highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                
+                ctx.fillStyle = highlight;
+                ctx.beginPath();
+                ctx.arc(x, y, radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            drawBrick() {
+                const width = 40;
+                const height = 30;
+                
+                // Main body
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-width/2, -height/2, width, height);
+                
+                // Bottom shadow
+                ctx.fillStyle = shadeColor(this.color, -20);
+                ctx.fillRect(-width/2, height/2 - height/6, width, height/6);
+                
+                // Studs
+                for (let i = -1; i <= 1; i++) {
+                    this.drawStud(i * 12, -height/2, 5);
+                }
+            }
+
+            drawPlate() {
+                const width = 40;
+                const height = 10;
+                
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-width/2, -height/2, width, height);
+                
+                ctx.fillStyle = shadeColor(this.color, -20);
+                ctx.fillRect(-width/2, height/2 - height/6, width, height/6);
+                
+                for (let i = -1; i <= 1; i++) {
+                    this.drawStud(i * 12, -height/2, 5);
+                }
+            }
+
+            drawTile() {
+                const width = 30;
+                const height = 8;
+                
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-width/2, -height/2, width, height);
+                
+                ctx.fillStyle = shadeColor(this.color, -20);
+                ctx.fillRect(-width/2, height/2 - height/6, width, height/6);
+            }
+        }
+
+        const legoParts = Array(50).fill().map(() => new LegoPart());
+
+        function shadeColor(color, percent) {
+            const num = parseInt(color.replace("#",""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+        }
+
+        const numbers = {
+            '4': [
+                [0,1,1,0],
+                [1,0,1,0],
+                [1,1,1,1],
+                [0,0,1,0],
+                [0,0,1,0]
+            ],
+            '0': [
+                [1,1,1,1],
+                [1,0,0,1],
+                [1,0,0,1],
+                [1,0,0,1],
+                [1,1,1,1]
+            ]
+        };
+
+        function drawNumberStud(x, y, radius, color) {
+            // Base stud
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Highlight
+            const highlight = ctx.createRadialGradient(
+                x - radius/3, y - radius/3, 0,
+                x - radius/3, y - radius/3, radius
+            );
+            highlight.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
+            highlight.addColorStop(0.5, 'rgba(255, 255, 255, 0.1)');
+            highlight.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.fillStyle = highlight;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawSmallLegoBrick(x, y, width, height, color) {
+            const studRadius = width / 6;
+            
+            // Main brick body
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, width, height);
+            
+            // Darker bottom edge
+            ctx.fillStyle = shadeColor(color, -20);
+            ctx.fillRect(x, y + height - height/6, width, height/6);
+            
+            // Studs
+            drawNumberStud(x + width/4, y, studRadius, color);
+            drawNumberStud(x + width*3/4, y, studRadius, color);
+        }
+
+        function drawNumber(number, startX, startY, brickSize) {
+            const pattern = numbers[number];
+            const color = '#FF0000';
+            
+            for (let y = 0; y < pattern.length; y++) {
+                for (let x = 0; x < pattern[y].length; x++) {
+                    if (pattern[y][x]) {
+                        drawSmallLegoBrick(
+                            startX + x * brickSize, 
+                            startY + y * brickSize, 
+                            brickSize, 
+                            brickSize * 0.8, 
+                            color
+                        );
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw sky
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw Lego parts
+            legoParts.forEach(part => {
+                part.update();
+                part.draw();
+            });
+
+            // Draw 404
+            const brickSize = 20;
+            const spacing = brickSize * 6;
+            const startX = canvas.width / 2 - spacing * 1.5;
+            const startY = canvas.height / 2 - brickSize * 2.5;
+
+            drawNumber('4', startX, startY, brickSize);
+            drawNumber('0', startX + spacing, startY, brickSize);
+            drawNumber('4', startX + spacing * 2, startY, brickSize);
+
+            // Draw text
+            ctx.fillStyle = '#333333';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Page Not Found', canvas.width / 2, startY + brickSize * 7);
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
 </html>

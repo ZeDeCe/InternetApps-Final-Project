@@ -4,41 +4,45 @@ const getBranches = async () => {
     return await Branch.find({});
 };
 
-const createBranch = async(name, address, phone) => {
-    const branch = new Branch({
-        name: name, 
-        location: location, 
-        phone: phone
-    })
-
-    return await branch.save();
-};
-
-const updateBranch = async(id, name, location, phone) => {
-    const branch = await getBranchById(id);
-    if (!branch)
-        return null;
-
-    try{
-        branch.name = name;
-        branch.location = location;
-        branch.phone = phone;
-
-        await branch.save();
-    } catch (e) {
-        console.log(e);
-        return null;
+const createBranch = async(branch) => {
+    try {
+        const newBranch = new Branch(branch);
+        return await newBranch.save();
+    }
+    catch(e) {
+        return {}
     }
     
+};
 
+const updateBranch = async(id, data) => {
+    try {
+        const user = await Branch.findOneAndUpdate({_id: id}, data);
+        if (user == null) {
+            return "Cannot find branches to update";
+        }
+        await user.save()
+    } catch(e) {
+        return;
+    }    
 }
 
 const getBranchById = async (id) => {
-    return await Branch.findById(id);
+    try {
+        return await Branch.findById(id);
+    } catch (e){
+        return;
+    }
+    
 }
 
 const deleteBranch = async(id) => {
-    return await Branch.findByIdAndDelete(id);
+    try {
+        return await Branch.findByIdAndDelete(id);
+    } catch (e){
+        return;
+    }
+    
 }
 
 
