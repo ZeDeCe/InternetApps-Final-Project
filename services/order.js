@@ -151,6 +151,15 @@ const updateOrder = async (orderid, tupleid, quantity) => {
     return order;
 };
 
+// This is for user service
+const deleteOrdersForUser = async(name) => {
+    try {
+        await Order.deleteMany({user: name})
+    } catch(e) {
+        return e.errors
+    }
+}
+
 //CRUD: Delete given order by id
 const deleteOrder = async (id) => {
     try {
@@ -174,5 +183,6 @@ module.exports = {
     getTotalOrderPrice,
     getOrderPrettyDate,
     getRandomItems,
-    getUserForOrder
+    getUserForOrder,
+    deleteOrdersForUser
 }

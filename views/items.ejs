@@ -55,14 +55,16 @@
                   <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
                   <div class="card-body">
                     <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
-                    <p class="card-text text-danger item-price"><strong>$<%= item.price %></strong></p>
+                    <p class="card-text text-danger item-price"><strong>$<%= item.price.toFixed(2) %></strong></p>
                     <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
                     <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
-                    <a href="#" class="btn btn-primary view-details">View Details</a>
+                    <a href="/items/<%= item._id %>" class="btn btn-primary view-details">View Details</a>
                   </div>
                 </div>
               </div>
             <% }); %>
+          <% } else { %>
+            <p class="text-center">No items found.</p>
           <% } %>
         </div>
       </div>
@@ -109,6 +111,6 @@
               window.location.href = `/items/filter?${queryString}`;
           });
       });
-  </script>
+    </script>
   </body>
 </html>
