@@ -27,10 +27,11 @@ const getCartById = async (user) => {
 }
 
 const getCartShippingPrice = async(totalPrice) => {
-    if (process.env.MIN_FREE_SHIPPING > 0 && totalPrice >= process.env.MIN_FREE_SHIPPING)
+    const min_free = Number(process.env.MIN_FREE_SHIPPING)
+    if (Number(process.env.MIN_FREE_SHIPPING) > 0 && totalPrice >= Number(process.env.MIN_FREE_SHIPPING))
         return 0;
 
-    return process.env.GLOBAL_SHIPPING_FEE;
+    return Number(process.env.GLOBAL_SHIPPING_FEE);
 }
 
 const getUserItems = async (user) => {
@@ -45,13 +46,17 @@ const addToCart = async (user, item) => {
     if (!cart) {
         cart = await createCart(user);
         if (!cart)
-            return;
+            return "Couldn't Create Cart";
     }
         
-    const itemData = Item.findById(item);
-    if (!itemData)
-        return;
-
+    try {
+        const itemData = await Item.findById(item);
+        if (!itemData)
+            return "Item ID invalid";
+    } catch (e){
+        return "Item ID invalid";
+    }
+    
     const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
 
     if (existingItem) {
@@ -66,7 +71,8 @@ const addToCart = async (user, item) => {
     try {
         return await cart.save();
     } catch (error) {
-        return;
+        if (error)
+        return "Can't add item to cart";
     }
     
 }
@@ -77,12 +83,16 @@ const deleteFromCart = async (user, item) => {
         return;
     }
 
-    if (!await cart.items.find(cartItem => cartItem.item._id.toString() === item))
-        return;
+    const itemIndex = cart.items.findIndex(cartItem => cartItem.item._id.toString() === item.toString());
+    if (itemIndex > -1) {
+        cart.items.splice(itemIndex, 1); // Remove the item from the array
+    } else {
+        return; // Return the cart without changes if item is not found
+    }
 
-    if (cart.items.length - 1){
-        cart.items.remove({_item: item});
-        return await cart.save();
+
+    if (cart.items.length > 0) {
+        return await cart.save(); // Save the cart
     }
         
     return await deleteCart(user);
@@ -107,6 +117,7 @@ const updateCartItem = async (user, item, quantity) => {
     }
 
 }
+
 
 module.exports = {
     createCart,

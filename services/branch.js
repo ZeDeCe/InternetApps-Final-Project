@@ -26,7 +26,6 @@ const updateBranch = async(id, name, location, phone) => {
 
         await branch.save();
     } catch (e) {
-        console.log(e);
         return null;
     }
     
