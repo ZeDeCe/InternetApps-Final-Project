@@ -13,29 +13,32 @@ async function firstGraphData(req, res) {
     const orders = await orderService.getOrdersInTimeRange(startDate, new Date());
     const salesByDay = {};
 
+    // Create an array of all dates we need
+    const allDates = [];
+    for (let i = 0; i <= 6; i++) {
+        const date = new Date(startDate);
+        date.setDate(startDate.getDate() + i);
+        const monthNumber = (date.getMonth() + 1).toString().padStart(2, '0');
+        const dayNumber = date.getDate().toString().padStart(2, '0');
+        const dateString = `${dayNumber}/${monthNumber}`;
+        allDates.push(dateString);
+        salesByDay[dateString] = 0; // Initialize all dates with 0
+    }
+
+    // Sum up the actual sales
     orders.forEach(order => {
         const orderDate = new Date(order.date);
-
         const monthNumber = (orderDate.getMonth() + 1).toString().padStart(2, '0');
         const dayNumber = orderDate.getDate().toString().padStart(2, '0');
-
-        if (!salesByDay[`${dayNumber}/${monthNumber}`]) 
-            salesByDay[`${dayNumber}/${monthNumber}`] = 0;
+        const dateString = `${dayNumber}/${monthNumber}`;
         
-        salesByDay[`${dayNumber}/${monthNumber}`] += order.total_price;
+        salesByDay[dateString] += order.total_price;
     });
     
-    const result = Object.entries(salesByDay)
-    .sort(([dateA], [dateB]) => {
-        // Split the dates into [day, month]
-        const [dayA, monthA] = dateA.split('/').map(Number);
-        const [dayB, monthB] = dateB.split('/').map(Number);
-
-    return monthA - monthB || dayA - dayB;
-    })
-    .map(([date, sales]) => ({
+    // Convert to array and ensure correct order
+    const result = allDates.map(date => ({
         date,
-        sales
+        sales: salesByDay[date]
     }));
 
     res.json(result);

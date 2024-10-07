@@ -27,7 +27,6 @@
         ];
     
         getData().then(data => {
-            console.log(data);
             set_graph(data);
         });
     
@@ -50,8 +49,6 @@
             });
         }
 
-
-    set_graph(dataa);
 
     function set_graph(data){
         // Calculate total
@@ -134,7 +131,7 @@
             .style("font-size", "20px")
             .style("margin-top", "20px")
             .style("font-family", "Poppins")
-            .html(`This chart shows how many items were sold over the last 7 Days categorized by themes.`);
+            .html('This chart shows the number of items sold over the last 7 days, categorized by themes.');
     }
 })
   
