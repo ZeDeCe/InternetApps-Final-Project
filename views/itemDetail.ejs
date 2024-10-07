@@ -99,6 +99,7 @@
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit Comment</button>
             </form>
         </div>
+    </div>
 
     <script>
     $(document).ready(function() {
@@ -126,9 +127,16 @@
 
         // Add to Cart button logic
         $('#addToCartBtn').on('click', function() {
-            // TODO: Implement add to cart functionality
-            console.log('Add to cart clicked for item: <%= item._id %>');
-            alert('Item added to cart (functionality to be implemented)');
+            $.ajax({
+                url: '/cart/add/<%= item._id %>',
+                method: 'POST',
+                success: function(response) {
+                    alert('Item added to cart successfully!');
+                },
+                error: function(xhr, status, error) {
+                    alert('Error adding item to cart. Please try again.');
+                }
+            });
         });
     });
     </script>

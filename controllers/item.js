@@ -1,5 +1,5 @@
 const itemService = require('../services/item');
-const xss = require('xss');
+const cartService = require('../services/cart');
 
 const getItems = async (req, res) => {
     try {
@@ -123,6 +123,26 @@ const addComment = async (req, res) => {
         res.redirect(`/items/${id}`);
     } catch (error) {
         res.status(500).render('error', { message: 'Error adding comment', error: error.message });
+    }
+};
+const addToCart = async (req, res) => {
+    try {
+        const username = req.session.username;
+        const itemId = req.params.id;
+
+        if (!username) {
+            return res.status(401).json({ message: 'User not logged in' });
+        }
+
+        const result = await cartService.addToCart(username, itemId);
+        if (result) {
+            res.status(200).json({ message: 'Item added to cart successfully' });
+        } else {
+            res.status(400).json({ message: 'Failed to add item to cart' });
+        }
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
