@@ -147,6 +147,7 @@
                             </div>
                         </div>
                         <button class="btn btn-primary btn-lg w-100 mt-4" id="checkout-btn" type="submit">Place Order</button>
+                        <h5 class="text-danger mt-2 text-center" id="checkout-error-message"></h5>
                     </div>
                 </div>
             </form>
@@ -164,6 +165,14 @@
         $('svg[name="card-type-image"]').each(function() {
             hideElement(this);
         });
+
+        function setError(message, error=""){
+                $("#checkout-error-message").html(message);
+            
+                if (error)
+                    console.error(error);
+
+            }
 
         function markInvalid($input) {
             $input.addClass('is-invalid');
@@ -242,6 +251,7 @@
         event.preventDefault();
         clearAllInvalid();
         let isValid = true;
+        const errMSG = "Place Order Failed.";
 
         // Validate required fields
         $('#checkoutForm [required]').each(function() {
@@ -288,17 +298,29 @@
                 url: '/order/create',
                 method: "POST",
                 contentType: "application/json",
-                data: JSON.stringify(payload)
+                data: JSON.stringify(payload),
+                success: function(result, textStatus, xhr) {
+                        if (xhr.status === 200) {
+                            location.href = "/user_page";
+                            return;
+                        }
+
+                        setError(errMSG, result.statusText);        
+                    },
+                    error: function(err) {
+                        setError(errMSG, e);
+                    }
             });
 
             // Check if response code is 200
+            console.log(result.status);
             if (result.status === 200) {
                 location.href = "/user_page";
             } else {
-                console.error("Error Occurred:", result.statusText);
+                setError(errMSG, result.statusText)
             }
         } catch (e) {
-            console.error("Error: ", e);
+            setError(errMSG, e);
         }
     });
 
