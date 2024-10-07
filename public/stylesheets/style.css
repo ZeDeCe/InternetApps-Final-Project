@@ -177,11 +177,11 @@ body.create-item-page h3 {
   margin-bottom: 20px;
 }
 
-.btn-danger {
+#createbtn {
   margin-bottom: 15px;
 }
 
-.btn-danger:hover {
+#createbtn {
   background-color: rgb(67, 216, 70);
 }
 

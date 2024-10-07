@@ -35,7 +35,7 @@ app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
 app.use('/items', itemsRouter);
 app.use('/search', itemsRouter);
-app.use('/', items);
+app.use('/', itemsRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
 app.use('/about', aboutRouter)

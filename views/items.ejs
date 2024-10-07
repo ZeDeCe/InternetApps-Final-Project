@@ -91,42 +91,33 @@
           });
   
           $('#apply-btn').click(function() {
-            $('#sidebar').removeClass('sidebar-open');
-
-            const priceRange = [];
-            const themes = [];
-            const piecesRange = [];
-
-            $('input[type="checkbox"]:checked').each(function() {
-                const type = $(this).data('type');
-                if (type === "price") {
-                    priceRange.push($(this).val());
-                } else if (type === "theme") {
-                    themes.push($(this).val());
-                } else if (type === "pieces") {
-                    piecesRange.push($(this).val());
-                }
-            });
-
-            const queryString = $.param({
-                priceRange: priceRange.join(','), 
-                themes: themes.join(','),          
-                piecesRange: piecesRange.join(','), 
-            });
-
-            window.location.href = `/items/filter?${queryString}`;
-        });
+              $('#sidebar').removeClass('sidebar-open');
+  
+              const priceRange = [];
+              const themes = [];
+              const piecesRange = [];
+  
+              $('input[type="checkbox"]:checked').each(function() {
+                  const type = $(this).data('type');
+                  if (type === "price") {
+                      priceRange.push($(this).val());
+                  } else if (type === "theme") {
+                      themes.push($(this).val());
+                  } else if (type === "pieces") {
+                      piecesRange.push($(this).val());
+                  }
+              });
+  
+              const queryString = $.param({
+                  priceRange: priceRange.join(','),
+                  themes: themes.join(','),
+                  piecesRange: piecesRange.join(',')
+              });
+  
+              // Redirect to the filter route
+              window.location.href = `/items/filter?${queryString}`;
+          });
       });
-      $(document).ready(function() {
-    $('.dropdown-item').click(function() {
-      const sort = $(this).data('sort');
-      const currentUrlParams = new URLSearchParams(window.location.search);
-
-      currentUrlParams.set('sort', sort);
-
-      window.location.href = `/items/filter?${currentUrlParams.toString()}`;
-    });
-  });
   </script>
   </body>
   <%- include('./partials/footer'); %>
