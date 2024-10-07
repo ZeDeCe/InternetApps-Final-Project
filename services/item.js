@@ -10,8 +10,20 @@ const getItemByName = async (name) => {
     return await Item.find({ name });
 };
 
-const getItems = async () => {
-    return await Item.find({});
+const getItems = async (sortCriteria) => {
+    const sortOptions = {};
+    
+    if (sortCriteria === 'a-z') {
+        sortOptions.name = 1; 
+    } else if (sortCriteria === 'z-a') {
+        sortOptions.name = -1; 
+    } else if (sortCriteria === 'price-low-high') {
+        sortOptions.price = 1; 
+    } else if (sortCriteria === 'price-high-low') {
+        sortOptions.price = -1; 
+    }
+    
+    return await Item.find({}).sort(sortOptions);  
 };
 
 const searchItemsByName = async (name) => {
@@ -21,7 +33,6 @@ const searchItemsByName = async (name) => {
         });
         return items;
     } catch (error) {
-        console.error('Error fetching items with name filter:', error);
         throw error;
     }
 };
@@ -39,32 +50,54 @@ async function createItem(name, description, price, picture, theme, pieces) {
         });
         return await item.save();
     } catch (error) {
-        console.error('Error creating item:', error.message);
         throw error;
     }
 }
 
-const getFilteredItems = async (filters) => {
+const getFilteredItems = async (filters, sortCriteria) => {
     const query = {};
 
-    if (filters.priceRange) {
-        const [minPrice, maxPrice] = filters.priceRange.split('-');
-        query.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+    // Handle Price Range Filter
+    if (filters.priceRange && filters.priceRange.length > 0) {
+        const priceRanges = filters.priceRange.split(',').map(range => {
+            const [minPrice, maxPrice] = range.split('-');
+            return { price: { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) } };
+        });
+        // Combine all price ranges into an $or query
+        query.$or = priceRanges.length > 0 ? priceRanges : [];
     }
 
+    // Handle Themes Filter
     if (filters.themes && filters.themes.length > 0) {
         query.theme = { $in: filters.themes };
     }
 
-    if (filters.piecesRange) {
-        const [minPieces, maxPieces] = filters.piecesRange.split('-');
-        query.pieces = { $gte: parseInt(minPieces), $lte: parseInt(maxPieces) };
+    // Handle Pieces Range Filter
+    if (filters.piecesRange && filters.piecesRange.length > 0) {
+        const piecesRanges = filters.piecesRange.split(',').map(range => {
+            const [minPieces, maxPieces] = range.split('-');
+            return { pieces: { $gte: parseInt(minPieces), $lte: parseInt(maxPieces) } };
+        });
+        // Combine all pieces ranges into an $or query
+        query.$or = query.$or ? [...query.$or, ...piecesRanges] : piecesRanges;
+    }
+
+    // Sorting options
+    const sortOptions = {};
+    if (sortCriteria === 'a-z') {
+        sortOptions.name = 1;
+    } else if (sortCriteria === 'z-a') {
+        sortOptions.name = -1;
+    } else if (sortCriteria === 'price-low-high') {
+        sortOptions.price = 1;
+    } else if (sortCriteria === 'price-high-low') {
+        sortOptions.price = -1;
     }
 
     try {
-        return await Item.find(query);
+        return await Item.find(query).sort(sortOptions);
     } catch (error) {
-        console.error('Error fetching items with filters:', error);
+        console.error('Error while fetching filtered items:', error);
         throw error;
     }
 };
@@ -74,7 +107,14 @@ const getUniqueThemes = async () => {
         const themes = await Item.distinct('theme'); // Get distinct themes from the DB
         return themes;
     } catch (error) {
-        console.error('Error fetching unique themes:', error);
+        throw error;
+    }
+};
+
+const deleteItem = async (itemId) => {
+    try {
+        return await Item.findByIdAndDelete(itemId);
+    } catch (error) {
         throw error;
     }
 };
@@ -86,5 +126,6 @@ module.exports = {
     searchItemsByName,
     createItem,
     getFilteredItems,
-    getUniqueThemes
+    getUniqueThemes,
+    deleteItem
 };

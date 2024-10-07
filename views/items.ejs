@@ -11,10 +11,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
             <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
         </svg>
-        </button>
-        <div class="home-icon">
-            <a href="/items"><i class="bi bi-house-door-fill"></i></a>
-        </div>
+      </button>
+
       <!-- Sidebar Filter -->
       <div id="sidebar" class="sidebar">
         <h4>Filter By -</h4>
@@ -44,31 +42,47 @@
         <button id="apply-btn" class="apply-button"><b>Apply</b></button>
       </div>
 
-      <div class="container mt-4">
+      <div class="container mt-4 d-flex align-items-center justify-content-center">
         <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
+          <button class="btn sort-button dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Sort By
+          </button>
+          
+          <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="a-z">A-Z</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-low-high">Price: Low to High</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-high-low">Price: High to Low</a></li>
+          </ul>
+        </div>
+
         <!-- Items section -->
         <div class="row">
-          <% if (items.length > 0) { %>
-            <% items.forEach(item => { %>
-              <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
-                <div class="card border-secondary item-card bg-white">
-                  <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
-                  <div class="card-body">
-                    <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
-                    <p class="card-text text-danger item-price"><strong>$<%= item.price %></strong></p>
-                    <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
-                    <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
-                    <a href="#" class="btn btn-primary view-details">View Details</a>
-                  </div>
+            <% if (items.length > 0) { %>
+                <% items.forEach(item => { %>
+                    <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
+                        <div class="card border-secondary item-card bg-white">
+                            <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
+                            <div class="card-body">
+                                <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
+                                <p class="card-text text-danger item-price"><strong>$<%= item.price %></strong></p>
+                                <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
+                                <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
+                                <a href="#" class="btn btn-primary view-details">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="col-12 text-center">
+                    <% if (searchName) { %>
+                        <h3 class="text-danger">No results found for "<%= searchName %>"</h3>
+                    <% } else { %>
+                        <h3 class="text-danger">No results found</h3>
+                    <% } %>
                 </div>
-              </div>
-            <% }); %>
-          <% } %>
+            <% } %>
         </div>
-      </div>
     </div>
-
-    <%- include('./partials/footer'); %>
 
     <!-- Sidebar JavaScript -->
     <script>
@@ -82,33 +96,43 @@
           });
   
           $('#apply-btn').click(function() {
-              $('#sidebar').removeClass('sidebar-open');
-  
-              const priceRange = [];
-              const themes = [];
-              const piecesRange = [];
-  
-              $('input[type="checkbox"]:checked').each(function() {
-                  const type = $(this).data('type');
-                  if (type === "price") {
-                      priceRange.push($(this).val());
-                  } else if (type === "theme") {
-                      themes.push($(this).val());
-                  } else if (type === "pieces") {
-                      piecesRange.push($(this).val());
-                  }
-              });
-  
-              const queryString = $.param({
-                  priceRange: priceRange.join(','),
-                  themes: themes.join(','),
-                  piecesRange: piecesRange.join(',')
-              });
-  
-              // Redirect to the filter route
-              window.location.href = `/items/filter?${queryString}`;
-          });
+            $('#sidebar').removeClass('sidebar-open');
+
+            const priceRange = [];
+            const themes = [];
+            const piecesRange = [];
+
+            $('input[type="checkbox"]:checked').each(function() {
+                const type = $(this).data('type');
+                if (type === "price") {
+                    priceRange.push($(this).val());
+                } else if (type === "theme") {
+                    themes.push($(this).val());
+                } else if (type === "pieces") {
+                    piecesRange.push($(this).val());
+                }
+            });
+
+            const queryString = $.param({
+                priceRange: priceRange.join(','), 
+                themes: themes.join(','),          
+                piecesRange: piecesRange.join(','), 
+            });
+
+            window.location.href = `/items/filter?${queryString}`;
+        });
       });
+      $(document).ready(function() {
+    $('.dropdown-item').click(function() {
+      const sort = $(this).data('sort');
+      const currentUrlParams = new URLSearchParams(window.location.search);
+
+      currentUrlParams.set('sort', sort);
+
+      window.location.href = `/items/filter?${currentUrlParams.toString()}`;
+    });
+  });
   </script>
   </body>
+  <%- include('./partials/footer'); %>
 </html>

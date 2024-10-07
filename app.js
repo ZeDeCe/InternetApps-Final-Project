@@ -1,7 +1,6 @@
 require("custom-env").env(process.env.NODE_ENV, "./config")
 
 const express = require('express');
-const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
@@ -35,7 +34,7 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
-app.use('/', indexRouter);
+app.use('/', items);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
 app.use('/items', items)

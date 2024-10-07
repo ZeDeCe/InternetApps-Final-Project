@@ -4,8 +4,8 @@
         <%- include('./partials/head', {title: "Admin Page"}); %>
     </head>
     <body class="bg-light">
-        <%- include('./partials/header'); %>
         <div class="main-div">
+            <%- include('./partials/header'); %>
             <div class="mt-5 w-100">
                 <div class="row g-0 justify-content-center">
                     <div class="col-10 p-0 bg-white" id="details">
@@ -102,10 +102,10 @@
                     location.href = "/admin/orders"
                 })
                 $("#items_manage").click(function() {
-                    location.href = "/admin/items"
+                    location.href = "/items/create"
                 })
-                $("#logout").click(function() {
-                    location.href = "/logout"
+                $("#stats").click(function() {
+                    location.href = "#"
                 })
             })
         </script>

@@ -16,3 +16,5 @@ router.route("/create")
     .post(loginController.isLoggedIn, userController.isAdmin, itemController.createItem); 
 
 module.exports = router;
+
+router.route('/delete').post(userController.isAdmin, userController.deleteUser);
