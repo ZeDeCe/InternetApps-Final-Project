@@ -78,7 +78,7 @@
 
         $(document).ready(function() {
             function setError(message, error=""){
-                $("#cart-error-message").html(message);
+                $("#cart-error-message").text(message);
             
                 if (error)
                     console.error(error);
@@ -86,10 +86,10 @@
             }
 
             function setOrderSummary(result) {
-                $('#subtotal_price').html("$"+String(result.orderPrice));
-                $('#shipping_price').html("$"+String(result.shippingPrice));
+                $('#subtotal_price').text("$"+result.orderPrice);
+                $('#shipping_price').text("$"+result.shippingPrice);
                 const total_price = Number(result.orderPrice)+Number(result.shippingPrice);
-                $('#total_price').html("$"+String(total_price));
+                $('#total_price').text("$"+total_price);
 
                 <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
                     var message = "";
@@ -105,7 +105,7 @@
                         message= "FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>";
                     }
                     
-                    $("#freeShipping").html(message);
+                    $("#freeShipping").text(message);
                 <%} %>
             }
         
@@ -163,7 +163,7 @@
                                 return;    
                             }
                             
-                            $('#price_'+id).html(`$${result.currentItem}`);
+                            $('#price_'+id).text(`$${result.currentItem}`);
                             setOrderSummary(result);
 
                         } else {
