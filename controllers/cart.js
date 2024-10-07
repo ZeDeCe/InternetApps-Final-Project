@@ -24,12 +24,12 @@ async function getCheckout(req, res){
     res.render('checkout.ejs', {items, orderPrice, shippingPrice});
 }
 
-
 async function addToCart(req, res){
     const username = req.session.username;
     const item = req.params.item;
-    if (!await cartService.addToCart(username, item)) {
-        res.status(400).send();
+    const result = await cartService.addToCart(username, item)
+    if (typeof(result) === "string") {
+        res.status(400).send(result);
         return;
     }
 
@@ -46,7 +46,17 @@ async function updateCartItem(req, res){
         return;
     }
 
-    res.status(200).send("OK");
+    const items = await cartService.getUserItems(username);
+    const orderPrice = await orderService.getTotalOrderPrice(items)
+
+    const currentItem = await items.find(item => item.item._id.toString() === id);
+    const data = {
+        orderPrice: orderPrice,
+        shippingPrice: items.length ? await cartService.getCartShippingPrice(orderPrice) : 0,
+        currentItem: currentItem.item.price * currentItem.quantity
+    };
+
+    res.json(data);
 }
 
 async function deleteFromCart(req, res) {
@@ -58,7 +68,15 @@ async function deleteFromCart(req, res) {
         return;
     }
      
-    res.status(200).send('ok');
+    const items = await cartService.getUserItems(username);
+    const orderPrice = await orderService.getTotalOrderPrice(items)
+
+    const data = {
+        orderPrice: orderPrice,
+        shippingPrice: items.length ? await cartService.getCartShippingPrice(orderPrice) : 0,
+    };
+
+    res.json(data);
 }
 
 

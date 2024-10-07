@@ -3,6 +3,8 @@
 <head>
     <%- include('./partials/head', {title: "Cart"}); %>
 </head>
+
+
 <body class="bg-light">
     <%- include('./partials/header'); %>
     <div class="main-div">
@@ -82,7 +84,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-floating mb-3 position-relative">
-                                            <input type="text" class="form-control" id="card-number" name="card-number" maxlength="16" placeholder="Card number" required>
+                                            <input type="text" class="form-control" id="card-number" maxlength="16" placeholder="Card number" required>
                                             <label for="card-number">Card number</label>
                                             <span class="position-absolute top-50 end-0 translate-middle-y me-3 d-inline-block d-inline-block">
                                                 <svg class="card-type-view" id="visa" name="card-type-image" height="100px" version="1.1" viewBox="0 0 160 100" width="160px" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" xmlns:xlink="http://www.w3.org/1999/xlink"><title/><defs/><g fill="none" fill-rule="evenodd" id="Page-1" stroke="none" stroke-width="1"><g id="Visa"><rect d="M0,9 L0,89 L160,89 L160,9 L0,9 Z M0,9" fill="#F6F6F6" height="80" id="Rectangle-20" width="160" x="0" y="9"/><path d="M148,1.01146687e-06 C140,1.76644588e-06 55.3007812,-1.60318373e-06 8,1.01146687e-06 C4,1.23257532e-06 -1.27897692e-13,4.00000101 7.10542736e-14,8.00000101 L7.10542736e-14,20.000001 L160,20.000001 C160,20.000001 159.999998,38.5719411 160,12.000001 C160,4.00000101 156,1.01146687e-06 148,1.01146687e-06 Z M148,1.01146687e-06" fill="#265697" id="Rectangle-1"/><path d="M0,80 C0,80 9.66373104e-07,80.000001 0,88.0000005 C-4.6283987e-07,95.9999999 4,99.9999997 12,99.9999997 C56.6232096,99.9999997 140,100 148,99.9999997 C156,99.9999997 160,95.9999999 160,88.0000005 L160,80 L0,80 Z M0,80" fill="#D97B16" id="Rectangle-1"/><path d="M111.614545,29.7821084 C109.372,28.9224828 105.858424,28 101.470273,28 C90.2863939,28 82.4084242,33.7551133 82.3411818,42.0028374 C82.2781818,48.0997635 87.9653636,51.5007685 92.258697,53.5306207 C96.6644545,55.6103251 98.1454848,56.9368276 98.1242727,58.793931 C98.0964848,61.6381084 94.6060303,62.9375172 91.3529394,62.9375172 C86.8226667,62.9375172 84.4159394,62.2944236 80.6987273,60.7102069 L79.2401818,60.0359015 L77.6516061,69.5344828 C80.2950606,70.718798 85.1838182,71.7451034 90.2596667,71.7982069 C102.157333,71.7982069 109.881091,66.109202 109.968909,57.3016158 C110.011545,52.4746207 106.995818,48.8013793 100.466091,45.7731823 C96.5098182,43.8103054 94.0869697,42.5004926 94.1126364,40.5129064 C94.1126364,38.7492217 96.1634242,36.8632906 100.594424,36.8632906 C104.295727,36.8045517 106.976727,37.6292808 109.065909,38.4889064 L110.080061,38.9785419 L111.614545,29.7821084" fill="#265697" id="Shape"/><path d="M140.638455,28.7779113 L131.892485,28.7779113 C129.183273,28.7779113 127.155606,29.5334975 125.965818,32.2966108 L109.156061,71.1819901 L121.041424,71.1819901 C121.041424,71.1819901 122.984667,65.9535764 123.424182,64.8056749 C124.723,64.8056749 136.269182,64.8238818 137.919697,64.8238818 C138.258455,66.3092611 139.296788,71.1819901 139.296788,71.1819901 L149.799333,71.1819901 L140.638455,28.7779113 L140.638455,28.7779113 Z M126.681515,56.1268374 C127.617606,53.6821281 131.191,44.2654778 131.191,44.2654778 C131.124182,44.3784039 132.120091,41.8088473 132.691758,40.2157438 L133.456667,43.8740296 C133.456667,43.8740296 135.623909,54.0024828 136.077,56.1264039 L126.681515,56.1268374 L126.681515,56.1268374 L126.681515,56.1268374 L126.681515,56.1268374 Z M126.681515,56.1268374" fill="#265697" id="Shape"/><path d="M59.2498788,71.1685517 L66.3264545,28.7373793 L77.6450303,28.7373793 L70.5635758,71.1685517 L59.2498788,71.1685517 Z M59.2498788,71.1685517" fill="#265697" id="Shape"/><path d="M49.7568182,28.7683744 L38.6756061,57.7032512 L37.4949394,51.8230739 C35.4320606,45.0446897 29.0047879,37.7005911 21.8193939,34.0238818 L31.9517879,71.1319212 L43.9270909,71.1180493 L61.7461212,28.7683744 L49.7568182,28.7683744" fill="#265697" id="Shape"/><path d="M28.3955758,28.7421478 L10.1444545,28.7421478 L10,29.6249655 C24.1991818,33.1371626 33.5946667,41.6248276 37.4947273,51.8230739 L33.5261515,32.3243547 C32.841,29.6375369 30.8538485,28.8357833 28.3955758,28.7421478" fill="#D97B16" id="Shape"/></g></g></svg>
@@ -154,6 +156,7 @@
 
 
     <script>
+        $(document).ready(function() {
         const showElement = (element) => $(element).css('display', 'inline-block');
         const hideElement = (element) => $(element).css('display', 'none');
 
@@ -162,50 +165,55 @@
             hideElement(this);
         });
 
+        function markInvalid($input) {
+            $input.addClass('is-invalid');
+        }
 
-        // Add input listener for card number field
-        $('input[name="card-number"]').each(function() {
-            $(this).on('input', function() {
-                // Allow only digits
-                $(this).val($(this).val().replace(/\D/g, ''));
-                
-                const creditCard = $(this).val();
-                
-                const patterns = {
-                    visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
-                    mastercard: /^5[1-5][0-9]{14}$/,
-                    amex: /^3[47][0-9]{13}$/
-                };
+        function clearInvalid($input) {
+            $input.removeClass('is-invalid');
+        }
 
-                // Hide all card type images
-                $('svg[name="card-type-image"]').each(function() {
-                    hideElement(this);
-                });
+        function clearAllInvalid() {
+            $('.form-control').removeClass('is-invalid');
+        }
 
-                // Check which card pattern matches and show corresponding image
-                for (let card in patterns) {
-                    if (patterns[card].test(creditCard)) {
-                        showElement(`#${card}`);
-                        return;
-                    }
-                }
+        const validations = {
+            'phone': /^\d{7,10}$/,
+            'card-number': /^[0-9]{13,16}$/,
+            'card-expiration': /^\d{2}\/\d{2}$/,
+            'card-cvv': /^\d{3,4}$/,
+            'zip': /^\d+$/,
+            'first-name': /^[a-zA-Z\s]+$/,
+            'last-name': /^[a-zA-Z\s]+$/,
+            'card-owner': /^[a-zA-Z\s]+$/
+            
+        };
 
-                // Show 'unknown' image if no match is found
-                showElement('#unknown');
-            });
-        });
-
-        $("card-number").on("input", function() {
+        // Your existing input handlers remain the same
+        $('#card-number').on('input', function() {
             $(this).val($(this).val().replace(/\D/g, ''));
+            
+            const creditCard = $(this).val();
+            
+            const patterns = {
+                visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+                mastercard: /^5[1-5][0-9]{14}$/,
+                amex: /^3[47][0-9]{13}$/
+            };
 
-            const creditCard = $(this).value;
+            $('svg[name="card-type-image"]').hide();
 
-            document.getElementsByName("card-type-image").forEach(hideElement);
-			for (let card in patterns) {
+            let cardTypeFound = false;
+            for (let card in patterns) {
                 if (patterns[card].test(creditCard)) {
-                    document.getElementById(card).style.display = "inline-block";
-                    return;
+                    showElement(`#${card}`);
+                    cardTypeFound = true;
+                    break;
                 }
+            }
+
+            if (!cardTypeFound) {
+                showElement('#unknown');
             }
         });
 
@@ -218,66 +226,83 @@
             if (val.length > 2) {
                 val = val.slice(0, 2) + '/' + val.slice(2);
             }
-            $(this).val(val);  // Set the formatted value back
+            $(this).val(val);
         });
 
         $("#card-cvv").on("input", function() {
             $(this).val($(this).val().replace(/\D/g, ''));
         });
 
-        
-        $("#checkout-btn").click(async() => {
-            event.preventDefault();
-            const firstName = document.getElementById("first-name").value;
-            const lastName = document.getElementById("last-name").value;
-            const phone = document.getElementById("phone").value;
-            const address = document.getElementById("address").value;
-            const city = document.getElementById("city").value;
-            const zip = document.getElementById("zip").value;
-            
-            const cardOwner = document.getElementById("card-owner").value;
-            const cardNumber = document.getElementById("card-number").value;
-            const cardExpiration = document.getElementById("card-expiration").value;
-            const cardCVV = document.getElementById("card-cvv").value;
-            
-            try {
-                const result = await fetch('/order/create', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ 
-                    shippingDetails: {
-                        firstName: firstName,
-                        lastName: lastName,
-                        phone: phone,
-                        address: address,
-                        city: city,
-                        zip: zip
-                    },
-                    paymentDetails: {
-                        owner: cardOwner,
-                        number: cardNumber,
-                        expiration: cardExpiration,
-                        cvv: cardCVV
-                    }
-                 })
-                })
+        $("#zip").on("input", function() {
+            $(this).val($(this).val().replace(/\D/g, ''));
+        });
 
-                if (result.ok){
-                    location.href = "/user_page";
-                } else {
-                    console.error("Error Occured:", result.statusText);
-                }
-            } catch (e){
-                console.error(e);
+        // Updated checkout button click handler with simplified validation
+        $("#checkout-btn").click(async function(event) {
+        event.preventDefault();
+        clearAllInvalid();
+        let isValid = true;
+
+        // Validate required fields
+        $('#checkoutForm [required]').each(function() {
+            if (!$(this).val().trim()) {
+                markInvalid($(this));
+                isValid = false;
             }
+        });
 
-            
-        })
+        // Validate pattern fields
+        $.each(validations, function(fieldId, pattern) {
+            const $input = $(`#${fieldId}`);
+            const value = $input.val().trim();
+            if (value && !pattern.test(value)) {
+                markInvalid($input);
+                isValid = false;
+            }
+        });
 
+        if (!isValid) {
+            return;
+        }
 
-	
+        const payload = { 
+            shippingDetails: {
+                firstName: $("#first-name").val(),
+                lastName: $("#last-name").val(),
+                phone: $("#phone").val(),
+                address: $("#address").val(),
+                city: $("#city").val(),
+                zip: $("#zip").val()
+            },
+            paymentDetails: {
+                owner: $("#card-owner").val(),
+                number: $("#card-number").val(),
+                expiration: $("#card-expiration").val(),
+                cvv: $("#card-cvv").val()
+            }
+        };
+
+        try {
+            // Use $.ajax to get the status code
+            const result = await $.ajax({
+                url: '/order/create',
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(payload)
+            });
+
+            // Check if response code is 200
+            if (result.status === 200) {
+                location.href = "/user_page";
+            } else {
+                console.error("Error Occurred:", result.statusText);
+            }
+        } catch (e) {
+            console.error("Error: ", e);
+        }
+    });
+
+    });
     </script>
 </body>
 </html>
