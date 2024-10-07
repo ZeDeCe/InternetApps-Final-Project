@@ -4,10 +4,14 @@ const Item = require('../models/Item');
 
 const getItemById = async (id) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.error('Invalid ObjectId:', id);
+            return null;
+        }
         return await Item.findById(id);
     } catch (error) {
         console.error('Error fetching item by ID:', error);
-        throw error;
+        throw error; 
     }
 };
 

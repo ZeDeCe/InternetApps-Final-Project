@@ -181,8 +181,9 @@ body.create-item-page h3 {
   margin-bottom: 15px;
 }
 
-#createbtn {
+#createbtn:hover {
   background-color: rgb(67, 216, 70);
+  border-color: black;
 }
 
 .alert {

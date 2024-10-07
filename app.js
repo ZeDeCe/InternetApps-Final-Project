@@ -1,6 +1,7 @@
 require("custom-env").env(process.env.NODE_ENV, "./config")
 
 const express = require('express');
+const indexRouter = require('./routes/index')
 const loginRouter = require('./routes/login')
 const userpageRouter = require('./routes/user_page')
 const aboutRouter = require('./routes/about')
@@ -33,9 +34,11 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
+// Use the new items router for both '/items' and '/search' paths
 app.use('/items', itemsRouter);
 app.use('/search', itemsRouter);
-app.use('/', itemsRouter);
+
+app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
 app.use('/about', aboutRouter)
@@ -49,11 +52,13 @@ app.use(function(req, res, next) {
   return res.render('error.ejs');
 });
 
+// error handler
 app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'dev' ? err : {};
 
- 
+  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
