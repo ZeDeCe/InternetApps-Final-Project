@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('./partials/head', {title: "Website: Cart"}); %>
+</head>
+<body>
+    <%- include('./partials/header'); %>
+    <div class="main-div">
+        <div class="container mt-5">
+            <h1 class="mb-4">Your Shopping Cart</h1>
+            <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
+                <h5 class="mb-3 text-secondary" id="freeShipping">
+                    <% if (items.length && shippingPrice) { %>
+                        $<%= process.env.MIN_FREE_SHIPPING - orderPrice %> Remaining for FREE shipping!
+                    <% } else if (items.length && !shippingPrice) { %>
+                        Your order is eligible for FREE Shipping!
+                    <% } else { %>
+                        FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>
+                    <% } %>
+                </h5>
+            <%} %>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Your Items</h5>
+                            <ul class="list-group list-group-flush" id="cartItems">
+                                <%for (let i = 0; i< items.length; i++) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" id="list_<%= items[i].item._id%>">
+                                        <div class="d-flex align-items-center">
+                                            <img src=<%= items[i].item.picture %> alt=<%= items[i].item.name %> class="product-image">
+                                            <a href="#" class="text-decoration-none text-dark"><%= items[i].item.name %></a>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="price" id="price_<%= items[i].item._id%>">$<%= items[i].item.price * items[i].quantity %></span>
+                                            <select class="form-select quantity-select mx-3 update-item" data-item-id="<%= items[i].item._id%>">
+                                                <%for (let j = 1; j <= 10; j++) { %>
+                                                    <option value="<%= j%>" <%= items[i].quantity === j ? 'selected' : '' %> ><%= j%></option>
+                                                <% } %>
+                                            </select>
+                                            <button class="btn btn-danger btn-sm remove-item" data-item-id="<%= items[i].item._id%>">Remove</button>
+                                        </div>
+                                    </li>        
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Subtotal</span>
+                                    <strong id="subtotal_price">$<%=orderPrice%></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Shipping</span>
+                                    <strong id="shipping_price"><%= "$" + shippingPrice %></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total</span>
+                                    <strong id="total_price">$<%=orderPrice+shippingPrice%></strong>
+                                </li>
+                            </ul>
+                            <button class="btn btn-primary btn-lg w-100 <%= items.length ? "" : "disabled" %>" id="checkout-btn">Checkout</button>
+                            <h5 class="text-danger mt-2 text-center" id="cart-error-message"></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/footer'); %>
+    <script>
+
+        $(document).ready(function() {
+            function setError(message, error=""){
+                $("#cart-error-message").text(message);
+            
+                if (error)
+                    console.error(error);
+
+            }
+
+            function setOrderSummary(result) {
+                $('#subtotal_price').text("$"+result.orderPrice);
+                $('#shipping_price').text("$"+result.shippingPrice);
+                const total_price = Number(result.orderPrice)+Number(result.shippingPrice);
+                $('#total_price').text("$"+total_price);
+
+                <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
+                    var message = "";
+                    if ($("[id^='list_']").length > 0){
+                        if (Number(result.shippingPrice) > 0){
+                            const value = <%= process.env.MIN_FREE_SHIPPING %> - Number(result.orderPrice);
+                            message = `$${String(value)} Remaining for FREE shipping!`;
+                        } else if (Number(result.shippingPrice) === 0) {
+                            message = "Your order is eligible for FREE Shipping!";
+                        }
+
+                    } else {
+                        message= "FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>";
+                    }
+                    
+                    $("#freeShipping").text(message);
+                <%} %>
+            }
+        
+            $("#checkout-btn").click(function() {
+                location.href = '/cart/checkout'
+            })
+
+
+            $('.remove-item').on('click', function(event) {
+            event.preventDefault();
+
+            const errorMSG = "deleting item failed";
+            const id = $(this).data('item-id');
+
+            $.ajax({
+                url: '/cart/delete/' + id,
+                type: 'DELETE',
+                success: function(result, textStatus, xhr) {
+                    
+                    if (xhr.status === 200) {
+                        if (typeof(result) !== "object"){
+                            setError(errorMSG, "Undefined Response")
+                            return; 
+                        }
+
+                        $('#list_'+id).remove();
+                        setOrderSummary(result);
+
+                    } else {
+                        setError(errorMSG, "Couldn't delete from cart");
+                    }
+                },
+                error: function(err) {
+                    setError(errorMSG, err.statusText);
+                }
+            });
+        });
+
+
+            $('.update-item').on('change', function(event) {
+                event.preventDefault();
+
+                const id = $(this).data('item-id');
+                const newQuantity = Number($(this).val());
+                const errorMSG = "updating item failed";
+                $.ajax({
+                    url: '/cart/update',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id: id, quantity: newQuantity }),
+                    success: function(result, textStatus, xhr) {
+                        if (xhr.status === 200) {
+                            if (typeof(result) !== "object"){
+                                setError(errorMSG, "undefined response");
+                                return;    
+                            }
+                            
+                            $('#price_'+id).text(`$${result.currentItem}`);
+                            setOrderSummary(result);
+
+                        } else {
+                            setError(errorMSG, "Couldn't update item.");
+                        }
+                    },
+                    error: function(err) {
+                        setError(errorMSG, err.statusText);
+                    }
+                });
+            });
+
+            })
+
+       
+    </script>
+</body>
+</html>

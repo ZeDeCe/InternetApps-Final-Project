@@ -56,7 +56,7 @@ const getOrderById = async (id) => {
 
 //CRUD: Get (read) all orders from DB grouped by user
 const getOrders = async () => {
-    return await Order.aggregate([
+    var orders =  await Order.aggregate([
         { $unwind: "$items" },
         {
             $lookup: {
@@ -83,6 +83,8 @@ const getOrders = async () => {
         },
         { $group: { _id: '$user', orders: { $push: '$$ROOT' } } }
     ]);
+    orders.sort((a, b) => new Date(b.date).getTime() < new Date(a.date).getTime());
+    return orders
 };
 
 //CRUD: Get (read) all specific user orders from DB
@@ -95,6 +97,7 @@ const getAllUserOrders = async (user) => {
         return null
     }
     orders = [{_id: user, orders: orders}];
+    orders.sort((a, b) => new Date(b.date).getTime() < new Date(a.date).getTime());
     return orders
 };
 
@@ -131,20 +134,31 @@ const updateOrder = async (orderid, tupleid, quantity) => {
     var order = await getOrderById(orderid);
     if (!order)
         return null;
-    for(var i = 0; i < order.items.length; ++i) {
-        if (order.items[i]._id.toString() === tupleid) {
-            order.items[i].quantity = quantity
-            break
+    if(new Date() - order.date <= 30 * 60 * 1000){
+        for(var i = 0; i < order.items.length; ++i) {
+            if (order.items[i]._id.toString() === tupleid) {
+                order.items[i].quantity = quantity
+                break
+            }
         }
-    }
-    order.total_price = await getTotalOrderPrice(order.items);
-    try {
-        await order.save();
-    } catch(e) {
-        return e.errors
+        order.total_price = await getTotalOrderPrice(order.items);
+        try {
+            await order.save();
+        } catch(e) {
+            return e.errors
+        }
     }
     return order;
 };
+
+// This is for user service
+const deleteOrdersForUser = async(name) => {
+    try {
+        await Order.deleteMany({user: name})
+    } catch(e) {
+        return e.errors
+    }
+}
 
 //CRUD: Delete given order by id
 const deleteOrder = async (id) => {
@@ -169,5 +183,6 @@ module.exports = {
     getTotalOrderPrice,
     getOrderPrettyDate,
     getRandomItems,
-    getUserForOrder
+    getUserForOrder,
+    deleteOrdersForUser
 }

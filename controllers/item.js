@@ -1,4 +1,5 @@
 const itemService = require('../services/item');
+const cartService = require('../services/cart');
 
 const getItems = async (req, res) => {
     try {
@@ -13,7 +14,7 @@ const getItems = async (req, res) => {
 };
 
 const renderCreateItemForm = (req, res) => {
-    res.render('createItem'); 
+    res.render('createItem');
 };
 
 const createItem = async (req, res) => {
@@ -62,20 +63,89 @@ const searchItems = async (req, res) => {
     }
 };
 
-const deleteItem = async (req, res) => {
-    const itemId = req.body.itemId;
-
+const getItemById = async (req, res) => {
     try {
-        const item = await itemService.getItemById(itemId);
+        const item = await itemService.getItemById(req.params.id);
         if (!item) {
-            return res.status(404).send("Item not found");
+            return res.status(404).render('error', { message: 'Item not found' });
+        }
+        res.render('itemDetail', { item });
+    } catch (error) {
+        res.status(500).render('error', { message: 'Server error', error: error.message });
+    }
+};
+
+const updateItem = async (req, res) => {
+    try {
+        const { name, picture, price, description, pieceCount, theme } = req.body;
+        const updatedItem = await itemService.updateItem(req.params.id, {
+            name,
+            picture,
+            price: Number(price),
+            description,
+            pieceCount: Number(pieceCount),
+            theme
+        });
+        if (!updatedItem) {
+            return res.status(404).render('error', { message: 'Item not found' });
+        }
+        res.redirect('/items');
+    } catch (error) {
+        res.status(400).render('error', { message: 'Error updating item', error: error.message });
+    }
+};
+
+const deleteItem = async (req, res) => {
+    try {
+        const deletedItem = await itemService.deleteItem(req.params.id);
+        if (!deletedItem) {
+            return res.status(404).render('error', { message: 'Item not found' });
+        }
+        res.redirect('/items');
+    } catch (error) {
+        res.status(500).render('error', { message: 'Error deleting item', error: error.message });
+    }
+};
+
+const addRating = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { rating } = req.body;
+        await itemService.addRating(id, Number(rating));
+        res.redirect(`/items/${id}`);
+    } catch (error) {
+        res.status(500).render('error', { message: 'Error adding rating', error: error.message });
+    }
+};
+
+const addComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { rating, comment } = req.body;
+        await itemService.addComment(id, Number(rating), comment);
+        res.redirect(`/items/${id}`);
+    } catch (error) {
+        res.status(500).render('error', { message: 'Error adding comment', error: error.message });
+    }
+};
+const addToCart = async (req, res) => {
+    try {
+        const username = req.session.username;
+        const itemId = req.params.id;
+
+        if (!username) {
+            return res.status(401).json({ message: 'User not logged in' });
         }
 
-        await itemService.deleteItem(itemId);
-
-        res.status(200).send("Item deleted successfully");
-        } catch (error) {
-        res.status(500).send("Failed to delete item");
+        const result = await cartService.addToCart(username, itemId);
+        if (result) {
+            res.status(200).json({ message: 'Item added to cart successfully' });
+        } else {
+            res.status(400).json({ message: 'Failed to add item to cart' });
+        }
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
@@ -85,5 +155,9 @@ module.exports = {
     createItem,
     renderCreateItemForm,
     getFilteredItems,
-    deleteItem
+    getItemById,
+    updateItem,
+    deleteItem,
+    addRating,
+    addComment
 };

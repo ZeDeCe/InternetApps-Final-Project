@@ -57,31 +57,26 @@
 
         <!-- Items section -->
         <div class="row">
-            <% if (items.length > 0) { %>
-                <% items.forEach(item => { %>
-                    <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
-                        <div class="card border-secondary item-card bg-white">
-                            <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
-                            <div class="card-body">
-                                <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
-                                <p class="card-text text-danger item-price"><strong>$<%= item.price %></strong></p>
-                                <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
-                                <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
-                                <a href="#" class="btn btn-primary view-details">View Details</a>
-                            </div>
-                        </div>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <div class="col-12 text-center">
-                    <% if (searchName) { %>
-                        <h3 class="text-danger">No results found for "<%= searchName %>"</h3>
-                    <% } else { %>
-                        <h3 class="text-danger">No results found</h3>
-                    <% } %>
+          <% if (items.length > 0) { %>
+            <% items.forEach(item => { %>
+              <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
+                <div class="card border-secondary item-card bg-white">
+                  <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
+                  <div class="card-body">
+                    <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
+                    <p class="card-text text-danger item-price"><strong>$<%= item.price.toFixed(2) %></strong></p>
+                    <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
+                    <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
+                    <a href="/items/<%= item._id %>" class="btn btn-primary view-details">View Details</a>
+                  </div>
                 </div>
-            <% } %>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p class="text-center">No items found.</p>
+          <% } %>
         </div>
+      </div>
     </div>
 
     <!-- Sidebar JavaScript -->

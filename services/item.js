@@ -3,7 +3,12 @@ const { ObjectId } = mongoose.Types;
 const Item = require('../models/Item');
 
 const getItemById = async (id) => {
-    return await Item.findById(id);
+    try {
+        return await Item.findById(id);
+    } catch (error) {
+        console.error('Error fetching item by ID:', error);
+        throw error;
+    }
 };
 
 const getItemByName = async (name) => {
@@ -46,7 +51,9 @@ async function createItem(name, description, price, picture, theme, pieces) {
             price,
             picture,
             theme,
-            pieces
+            pieces,
+            ratings: [], // Initialize empty ratings array
+            comments: [] // Initialize empty comments array
         });
         return await item.save();
     } catch (error) {
@@ -111,13 +118,52 @@ const getUniqueThemes = async () => {
     }
 };
 
-const deleteItem = async (itemId) => {
+const updateItem = async (id, updateData) => {
     try {
-        return await Item.findByIdAndDelete(itemId);
+        return await Item.findByIdAndUpdate(id, updateData, { new: true });
     } catch (error) {
+        console.error('Error updating item:', error.message);
         throw error;
     }
 };
+
+const deleteItem = async (id) => {
+    try {
+        return await Item.findByIdAndDelete(id);
+    } catch (error) {
+        console.error('Error deleting item:', error.message);
+        throw error;
+    }
+};
+
+const addRating = async (id, rating) => {
+    try {
+        const item = await Item.findById(id);
+        if (!item) throw new Error('Item not found');
+        if (!item.ratings) item.ratings = [];
+        item.ratings.push({ value: rating });
+        await item.save();
+    } catch (error) {
+        console.error('Error adding rating:', error);
+        throw error;
+    }
+};
+
+const addComment = async (id, rating, comment) => {
+    try {
+        const item = await Item.findById(id);
+        if (!item) throw new Error('Item not found');
+        if (!item.comments) item.comments = [];
+        if (!item.ratings) item.ratings = [];
+        item.comments.push({ rating, text: comment });
+        item.ratings.push({ value: rating });
+        await item.save();
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        throw error;
+    }
+};
+
 
 module.exports = {
     getItems,
@@ -127,5 +173,8 @@ module.exports = {
     createItem,
     getFilteredItems,
     getUniqueThemes,
-    deleteItem
+    updateItem,
+    deleteItem,
+    addRating,
+    addComment
 };

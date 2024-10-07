@@ -5,11 +5,11 @@
     </head>
     <body class="bg-light">
         <%- include('./partials/header'); %>
-        <%- include('./partials/backbutton'); %>
         <div class="main-div">
+            <%- include('./partials/backbutton'); %>
             <div class="mt-5 w-100">
                 <div class="row g-0 justify-content-center">
-                    <div class="col-10 p-0 bg-white" id="details">
+                    <div class="col-10 p-0 bg-white shadow rounded" id="details">
                         <div class="row p-3 fs-3 lego-font">
                             <b>Your Account</b>
                         </div>
@@ -43,10 +43,10 @@
                         </div>
                         <div class="list-group m-0 list-group-horizontal p-3">
                             <li class="list-group-item border-0">
-                                <button type="button" class="btn btn-primary saveChanges">Save Changes</button>
+                                <button type="button" class="btn btn-primary fw-bold saveChanges">Save Changes</button>
                             </li>
                             <li class="list-group-item border-0">
-                                <button type="button" class="btn btn-danger deleteAccount">Delete Account</button>
+                                <button type="button" class="btn btn-danger fw-bold deleteAccount">Delete Account</button>
                             </li>
                         </div>
                         <div class="row p-3">

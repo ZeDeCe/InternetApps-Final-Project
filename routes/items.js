@@ -2,18 +2,40 @@ const express = require('express');
 const router = express.Router();
 const itemController = require('../controllers/item');
 const loginController = require('../controllers/login');
-const userController = require('../controllers/user');  
+const userController = require('../controllers/user');
 
-router.route("/").get(itemController.getItems);
+// Get all items
+router.get('/', itemController.getItems);
 
-router.route("/search").get(itemController.searchItems);
+// Search items
+router.get('/search', itemController.searchItems);
 
-router.route("/filter").get(itemController.getFilteredItems);
+// Filter items
+router.get('/filter', itemController.getFilteredItems);
 
-router.route("/create")
-    .get(loginController.isLoggedIn, userController.isAdmin, itemController.renderCreateItemForm)  
+// Create item form (admin only)
+router.get('/create', loginController.isLoggedIn, userController.isAdmin, itemController.renderCreateItemForm);
 
-    .post(loginController.isLoggedIn, userController.isAdmin, itemController.createItem); 
+// Create item (admin only)
+router.post('/create', loginController.isLoggedIn, userController.isAdmin, itemController.createItem);
+
+// Get single item
+router.get('/:id', itemController.getItemById);
+
+// Update item (admin only)
+router.post('/:id/update', loginController.isLoggedIn, userController.isAdmin, itemController.updateItem);
+
+// Delete item (admin only)
+router.post('/:id/delete', loginController.isLoggedIn, userController.isAdmin, itemController.deleteItem);
+
+// Add rating to item
+router.post('/:id/rate', loginController.isLoggedIn, itemController.addRating);
+
+// Add comment to item
+router.post('/:id/comment', loginController.isLoggedIn, itemController.addComment);
+
+
+
 
 module.exports = router;
 

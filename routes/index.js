@@ -23,6 +23,9 @@ router.get('/policies', function(req, res) {
     case "conditions_of_use":
       res.render('policies/conditions_of_use.ejs')
       break;
+    case "forgotpassword":
+      res.render('policies/forgotpassword.ejs')
+      break;
     default:
       res.render('error.ejs')
       break;

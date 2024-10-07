@@ -6,7 +6,8 @@
     <body class="bg-light">
         <%- include('./partials/header'); %>
         <%- include('./partials/backbutton'); %>
-        <div class="container mt-4 bg-white main-div">
+        <div class="container mt-4 bg-white shadow rounded main-div">
+            <br>
             <h1 class="mb-4">Admin Dashboard</h1>
 
             <!-- User Management Section -->
@@ -222,11 +223,11 @@
                     $.post('/user/delete', {username: userId}).done(function(data) {
                        
                         $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
-                        $('#deleteUserModal').modal('hide');
+                        $('#deleteModal').modal('hide');
                     }).fail(function(err) {
                         if(err.responseText === "Failed deleting user") { // User already deleted
                             $('#userTableBody').find(`.deleteUser[data-id="${userId}"]`).closest('tr').remove();
-                            $('#deleteUserModal').modal('hide');
+                            $('#deleteModal').modal('hide');
                         } else {
                             location.href = "/error.ejs"
                         }

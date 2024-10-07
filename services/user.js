@@ -1,4 +1,5 @@
 const User = require("../models/User")
+const orderService = require("./order")
 
 async function deleteUser(username) {
     try {
@@ -6,6 +7,9 @@ async function deleteUser(username) {
         if (user == null) {
             return "Cannot find user to delete";
         }
+        // When a user is deleted, we delete all their orders
+        const name = user._id
+        return orderService.deleteOrdersForUser(name)
     } catch(e) {
         return e.errors
     }
