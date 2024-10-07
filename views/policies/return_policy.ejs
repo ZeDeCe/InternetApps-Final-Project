@@ -1,87 +1,171 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <%- include('./partials/head', {title: "Website: Return Policy"}); %>
-    </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
-    <body class="bg-light">
-        <%- include('./partials/backbutton'); %>
-        <div class="m-3">
-			<h2>Return Policy</h2>
-            <h3>1. Overview</h3>
-            At TONNS Lego Store, we strive to provide high-quality products and excellent customer service. If you are not completely satisfied with your purchase, we’re here to help. This Return Policy outlines the terms and conditions for returning products purchased from our website.
-            <br><br>
-            <h3>2. Eligibility for Returns</h3>
-            <h5>2.1 General Conditions</h5>
-            To be eligible for a return, the following conditions must be met:
-            <br>
-            The item must be unused, unworn, and in the same condition that you received it.<br>
-            The item must be in its original packaging, including tags, labels, and any accessories.<br>
-            A valid proof of purchase (order confirmation, receipt, or invoice) must be provided.
-            <br>
-            <h5>2.2 Non-Returnable Items</h5>
-            Certain items are non-returnable, including:<br>
+<html lang="en">
 
-            Perishable goods (e.g., food, flowers, newspapers)<br>
-            Personalized or custom-made items<br>
-            Intimate or sanitary goods (e.g., undergarments, swimwear)<br>
-            Downloadable software or digital products<br>
-            Gift cards
-            <br><br>
-            <h3>3. Return Process</h3>
-            <h5>3.1 How to Initiate a Return</h5>
-            To initiate a return, please follow these steps:<br>
+<head>
+    <%- include('./partials/head', {title: "Website: Return Policy"}); %>
+</head>
 
-            Contact our customer service team at tonnslegostore@shop.com or +9727684032 within 5 days of receiving your order.<br>
-            Provide your order number and a brief description of the reason for the return.<br>
-            Our team will review your request and provide you with a Return Merchandise Authorization (RMA) number and return instructions.
-            <br>
-            <h5>3.2 Shipping Your Return</h5>
-            Pack the item securely in its original packaging, including all accessories, manuals, and documentation.<br>
-            Clearly mark the RMA number on the outside of the package.<br>
-            Ship the item to the address provided by our customer service team. We recommend using a trackable shipping service and purchasing shipping insurance, as we are not responsible for lost or damaged returns.
-            <br>
-            <h5>3.3 Return Shipping Costs</h5>
-            If the return is due to our error (e.g., wrong item shipped, defective product), we will cover the return shipping costs.<br>
-            For all other returns, the customer is responsible for the return shipping costs.
-            <br><br>
-            <h3>4. Refunds</h3>
-            <h5>4.1 Processing Your Refund</h5>
-            Once we receive and inspect your return, we will notify you of the approval or rejection of your refund. If approved, your refund will be processed within 7 business days, and a credit will automatically be applied to your original method of payment.
-            <br>
-            <h5>4.2 Partial Refunds</h5>
-            Partial refunds may be granted in the following situations:<br>
+<body class="bg-light">
+    <%- include('./partials/header'); %>
+    <%- include('./partials/backbutton'); %>
 
-            Items returned in a condition that is not in its original state, damaged, or missing parts for reasons not due to our error.<br>
-            Items returned after the 5 day return window.
-            <br>
-            <h5>4.3 Non-Refundable Fees</h5>
-            The following fees are non-refundable:<br>
+    <div class="container mt-5 main-div">
+        <header class="text-center mb-5">
+            <h2>Return Policy</h2>
+            <nav>
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a class="nav-link text-primary" href="#overview">1. Overview</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#eligibility">2. Eligibility for Returns</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#return-process">3. Return Process</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#refunds">4. Refunds</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#exchanges">5. Exchanges</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#missing-refunds">6. Late or Missing Refunds</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#contact-us">7. Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
 
-            Original shipping costs<br>
-            Restocking fees (if applicable)<br>
-            Customs duties and taxes
-            <br><br>
-            <h3>5. Exchanges</h3>
-            We only replace items if they are defective or damaged. If you need to exchange an item for the same product, please contact our customer service team to arrange the exchange.
-            <br><br>
-            <h3>6. Late or Missing Refunds</h3>
-            If you haven’t received a refund yet, please:<br>
+        <main>
+            <section id="overview" class="mb-5">
+                <h3>1. Overview</h3>
+                <p>At TONNS Lego Store, we strive to provide high-quality products and excellent customer service. If you are not completely satisfied with your purchase, we’re here to help. This Return Policy outlines the terms and conditions for returning products purchased from our website.</p>
+            </section>
 
-            Check your bank account again.<br>
-            Contact your credit card company, as it may take some time before your refund is officially posted.<br>
-            Contact your bank, as there is often a processing time before a refund is posted.<br>
-            If you’ve done all of this and still have not received your refund, please contact us at tonnslegostore@shop.com.<br>
-            <br><br>
-            <h3>7. Contact Us</h3>
-            If you have any questions or concerns about our Shipping Information Policy, please contact us at:<br>
+            <section id="eligibility" class="mb-5">
+                <h3>2. Eligibility for Returns</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        2.1 General Conditions
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">The item must be unused, unworn, and in the same condition that you received it.</li>
+                            <li class="list-group-item">The item must be in its original packaging, including tags, labels, and any accessories.</li>
+                            <li class="list-group-item">A valid proof of purchase (order confirmation, receipt, or invoice) must be provided.</li>
+                        </ul>
+                    </div>
+                </div>
 
-            TONNS Lego Store<br>
-            Lego Street 123, Legoland<br>
-            +9727684032<br>
-            tonnslegostore@shop.com<br> 
-        </div>
-    </body>
+                <div class="card">
+                    <div class="card-header">
+                        2.2 Non-Returnable Items
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Perishable goods (e.g., food, flowers, newspapers)</li>
+                            <li class="list-group-item">Personalized or custom-made items</li>
+                            <li class="list-group-item">Intimate or sanitary goods (e.g., undergarments, swimwear)</li>
+                            <li class="list-group-item">Downloadable software or digital products</li>
+                            <li class="list-group-item">Gift cards</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="return-process" class="mb-5">
+                <h3>3. Return Process</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        3.1 How to Initiate a Return
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item">Contact our customer service team at <a href="mailto:tonnslegostore@shop.com">tonnslegostore@shop.com</a> or +9727684032 within 5 days of receiving your order.</li>
+                            <li class="list-group-item">Provide your order number and a brief description of the reason for the return.</li>
+                            <li class="list-group-item">Our team will review your request and provide you with a Return Merchandise Authorization (RMA) number and return instructions.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        3.2 Shipping Your Return
+                    </div>
+                    <div class="card-body">
+                        <p>Pack the item securely in its original packaging, including all accessories, manuals, and documentation. Clearly mark the RMA number on the outside of the package. Ship the item to the address provided by our customer service team. We recommend using a trackable shipping service and purchasing shipping insurance, as we are not responsible for lost or damaged returns.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        3.3 Return Shipping Costs
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">If the return is due to our error (e.g., wrong item shipped, defective product), we will cover the return shipping costs.</li>
+                            <li class="list-group-item">For all other returns, the customer is responsible for the return shipping costs.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="refunds" class="mb-5">
+                <h3>4. Refunds</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        4.1 Processing Your Refund
+                    </div>
+                    <div class="card-body">
+                        <p>Once we receive and inspect your return, we will notify you of the approval or rejection of your refund. If approved, your refund will be processed within 7 business days, and a credit will automatically be applied to your original method of payment.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        4.2 Partial Refunds
+                    </div>
+                    <div class="card-body">
+                        <p>Partial refunds may be granted in the following situations:</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Items returned in a condition that is not in its original state, damaged, or missing parts for reasons not due to our error.</li>
+                            <li class="list-group-item">Items returned after the 5-day return window.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        4.3 Non-Refundable Fees
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Original shipping costs</li>
+                            <li class="list-group-item">Restocking fees (if applicable)</li>
+                            <li class="list-group-item">Customs duties and taxes</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="exchanges" class="mb-5">
+                <h3>5. Exchanges</h3>
+                <p>We only replace items if they are defective or damaged. If you need to exchange an item for the same product, please contact our customer service team to arrange the exchange.</p>
+            </section>
+
+            <section id="missing-refunds" class="mb-5">
+                <h3>6. Late or Missing Refunds</h3>
+                <p>If you haven’t received a refund yet, please:</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Check your bank account again.</li>
+                    <li class="list-group-item">Contact your credit card company, as it may take some time before your refund is officially posted.</li>
+                    <li class="list-group-item">Contact your bank, as there is often a processing time before a refund is posted.</li>
+                    <li class="list-group-item">If you’ve done all of this and still have not received your refund, please contact us at <a href="mailto:tonnslegostore@shop.com">tonnslegostore@shop.com</a>.</li>
+                </ul>
+            </section>
+
+            <section id="contact-us" class="mb-5">
+                <h3>7. Contact Us</h3>
+                <address>
+                    <strong>TONNS Lego Store</strong><br>
+                    Lego Street 123, Legoland<br>
+                    Phone: <a href="tel:+9727684032">+9727684032</a><br>
+                    Email: <a href="mailto:tonnslegostore@shop.com">tonnslegostore@shop.com</a>
+                </address>
+            </section>
+        </main>
+    </div>
+
+    <%- include('./partials/footer'); %>
+</body>
+
 </html>
