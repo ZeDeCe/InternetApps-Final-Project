@@ -43,7 +43,6 @@ async function register(req, res) {
 async function logout(req, res) {
     req.session.destroy((err) => {
         if (err) {
-            console.error(err);
             res.status(500).send('Error logging out');
         } else {
             res.redirect("/");

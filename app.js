@@ -8,6 +8,9 @@ const aboutRouter = require('./routes/about')
 const adminRouter = require('./routes/admin')
 const userRouter = require('./routes/user')
 const branchRouter = require('./routes/branch');
+const cartRouter = require('./routes/cart')
+const itemsRouter = require('./routes/items')
+const orderRouter = require('./routes/order')
 
 const session = require('express-session')
 const mongoose = require("mongoose")
@@ -24,7 +27,7 @@ app.use(session({
     {
         mongoUrl: process.env.DB_URL + 'session-store'
     }
-)
+  )
 }))
 
 app.set("view engine", "ejs")
@@ -33,13 +36,19 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
+// Use the new items router for both '/items' and '/search' paths
+app.use('/items', itemsRouter);
+app.use('/search', itemsRouter);
+
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)
-app.use('/about', aboutRouter);
+app.use('/about', aboutRouter)
 app.use('/admin', adminRouter)
 app.use('/user', userRouter)
 app.use('/branch', branchRouter);
+app.use('/cart', cartRouter);
+app.use('/order', orderRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -58,3 +67,5 @@ app.use(function(err, req, res, next) {
 });
 
 app.listen(process.env.PORT)
+
+module.exports = app;

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head', {title: "Lego Land"}); %>
+  </head>
+  <body>
+    <div class="main-div bg-light">
+      <%- include('./partials/header'); %>
+      <button type="button" id="filter-btn" class="btn">
+        Filter
+        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+        </svg>
+        </button>
+        <div class="home-icon">
+            <a href="/items"><i class="bi bi-house-door-fill"></i></a>
+        </div>
+      <!-- Sidebar Filter -->
+      <div id="sidebar" class="sidebar">
+        <h4>Filter By -</h4>
+        <a href="javascript:void(0)" class="closebtn">&times;</a> <!-- "x" button-->
+        <div>
+          <h5>Price Range</h5>
+          <label><input type="checkbox" data-type="price" value="1-49"> Under $50</label><br>
+          <label><input type="checkbox" data-type="price" value="50-99"> $50 - $99</label><br>
+          <label><input type="checkbox" data-type="price" value="100-500"> $100 - $500</label>
+          <label><input type="checkbox" data-type="price" value="501-10000"> More than $500</label>
+        </div>
+        <div>
+          <h5>Theme</h5>
+          <% uniqueThemes.forEach(theme => { %>
+            <label>
+              <input type="checkbox" data-type="theme" value="<%= theme %>"> <%= theme %>
+            </label><br>
+          <% }); %>
+        </div>
+        <div>
+          <h5>Piece Count</h5>
+          <label><input type="checkbox" data-type="pieces" value="1-100"> Under 100</label><br>
+          <label><input type="checkbox" data-type="pieces" value="100-500"> 100-500</label><br>
+          <label><input type="checkbox" data-type="pieces" value="500-1000"> 500-1000</label>
+          <label><input type="checkbox" data-type="pieces" value="1000-10000"> More than 1000</label>
+        </div>
+        <button id="apply-btn" class="apply-button"><b>Apply</b></button>
+      </div>
+
+      <div class="container mt-4">
+        <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
+        <!-- Items section -->
+        <div class="row">
+          <% if (items.length > 0) { %>
+            <% items.forEach(item => { %>
+              <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
+                <div class="card border-secondary item-card bg-white">
+                  <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
+                  <div class="card-body">
+                    <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
+                    <p class="card-text text-danger item-price"><strong>$<%= item.price.toFixed(2) %></strong></p>
+                    <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
+                    <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
+                    <a href="/items/<%= item._id %>" class="btn btn-primary view-details">View Details</a>
+                  </div>
+                </div>
+              </div>
+            <% }); %>
+          <% } else { %>
+            <p class="text-center">No items found.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <%- include('./partials/footer'); %>
+
+    <!-- Sidebar JavaScript -->
+    <script>
+      $(document).ready(function() {
+          $('#filter-btn').click(function() {
+              $('#sidebar').addClass('sidebar-open');
+          });
+  
+          $('.closebtn').click(function() {
+              $('#sidebar').removeClass('sidebar-open');
+          });
+  
+          $('#apply-btn').click(function() {
+              $('#sidebar').removeClass('sidebar-open');
+  
+              const priceRange = [];
+              const themes = [];
+              const piecesRange = [];
+  
+              $('input[type="checkbox"]:checked').each(function() {
+                  const type = $(this).data('type');
+                  if (type === "price") {
+                      priceRange.push($(this).val());
+                  } else if (type === "theme") {
+                      themes.push($(this).val());
+                  } else if (type === "pieces") {
+                      piecesRange.push($(this).val());
+                  }
+              });
+  
+              const queryString = $.param({
+                  priceRange: priceRange.join(','),
+                  themes: themes.join(','),
+                  piecesRange: piecesRange.join(',')
+              });
+  
+              // Redirect to the filter route
+              window.location.href = `/items/filter?${queryString}`;
+          });
+      });
+    </script>
+  </body>
+</html>

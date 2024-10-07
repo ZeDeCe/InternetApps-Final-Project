@@ -1,98 +1,219 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <%- include('./partials/head', {title: "Website: Shipping info"}); %>
-    </head>
-    <header>
-        <%- include('./partials/header'); %>
-    </header>
-    <body class="bg-light">
-        <div class="m-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-            </svg>
-            <a href="/user_page/" class="text-dark text-decoration-none" ><small>Back</small></a>
-        </div>
-        <div class="m-3">
-			<h2>Shipping Information Policy</h2>
-            <h3>1. Overview</h3>
-            At [Your Website Name], we strive to deliver your orders in a timely and efficient manner. This Shipping Information Policy outlines the shipping methods, processing times, delivery times, and other important details related to shipping.
-            <br><br>
-            <h3>2. Shipping Destinations</h3>
-            We offer shipping to the following destinations:
+<html lang="en">
 
-            Domestic (within [Your Country])<br>
-            International (to selected countries)<br>
-            Please note that some products may have restrictions on delivery to certain regions or countries due to legal or logistical reasons. If your order cannot be shipped to your location, you will be notified at checkout.
-            <br><br>
-            <h3>3. Shipping Methods & Costs</h3>
-            <h5>3.1 Shipping Methods</h5>
-            We offer the following shipping methods:<br>
+<head>
+    <%- include('./partials/head', {title: "Website: Shipping Info"}); %>
+</head>
 
-            Standard Shipping: Estimated delivery within [X] business days.<br>
-            Expedited Shipping: Estimated delivery within [X] business days.<br>
-            Overnight Shipping: Estimated delivery by the next business day.
-            <br>
-            <h5>3.2 Shipping Costs</h5>
-            Shipping costs are calculated based on the weight, dimensions, and destination of your order. The exact shipping charges will be displayed at checkout before you complete your purchase.<br>
+<body class="bg-light">
+    <%- include('./partials/header'); %>
+    <%- include('./partials/backbutton'); %>
 
-            Free Shipping: We offer free standard shipping on orders over [X] within [Your Country]. Free shipping promotions are subject to change and may vary by region.
-            <br><br>
-            <h3>4. Order Processing Time</h3>
-            <h5>4.1 Processing Time</h5>
-            Orders are processed within [X] business days (excluding weekends and holidays) after receiving your order confirmation email. You will receive another notification when your order has shipped.
-            <br>
-            <h5>4.2 Delays</h5>
-            Please note that processing times may be delayed during peak seasons (e.g., holidays) or due to high order volumes. We will do our best to notify you of any significant delays.
-            <br><br>
-            <h3>5. Delivery Time</h3>
-            <h5>5.1 Estimated Delivery Time</h5>
-            Estimated delivery times are based on the shipping method selected and the destination of your order. While we aim to deliver within the estimated timeframe, please note that actual delivery times may vary due to factors beyond our control, such as customs processing or carrier delays.
-            <br>
-            <h5>5.2 Tracking Your Order</h5>
-            Once your order has shipped, you will receive a shipping confirmation email with a tracking number and link to track your order. Please allow [X] hours for the tracking information to update.
-            <br><br>
-            <h3>6. International Shipping</h3>
-            <h5>6.1 Customs, Duties, and Taxes</h5>
-            International orders may be subject to customs duties, taxes, and import fees, which are not included in our shipping charges. These charges are the responsibility of the customer and are typically collected by the carrier at the time of delivery.
-            <br>
-            <h5>6.2 Shipping Times</h5>
-            International shipping times vary depending on the destination country and customs processing times. Estimated delivery times for international orders are typically [X] to [X] business days but may be longer.
-            <br><br>
-            <h3>7. Shipping Restrictions</h3>
-            <h5>7.1 P.O. Boxes & APO/FPO Addresses</h5>
-            We do not ship to P.O. Boxes, APO, or FPO addresses. Please provide a valid residential or commercial address at checkout.
-            <br>
-            <h5>7.2 Restricted Products</h5>
-            Certain products may be restricted from shipping to specific locations due to regulatory or carrier restrictions. If an item in your order cannot be shipped to your location, we will notify you and provide alternative options.
-            <br><br>
-            <h3>8. Missing, Lost, or Damaged Packages</h3>
-            <h5>8.1 Missing or Lost Packages</h5>
-            If your package is marked as delivered but you have not received it, please:<br>
+    <div class="container mt-5 main-div">
+        <header class="text-center mb-5">
+            <h2>Shipping Information Policy</h2>
+            <nav>
+                <ul class="nav justify-content-center">
+                    <li class="nav-item"><a class="nav-link text-primary" href="#overview">1. Overview</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#shipping-destinations">2. Shipping Destinations</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#shipping-methods">3. Shipping Methods & Costs</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#processing-time">4. Order Processing Time</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#delivery-time">5. Delivery Time</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#international-shipping">6. International Shipping</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#shipping-restrictions">7. Shipping Restrictions</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#missing-packages">8. Missing, Lost, or Damaged Packages</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#order-changes">9. Order Changes and Cancellations</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="#contact-us">10. Contact Us</a></li>
+                </ul>
+            </nav>
+        </header>
 
-            Check with neighbors or other household members to see if they received the package.<br>
-            Contact the carrier to inquire about the delivery.<br>
-            If the package cannot be located, contact our customer service team at [Customer Service Email] within [X] days of the marked delivery date.
-            <br>
-            <h5>8.2 Damaged Packages</h5>
-            If your package arrives damaged, please take photos of the damage and contact our customer service team immediately. We will work with you to resolve the issue, whether by sending a replacement or issuing a refund.
-            <br><br>
-            <h3>9. Order Changes and Cancellations</h3>
-            <h5>9.1 Order Changes</h5>
-            If you need to make changes to your order (e.g., shipping address, item quantity), please contact us as soon as possible. We will do our best to accommodate your request, but changes may not be possible once the order has been processed or shipped.
-            <br>
-            <h5>9.2 Order Cancellations</h5>
-            If you wish to cancel your order, please contact us immediately. Orders that have already been processed or shipped cannot be canceled, but you may be able to return the item(s) following our Return Policy.
-            <br><br>
-            <h3>10. Contact Us</h3>
-            If you have any questions or concerns about our Shipping Information Policy, please contact us at:<br>
+        <main>
+            <section id="overview" class="mb-5">
+                <h3>1. Overview</h3>
+                <p>At TONNS, we strive to deliver your orders in a timely and efficient manner. This Shipping Information Policy outlines the shipping methods, processing times, delivery times, and other important details related to shipping.</p>
+            </section>
 
-            [Your Company Name]<br>
-            [Address]<br>
-            [Phone Number]<br>
-            [Email Address]<br>
+            <section id="shipping-destinations" class="mb-5">
+                <h3>2. Shipping Destinations</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Domestic (within Legoland)</li>
+                    <li class="list-group-item">International (to selected countries)</li>
+                </ul>
+                <p class="mt-3">Please note that some products may have restrictions on delivery to certain regions or countries due to legal or logistical reasons. If your order cannot be shipped to your location, you will be notified at checkout.</p>
+            </section>
 
-            
-        </div>
-    </body>
+            <section id="shipping-methods" class="mb-5">
+                <h3>3. Shipping Methods & Costs</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        3.1 Shipping Methods
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Standard Shipping: Estimated delivery within 7 business days.</li>
+                            <li class="list-group-item">Expedited Shipping: Estimated delivery within 3 business days.</li>
+                            <li class="list-group-item">Overnight Shipping: Estimated delivery by the next business day.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        3.2 Shipping Costs
+                    </div>
+                    <div class="card-body">
+                        <p>Shipping costs are calculated based on the weight, dimensions, and destination of your order. The exact shipping charges will be displayed at checkout before you complete your purchase.</p>
+                        <p>Free Shipping: We offer free standard shipping on orders over 3 within Legoland. Free shipping promotions are subject to change and may vary by region.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="processing-time" class="mb-5">
+                <h3>4. Order Processing Time</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        4.1 Processing Time
+                    </div>
+                    <div class="card-body">
+                        <p>Orders are processed within 2 business days (excluding weekends and holidays) after receiving your order confirmation email. You will receive another notification when your order has shipped.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        4.2 Delays
+                    </div>
+                    <div class="card-body">
+                        <p>Please note that processing times may be delayed during peak seasons (e.g., holidays) or due to high order volumes. We will do our best to notify you of any significant delays.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="delivery-time" class="mb-5">
+                <h3>5. Delivery Time</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        5.1 Estimated Delivery Time
+                    </div>
+                    <div class="card-body">
+                        <p>Estimated delivery times are based on the shipping method selected and the destination of your order. While we aim to deliver within the estimated timeframe, please note that actual delivery times may vary due to factors beyond our control, such as customs processing or carrier delays.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        5.2 Tracking Your Order
+                    </div>
+                    <div class="card-body">
+                        <p>Once your order has shipped, you will receive a shipping confirmation email with a tracking number and link to track your order. Please allow 3 hours for the tracking information to update.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="international-shipping" class="mb-5">
+                <h3>6. International Shipping</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        6.1 Customs, Duties, and Taxes
+                    </div>
+                    <div class="card-body">
+                        <p>International orders may be subject to customs duties, taxes, and import fees, which are not included in our shipping charges. These charges are the responsibility of the customer and are typically collected by the carrier at the time of delivery.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        6.2 Shipping Times
+                    </div>
+                    <div class="card-body">
+                        <p>International shipping times vary depending on the destination country and customs processing times. Estimated delivery times for international orders are typically 3 to 7 business days but may be longer.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="shipping-restrictions" class="mb-5">
+                <h3>7. Shipping Restrictions</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        7.1 P.O. Boxes & APO/FPO Addresses
+                    </div>
+                    <div class="card-body">
+                        <p>We do not ship to P.O. Boxes, APO, or FPO addresses. Please provide a valid residential or commercial address at checkout.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        7.2 Restricted Products
+                    </div>
+                    <div class="card-body">
+                        <p>Certain products may be restricted from shipping to specific locations due to regulatory or carrier restrictions. If an item in your order cannot be shipped to your location, we will notify you and provide alternative options.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="missing-packages" class="mb-5">
+                <h3>8. Missing, Lost, or Damaged Packages</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        8.1 Missing or Lost Packages
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered">
+                            <li class="list-group-item">Check with neighbors or other household members to see if they received the package.</li>
+                            <li class="list-group-item">Contact the carrier to inquire about the delivery.</li>
+                            <li class="list-group-item">If the package cannot be located, contact our customer service team at <a href="mailto:tonnslegostore@shop.com">tonnslegostore@shop.com</a> within 5 days of the marked delivery date.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        8.2 Damaged Packages
+                    </div>
+                    <div class="card-body">
+                        <p>If your package arrives damaged, please take photos of the damage and contact our customer service team immediately. We will work with you to resolve the issue, whether by sending a replacement or issuing a refund.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="order-changes" class="mb-5">
+                <h3>9. Order Changes and Cancellations</h3>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        9.1 Order Changes
+                    </div>
+                    <div class="card-body">
+                        <p>If you need to make changes to your order (e.g., shipping address, item quantity), please contact us as soon as possible. We will do our best to accommodate your request, but changes may not be possible once the order has been processed or shipped.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        9.2 Order Cancellations
+                    </div>
+                    <div class="card-body">
+                        <p>If you wish to cancel your order, please contact us immediately. Orders that have already been processed or shipped cannot be canceled, but you may be able to return the item(s) following our Return Policy.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact-us" class="mb-5">
+                <h3>10. Contact Us</h3>
+                <address>
+                    <p>If you have any questions or concerns about our Shipping Information Policy, please contact us at:</p>
+                    <p><strong>TONNS Lego Store</strong><br>
+                        Lego Street 123, Legoland<br>
+                        <a href="tel:+9727684032">+9727684032</a><br>
+                        <a href="mailto:tonnslegostore@shop.com">tonnslegostore@shop.com</a>
+                    </p>
+                </address>
+            </section>
+        </main>
+    </div>
+
+    <%- include('./partials/footer'); %>
+</body>
+
 </html>
