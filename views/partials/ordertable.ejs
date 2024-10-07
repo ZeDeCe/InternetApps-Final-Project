@@ -13,7 +13,7 @@
             <%}%>
             <%for (let i = 0; i < orders.length; i++) { const order = orders[i]%>
                 <div class="bg-transparent mt-3" id="singleorder" data-id="<%=order._id%>">
-                    <div class="bg-primary bg-opacity-25 p-3 border border-bottom-0 rounded-top">
+                    <div class="bg-danger p-3 border border-bottom-0 rounded-top text-white">
                         <% if(isAdmin) {%>
                             <div class="row">
                                 <div class="col-2">
