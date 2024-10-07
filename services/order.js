@@ -56,7 +56,7 @@ const getOrderById = async (id) => {
 
 //CRUD: Get (read) all orders from DB grouped by user
 const getOrders = async () => {
-    return await Order.aggregate([
+    var orders =  await Order.aggregate([
         { $unwind: "$items" },
         {
             $lookup: {
@@ -83,6 +83,8 @@ const getOrders = async () => {
         },
         { $group: { _id: '$user', orders: { $push: '$$ROOT' } } }
     ]);
+    orders.sort((a, b) => new Date(b.date).getTime() < new Date(a.date).getTime());
+    return orders
 };
 
 //CRUD: Get (read) all specific user orders from DB
@@ -95,6 +97,7 @@ const getAllUserOrders = async (user) => {
         return null
     }
     orders = [{_id: user, orders: orders}];
+    orders.sort((a, b) => new Date(b.date).getTime() < new Date(a.date).getTime());
     return orders
 };
 
