@@ -48,6 +48,15 @@ function isAdmin(req, res, next) {
     }
 }
 
+function isNotAdmin(req,res,next) {
+    if (req && req.session && !req.session.isAdmin) {
+        return next()
+    }
+    else {
+        res.redirect("/admin")
+    }
+}
+
 async function validateUsername(req, res) {
     res.send(await userService.validateUsername(req.body.username))
 }
@@ -75,5 +84,6 @@ module.exports = {
     createUserAsAdmin,
     getUser,
     deleteAccount,
-    updateAccount
+    updateAccount,
+    isNotAdmin
 }

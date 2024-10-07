@@ -1,10 +1,6 @@
 const orderService = require("../services/order.js")
 const userService = require("../services/user.js")
 async function getUserPage (req, res) {
-    if (req.session.isAdmin) {
-        res.redirect('/admin')
-        return
-    }
     const user = req.session.username;
     var order = await orderService.getUserLatestOrder(user);
     const items = await orderService.getRandomItems();
