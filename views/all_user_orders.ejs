@@ -71,7 +71,17 @@
                             location.href = "/error"
                         }
                         else {
-                            $(`#singleorder[data-id="${orderid}"]`).remove();
+                            var ordertodelete = $(`#singleorder[data-id="${orderid}"]`)
+                            var closestuser = ordertodelete.closest("#userdiv[user]")
+                            if(!ordertodelete || !closestuser) {
+                                location.href = "/error"
+                                return
+                            }
+                            if(closestuser.children("#singleorder").length <= 1) {
+                                closestuser.remove()
+                            } else {
+                                ordertodelete.remove();
+                            }
                             $('#deleteModal').modal('hide');
                         }
                     })
