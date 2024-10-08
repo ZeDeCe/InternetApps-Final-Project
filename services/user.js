@@ -1,6 +1,7 @@
 const User = require("../models/User")
 const orderService = require("./order")
 
+// Requirement delete
 async function deleteUser(username) {
     try {
         const user = await User.findOneAndDelete({_id: username})
@@ -15,6 +16,7 @@ async function deleteUser(username) {
     }
 }
 
+// Requirement update
 async function updateUser(username, data) {
     try {
         const user = await User.findOneAndUpdate({_id: username}, data);
@@ -27,6 +29,7 @@ async function updateUser(username, data) {
     }
 }
 
+// Requirement create
 // This is a generic function that creates a user in the DB
 async function createUser(user) {
     if(await validateUsername(user._id)) {
@@ -43,12 +46,18 @@ async function createUser(user) {
     }
 }
 
+// Requirement List
 async function getAllUsers() {
-    return await User.find();
+    return await User.find()
 }
 
 async function getUser(username) {
-    return await User.find({_id: username})
+    return await searchUser({_id: username})
+}
+
+// Requirement "search"
+async function searchUser(data) {
+    return await User.find(data);
 }
 
 async function isAdmin(username) {
@@ -60,8 +69,6 @@ async function validateUsername(username) {
     const user = await User.findOne({_id: username})
     return user != null;
 }
-
-
 
 module.exports = {
     deleteUser,
