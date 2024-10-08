@@ -47,6 +47,7 @@
             const price = $('#price').val();
             const pieces = $('#pieces').val();
             const themeInput = $('#theme');
+            const nameInput = $('#name');
             let errorMessage = '';
 
             if (price < 1 || price > 10000) {
@@ -58,6 +59,8 @@
             }
 
             let themeValue = themeInput.val().trim();
+            let nameValue = nameInput.val().trim();
+
             if (themeValue.length === 0) {
                 errorMessage += 'Theme is required.<br>';
             }
@@ -68,7 +71,9 @@
             } else {
                 // Capitalize the first letter of the theme
                 themeValue = themeValue.charAt(0).toUpperCase() + themeValue.slice(1).toLowerCase();
+                nameValue = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
                 themeInput.val(themeValue);
+                nameInput.val(nameValue);
             }
         });
     });

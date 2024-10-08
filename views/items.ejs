@@ -42,19 +42,19 @@
         <button id="apply-btn" class="apply-button"><b>Apply</b></button>
       </div>
 
-      <div class="container mt-4 d-flex align-items-center justify-content-center">
-        <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
-          <button class="btn sort-button dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            Sort By
-          </button>
-          
-          <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="a-z">A-Z</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-low-high">Price: Low to High</a></li>
-            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-high-low">Price: High to Low</a></li>
-          </ul>
-        </div>
+      <button class="btn sort-button dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Sort By
+      </button>
+      
+      <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="a-z">A-Z</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-low-high">Price: Low to High</a></li>
+        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-high-low">Price: High to Low</a></li>
+      </ul>
 
+
+      <div class="container mt-4">
+        <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
         <!-- Items section -->
         <div class="row">
           <% if (items.length > 0) { %>
@@ -117,6 +117,14 @@
               // Redirect to the filter route
               window.location.href = `/items/filter?${queryString}`;
           });
+      });
+      $(document).ready(function() {
+        $('.dropdown-item').click(function() {
+          const sort = $(this).data('sort');
+          const currentUrlParams = new URLSearchParams(window.location.search);
+          currentUrlParams.set('sort', sort);
+          window.location.href = `/items/filter?${currentUrlParams.toString()}`;
+        });
       });
   </script>
   </body>

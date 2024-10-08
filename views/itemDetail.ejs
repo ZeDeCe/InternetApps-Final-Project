@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head', {title: item.name + " - Details"}); %>
+    <%- include('./partials/head', {title: item.name}); %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -15,9 +15,9 @@
                 </div>
                 <div class="p-8">
                     <h1 class="text-3xl font-bold mb-2"><%= item.name %></h1>
-                    <p class="text-gray-600 text-xl mb-4">$<%= item.price.toFixed(2) %></p>
-                    <p class="text-gray-700 mb-2">Pieces: <%= item.pieces %></p>
-                    <p class="text-gray-700 mb-4">Theme: <%= item.theme %></p>
+                    <p class="text-gray-600 text-xl mb-4"><b>$<%= item.price.toFixed(2) %></b></p>
+                    <p class="text-gray-700 mb-2"><b>Pieces: </b><%= item.pieces %></p>
+                    <p class="text-gray-700 mb-4"><b>Theme: </b><%= item.theme %></p>
                     <p class="text-gray-700 mb-4"><%= item.description %></p>
                     <div class="flex items-center mb-4">
                         <% const avgRating = item.ratings && item.ratings.length ? item.ratings.reduce((sum, rating) => sum + rating.value, 0) / item.ratings.length : 0; %>
@@ -140,6 +140,6 @@
         });
     });
     </script>
-    <%- include('./partials/footer'); %>
 </body>
+<%- include('./partials/footer'); %>
 </html>

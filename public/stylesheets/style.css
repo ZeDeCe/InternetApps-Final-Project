@@ -1,6 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@font-face {
+  font-family: 'Lego'; 
+  src: url('../fonts/PressStart2P-Regular.ttf') format('truetype'); 
+  font-weight: normal; 
+  font-style: normal;
+}
 
 html, body {
   height: 100%;
@@ -168,13 +174,15 @@ body.create-item-page h3 {
   color: #ffea00;
   margin-top: 7px;
   text-align: center;
-  font-family: 'Press Start 2P', cursive; 
+  font-family: 'Lego', cursive; 
   padding-top: 10px;
 }
 
 #ci-container{
   max-width: 600px;
   margin-bottom: 20px;
+  position: relative;
+  top: -30px; 
 }
 
 #createbtn {
@@ -240,7 +248,6 @@ body.create-item-page h3 {
   padding-bottom: 20px;
 }
 
-/* Adjust price height */
 .item-price {
   padding: 5px;
   margin-bottom: 4px;
@@ -261,13 +268,9 @@ body.create-item-page h3 {
 }
 
 .lego-font {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'Lego', sans-serif; 
   padding-top: 30px;
 }
-
-
-
-
 
   
 

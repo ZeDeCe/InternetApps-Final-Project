@@ -68,37 +68,29 @@ async function createItem(name, description, price, picture, theme, pieces) {
 const getFilteredItems = async (filters, sortCriteria) => {
     const query = {};
 
-    // Handle Price Range Filter
     if (filters.priceRange && filters.priceRange.length > 0) {
         const priceRanges = filters.priceRange.split(',').map(range => {
             const [minPrice, maxPrice] = range.split('-');
             return { price: { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) } };
         });
-        // Combine all price ranges into an $or query
-        query.$or = priceRanges.length > 0 ? priceRanges : [];
+        query.$and = [{ $or: priceRanges }];
     }
 
-    // Handle Themes Filter
     if (filters.themes && filters.themes.length > 0) {
-        query.theme = { $in: filters.themes };
+        query.$and = query.$and ? [...query.$and, { theme: { $in: filters.themes } }] : [{ theme: { $in: filters.themes } }];
     }
 
-    // Handle Pieces Range Filter
     if (filters.piecesRange && filters.piecesRange.length > 0) {
         const piecesRanges = filters.piecesRange.split(',').map(range => {
             const [minPieces, maxPieces] = range.split('-');
             return { pieces: { $gte: parseInt(minPieces), $lte: parseInt(maxPieces) } };
         });
-        // Combine all pieces ranges into an $or query
-        query.$or = query.$or ? [...query.$or, ...piecesRanges] : piecesRanges;
+        query.$and = query.$and ? [...query.$and, { $or: piecesRanges }] : [{ $or: piecesRanges }];
     }
 
-    // Sorting options
     const sortOptions = {};
     if (sortCriteria === 'a-z') {
         sortOptions.name = 1;
-    } else if (sortCriteria === 'z-a') {
-        sortOptions.name = -1;
     } else if (sortCriteria === 'price-low-high') {
         sortOptions.price = 1;
     } else if (sortCriteria === 'price-high-low') {

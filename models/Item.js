@@ -35,7 +35,10 @@ const ItemSchema = new mongoose.Schema({
     _id: mongoose.Types.ObjectId,
     name: {
         type: String,
-        required: true
+        required: true,
+        set: function(value) {
+            return value.charAt(0).toUpperCase() + value.slice(1);
+        }
     },
     picture: {
         type: String,

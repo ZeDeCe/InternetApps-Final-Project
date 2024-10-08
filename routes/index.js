@@ -3,7 +3,7 @@ var router = express.Router();
 const loginController = require('../controllers/login')
 
 router.get('/', function(req, res) {
-  res.render('items.ejs', {username: req.session.username, isadmin: req.session.isAdmin});
+  res.render('index.ejs', {username: req.session.username, isadmin: req.session.isAdmin});
 });
 
 router.get('/policies', function(req, res) {

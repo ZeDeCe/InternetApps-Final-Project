@@ -1,5 +1,6 @@
 const itemService = require('../services/item');
 const cartService = require('../services/cart');
+const { shareNewItem } = require('../services/social');
 
 const getItems = async (req, res) => {
     try {
@@ -21,7 +22,12 @@ const createItem = async (req, res) => {
     const { name, description, price, picture, theme, pieces } = req.body;
 
     try {
-        await itemService.createItem(name, description, price, picture, theme, pieces);
+        const newItem = await itemService.createItem(name, description, price, picture, theme, pieces);
+
+        if (newItem) {
+            await shareNewItem(newItem);
+        }
+
         res.redirect('/items'); 
     } catch (error) {
         res.render('createItem', {
