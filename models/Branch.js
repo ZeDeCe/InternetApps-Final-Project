@@ -26,7 +26,15 @@ const Branch = new mongoose.Schema ({
     },
     phone: {
         type: String,
-        required: true
+        minLength: 8,
+        maxLength: 10,
+        required: true,
+        validate: {
+            validator: function(value) {
+                return /^[0-9]+$/.test(value); // Regex to check for numbers only
+            },
+            message: 'invalid phone number'
+        }
     }
 });
 

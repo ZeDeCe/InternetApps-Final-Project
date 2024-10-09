@@ -129,7 +129,7 @@
         $('#addToCartBtn').on('click', function() {
             $.ajax({
                 url: '/cart/add/<%= item._id %>',
-                method: 'POST',
+                method: 'GET',
                 success: function(response) {
                     alert('Item added to cart successfully!');
                 },

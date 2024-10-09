@@ -199,6 +199,31 @@ body.create-item-page h3 {
 }
 
 
+.slogan {
+  column-count: 3;
+  column-gap: 20px; /* Optional: Controls the space between columns */
+  text-align: center; /* Centers the text in each column */
+}
+
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  pointer-events: none;
+}
+.total-label {
+  font-size: 24px;
+  font-weight: bold;
+  text-anchor: middle;
+}
+.theme-label {
+  font-size: 14px;
+  text-anchor: middle;
+}
 /* items page */
 
 .item-card {
@@ -270,6 +295,14 @@ body.create-item-page h3 {
 .lego-font {
   font-family: 'Lego', sans-serif; 
   padding-top: 30px;
+}
+
+.big-logo {
+  text-shadow: 
+  2px 2px 4px rgba(0, 0, 0, 0.3), /* Soft shadow */
+  3px 3px 6px rgba(0, 0, 0, 0.2); /* Slightly darker shadow */
+  transition: text-shadow 0.3s; /* Smooth transition on hover */
+  font-size: 3rem;
 }
 
   

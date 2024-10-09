@@ -172,6 +172,25 @@ const deleteOrder = async (id) => {
     }
 };
 
+const getOrdersInTimeRange = async (start_date, end_date) => {
+    try {
+        return await Order.find({
+            date: {
+                $gte: start_date,
+                $lt: end_date
+            }
+        }).populate({
+            path: "items.item",
+            model: "Item"
+        });
+
+    } catch (e){
+        return [];
+    }
+
+
+}
+
 module.exports = {
     deleteOrder,
     updateOrder,
@@ -183,6 +202,7 @@ module.exports = {
     getTotalOrderPrice,
     getOrderPrettyDate,
     getRandomItems,
+    getOrdersInTimeRange,
     getUserForOrder,
     deleteOrdersForUser
 }
