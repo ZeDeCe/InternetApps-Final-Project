@@ -1,11 +1,14 @@
 const itemService = require('../services/item');
 const cartService = require('../services/cart');
+const { shareNewItem } = require('../services/social');
 
 const getItems = async (req, res) => {
     try {
-        const items = await itemService.getItems();
-        const uniqueThemes = await itemService.getUniqueThemes(); // Fetch unique themes
-        res.render('items', { items: items, searchName: '', uniqueThemes }); 
+        const sort = req.query.sort || 'a-z'; // Default sort to A-Z
+        const items = await itemService.getItems(sort);
+        const uniqueThemes = await itemService.getUniqueThemes();
+
+        res.render('items', { items: items, searchName: '', uniqueThemes });
     } catch (error) {
         res.status(500).send('Error fetching items');
     }
@@ -19,7 +22,12 @@ const createItem = async (req, res) => {
     const { name, description, price, picture, theme, pieces } = req.body;
 
     try {
-        await itemService.createItem(name, description, price, picture, theme, pieces);
+        const newItem = await itemService.createItem(name, description, price, picture, theme, pieces);
+
+        if (newItem) {
+            await shareNewItem(newItem);
+        }
+
         res.redirect('/items'); 
     } catch (error) {
         res.render('createItem', {
@@ -41,9 +49,10 @@ const getFilteredItems = async (req, res) => {
             themes: req.query.themes ? req.query.themes.split(',') : [],
             piecesRange: req.query.piecesRange
         };
-        const filteredItems = await itemService.getFilteredItems(filters);
-        const uniqueThemes = await itemService.getUniqueThemes(); // Fetch unique themes for filtering
-        res.render('items', { items: filteredItems, searchName: req.query.name, uniqueThemes }); // Pass unique themes to the view
+        const sort = req.query.sort || 'a-z'; // Default to A-Z sorting
+        const filteredItems = await itemService.getFilteredItems(filters, sort); // Pass sort to service
+        const uniqueThemes = await itemService.getUniqueThemes(); 
+        res.render('items', { items: filteredItems, searchName: req.query.name, uniqueThemes }); 
     } catch (error) {
         res.status(500).send('Internal Server Error');
     }
@@ -53,8 +62,8 @@ const searchItems = async (req, res) => {
     try {
         const searchName = req.query.name || '';
         const items = await itemService.searchItemsByName(searchName);
-        const uniqueThemes = await itemService.getUniqueThemes();
-        res.render('items', { items: items, searchName: searchName, uniqueThemes }); // Pass unique themes to the view
+        const uniqueThemes = await itemService.getUniqueThemes(); 
+        res.render('items', { items: items, searchName: searchName, uniqueThemes }); 
     } catch (error) {
         res.status(500).send('Error searching items');
     }

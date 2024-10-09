@@ -36,10 +36,8 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({ extended: true }))
 app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
-// Use the new items router for both '/items' and '/search' paths
 app.use('/items', itemsRouter);
 app.use('/search', itemsRouter);
-
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)

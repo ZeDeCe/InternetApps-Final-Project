@@ -4,74 +4,78 @@
     <%- include('./partials/head', {title: "Create Item"}); %>
 </head>
 <body class="create-item-page bg-light">
-    <div class="ms-3 mt-2">
-        <a href="/user_page/" class="text-dark text-decoration-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-          </svg>
-          <b>Back</b></a>
-    </div>
-    <h3>Create New Item</h3>
+    <%- include('./partials/header'); %>
+    <%- include('./partials/backbutton'); %>
+    
+    <div class="container mt-5 bg-white" id="ci-container">
+        <h3 class="text-center mb-4">Create New Item</h3>
 
-    <form id="create-item-form" action="/items/create" method="POST">
-        <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <div>
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea>
-        </div>
-        <div>
-            <label for="price">Price:</label>
-            <input type="number" id="price" name="price" placeholder="Price should be between 1 and 10,000" required>
-        </div>
-        <div>
-            <label for="picture">Picture URL:</label>
-            <input type="text" id="picture" name="picture" required>
-        </div>
-        <div>
-            <label for="theme">Theme:</label>
-            <input type="text" id="theme" name="theme" required>
-        </div>
-        <div>
-            <label for="pieces">Number of Pieces:</label>
-            <input type="number" id="pieces" name="pieces" placeholder="Pieces number should be between 1 and 10,000" required>
-        </div>
-        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
-        <button type="submit" class="btn btn-success">Create Item</button>
-    </form>
+        <form id="create-item-form" action="/items/create" method="POST" class="form-group">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" class="form-control" id="price" name="price" placeholder="Price should be between 1 and 10,000" required>
+            </div>
+            <div class="mb-3">
+                <label for="picture" class="form-label">Picture URL:</label>
+                <input type="text" class="form-control" id="picture" name="picture" required>
+            </div>
+            <div class="mb-3">
+                <label for="theme" class="form-label">Theme:</label>
+                <input type="text" class="form-control" id="theme" name="theme" required>
+            </div>
+            <div class="mb-3">
+                <label for="pieces" class="form-label">Number of Pieces:</label>
+                <input type="number" class="form-control" id="pieces" name="pieces" placeholder="Pieces number should be between 1 and 10,000" required>
+            </div>
+            <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+            <button type="submit" class="btn btn-danger" id="createbtn">Create</button>
+        </form>
+    </div>
+    <%- include('./partials/footer'); %>
 
     <script>
     $(document).ready(function() {
         $('#create-item-form').submit(function(event) {
-    const price = $('#price').val();
-    const pieces = $('#pieces').val();
-    const themeInput = $('#theme');
-    let errorMessage = '';
+            const price = $('#price').val();
+            const pieces = $('#pieces').val();
+            const themeInput = $('#theme');
+            const nameInput = $('#name');
+            let errorMessage = '';
 
-    if (price < 1 || price > 10000) {
-        errorMessage += 'Price must be between 1 and 10,000.<br>';
-    }
+            if (price < 1 || price > 10000) {
+                errorMessage += 'Price must be between 1 and 10,000.<br>';
+            }
 
-    if (pieces < 1 || pieces > 10000) {
-        errorMessage += 'Pieces number must be between 1 and 10,000.<br>';
-    }
+            if (pieces < 1 || pieces > 10000) {
+                errorMessage += 'Pieces number must be between 1 and 10,000.<br>';
+            }
 
-    let themeValue = themeInput.val().trim();
-    if (themeValue.length === 0) {
-        errorMessage += 'Theme is required.<br>';
-    }
+            let themeValue = themeInput.val().trim();
+            let nameValue = nameInput.val().trim();
 
-    if (errorMessage) {
-        $('#error-message').html(errorMessage).show();
-        event.preventDefault();
-    } else {
-        // Capitalize the first letter of the theme
-        themeValue = themeValue.charAt(0).toUpperCase() + themeValue.slice(1).toLowerCase();
-        themeInput.val(themeValue);
-    }
-    });
+            if (themeValue.length === 0) {
+                errorMessage += 'Theme is required.<br>';
+            }
+
+            if (errorMessage) {
+                $('#error-message').html(errorMessage).show();
+                event.preventDefault();
+            } else {
+                // Capitalize the first letter of the theme
+                themeValue = themeValue.charAt(0).toUpperCase() + themeValue.slice(1).toLowerCase();
+                nameValue = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+                themeInput.val(themeValue);
+                nameInput.val(nameValue);
+            }
+        });
     });
     </script>
 </body>

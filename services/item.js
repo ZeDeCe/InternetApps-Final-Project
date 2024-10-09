@@ -4,10 +4,14 @@ const Item = require('../models/Item');
 
 const getItemById = async (id) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            console.error('Invalid ObjectId:', id);
+            return null;
+        }
         return await Item.findById(id);
     } catch (error) {
         console.error('Error fetching item by ID:', error);
-        throw error;
+        throw error; 
     }
 };
 
@@ -15,8 +19,20 @@ const getItemByName = async (name) => {
     return await Item.find({ name });
 };
 
-const getItems = async () => {
-    return await Item.find({});
+const getItems = async (sortCriteria) => {
+    const sortOptions = {};
+    
+    if (sortCriteria === 'a-z') {
+        sortOptions.name = 1; 
+    } else if (sortCriteria === 'z-a') {
+        sortOptions.name = -1; 
+    } else if (sortCriteria === 'price-low-high') {
+        sortOptions.price = 1; 
+    } else if (sortCriteria === 'price-high-low') {
+        sortOptions.price = -1; 
+    }
+    
+    return await Item.find({}).sort(sortOptions);  
 };
 
 const searchItemsByName = async (name) => {
@@ -26,7 +42,6 @@ const searchItemsByName = async (name) => {
         });
         return items;
     } catch (error) {
-        console.error('Error fetching items with name filter:', error);
         throw error;
     }
 };
@@ -46,32 +61,46 @@ async function createItem(name, description, price, picture, theme, pieces) {
         });
         return await item.save();
     } catch (error) {
-        console.error('Error creating item:', error.message);
         throw error;
     }
 }
 
-const getFilteredItems = async (filters) => {
+const getFilteredItems = async (filters, sortCriteria) => {
     const query = {};
 
-    if (filters.priceRange) {
-        const [minPrice, maxPrice] = filters.priceRange.split('-');
-        query.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+    if (filters.priceRange && filters.priceRange.length > 0) {
+        const priceRanges = filters.priceRange.split(',').map(range => {
+            const [minPrice, maxPrice] = range.split('-');
+            return { price: { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) } };
+        });
+        query.$and = [{ $or: priceRanges }];
     }
 
     if (filters.themes && filters.themes.length > 0) {
-        query.theme = { $in: filters.themes };
+        query.$and = query.$and ? [...query.$and, { theme: { $in: filters.themes } }] : [{ theme: { $in: filters.themes } }];
     }
 
-    if (filters.piecesRange) {
-        const [minPieces, maxPieces] = filters.piecesRange.split('-');
-        query.pieces = { $gte: parseInt(minPieces), $lte: parseInt(maxPieces) };
+    if (filters.piecesRange && filters.piecesRange.length > 0) {
+        const piecesRanges = filters.piecesRange.split(',').map(range => {
+            const [minPieces, maxPieces] = range.split('-');
+            return { pieces: { $gte: parseInt(minPieces), $lte: parseInt(maxPieces) } };
+        });
+        query.$and = query.$and ? [...query.$and, { $or: piecesRanges }] : [{ $or: piecesRanges }];
+    }
+
+    const sortOptions = {};
+    if (sortCriteria === 'a-z') {
+        sortOptions.name = 1;
+    } else if (sortCriteria === 'price-low-high') {
+        sortOptions.price = 1;
+    } else if (sortCriteria === 'price-high-low') {
+        sortOptions.price = -1;
     }
 
     try {
-        return await Item.find(query);
+        return await Item.find(query).sort(sortOptions);
     } catch (error) {
-        console.error('Error fetching items with filters:', error);
+        console.error('Error while fetching filtered items:', error);
         throw error;
     }
 };
@@ -81,7 +110,6 @@ const getUniqueThemes = async () => {
         const themes = await Item.distinct('theme'); // Get distinct themes from the DB
         return themes;
     } catch (error) {
-        console.error('Error fetching unique themes:', error);
         throw error;
     }
 };
