@@ -194,7 +194,7 @@
             'zip': /^\d+$/,
             'first-name': /^[a-zA-Z\s]+$/,
             'last-name': /^[a-zA-Z\s]+$/,
-            'card-owner': /^[a-zA-Z\s]+$/
+            'card-owner': /^(?=.*\s)[a-zA-Z\s]+$/
             
         };
 
@@ -251,7 +251,8 @@
         event.preventDefault();
         clearAllInvalid();
         let isValid = true;
-        const errMSG = "Place Order Failed.";
+        const errMSG = "Error Placing Order";
+        setError("");
 
         // Validate required fields
         $('#checkoutForm [required]').each(function() {
@@ -312,13 +313,6 @@
                     }
             });
 
-            // Check if response code is 200
-            console.log(result.status);
-            if (result.status === 200) {
-                location.href = "/user_page";
-            } else {
-                setError(errMSG, result.statusText)
-            }
         } catch (e) {
             setError(errMSG, e);
         }

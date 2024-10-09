@@ -2,25 +2,31 @@
 <html>
     <head>
         <%- include('./partials/head', {title: "About US"}); %>
-        <script type="module" src="/about.js"></script>
         <script src="https://d3js.org/d3.v7.min.js"></script>
     </head>
-    
+
     <body>
         <%- include('./partials/header'); %>
         <div class="main-div">
             <section class="mt-5 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
-                <h1>
-                    About US
+                <h1 class="big-logo">
+                    TONNS LEGO STORE
                 </h1>
+
+                <div class="slogan mb-2">
+                    <div><h2>Cheaper</h2></div>
+                    <div><h2>Better</h2></div>
+                    <div><h2>Available</h2></div>
+                </div>
                 <p>
-                    Today, there's no need to spend all your precious time finding
-                    assets availabe on the market.
+                    At Tonns, we’re more than just a LEGO store—we’re a community for creators of all ages. With a deep passion for innovation, imagination, and hands-on fun, 
+                    we offer a diverse selection of LEGO sets, from classic collections to the latest themed releases. Whether you're a seasoned builder or a new enthusiast, 
+                    our team is here to help you explore, create, and bring your ideas to life.
                 </p>
+                
                 <p class="mb-5">
-                    <b>The Shop Company</b> will help you find the best real Estate
-                    which fits you. With a team of the best real estate agents we will
-                    help you find the one which fits you the most in the hottest location available!
+                    At Tonns, we believe in the power of play, and we're dedicated to inspiring 
+                    the next generation of architects, engineers, and dreamers—one brick at a time.
                 </p>
 
                 <video controls autoplay class="intro-video rounded" style="max-width: 100%;">
@@ -29,26 +35,18 @@
                     </video>
 
             </section>
-
-            <section class="mt-5 text-center">
-                <h1>
-                    Statistics
-                </h1>
-                <p>In Progress...</p>
-
-            </section>
             
-            <section class="mt-5 mb-2 text-center text-wrap text-break" style="max-width: 35vw; margin: 0 auto;">
+            <section class="mt-5 mb-2 text-center text-wrap text-break" style="max-width: 35%; margin: 0 auto;">
                     <h1>
-                        Let's Grab A Coffee
+                        Let's Build a Lego!
                     </h1>
                     <p>
-                        We understand buying real esate online is not for everyone.
-                        feels like you need a coffee time consulting with us?<br>
-                        You are welcome to visit us at the closest branch to your house!
+                        We know that buying LEGO online isn't for everyone. <br>
+                        Ready for an adventure? Let us help you find the perfect kit just for you! <br>
+                        Join us at the nearest store to start building your LEGO masterpiece!
                     </p>
                     <h5>
-                        Click the closest pointer available at your location to get the branch information
+                        Click on the nearest pointer to your location to get branch information.
                     </h5>
             </section>
             
@@ -74,9 +72,13 @@
                                 <div class="d-flex align-items-center mt-4">
                                     <i class="bi bi-telephone-fill me-2 fs-5"></i>
                                     <h4 class="mb-0" id="branch-phone"></h4>
-                                    </div>
-                                
+                                </div>
                             </div>
+                            <aside class="text-center text-light">
+                                <i class="bi bi-cloud fs-1"></i>
+                                <h5 id="branch-weather"></h5>
+                                <h5 id="branch-precipitation"></h5>
+                            </aside>
                         </div>
                     </div>
                     
@@ -90,5 +92,160 @@
             ></script>
         </div>
         <%- include('./partials/footer'); %>
+
+        <script>
+            let map, 
+                infoWindow,
+                geocoder;
+
+            let branches;
+
+            async function setBranches() {
+            try {
+                const response = await fetch('/branch');
+                branches = await response.json();
+                }  catch (error) {
+                console.error('Error fetching dictionary:', error);
+                return;
+                }
+
+                
+            for (var i=0; i<branches.length; i++){
+                addPoint(branches[i].location, 
+                        branches[i]);
+            }
+
+            } 
+
+            async function createUserMark(location){
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            const userTag = document.createElement("div");
+
+            userTag.className = "maps-user-tag bg-primary text-white p-2 position-relative rounded fs-6";
+            userTag.textContent = "You";
+
+            const marker = new AdvancedMarkerElement({
+                map,
+                position: location,
+                content: userTag,
+                zIndex: 1
+            });
+            }
+
+            function CenterCurrentLocation(){
+            infoWindow = new google.maps.InfoWindow();
+            geocoder = new google.maps.Geocoder();
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    };
+                    map.setCenter(pos);
+                    createUserMark(pos);
+                },
+                () => {
+                    handleLocationError(true, infoWindow, map.getCenter());
+                },
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, infoWindow, map.getCenter());
+            }
+            }
+
+            async function initMap() {
+            const { Map } = await google.maps.importLibrary("maps");
+            const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 11,
+                disableDefaultUI: true,
+                zoomControl: true,
+                scaleControl: true,
+                mapId: "4504f8b37365c3d0",
+            });
+            
+
+            CenterCurrentLocation();
+            await setBranches();  
+
+            }
+
+            
+            async function getBranchWeather(branch) {
+                if (!branch)
+                    return;
+
+                const lng = branch.location.lng;
+                const lat = branch.location.lat;
+
+                if (!lng || !lng)
+                    return;
+
+                try {
+                    const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m,precipitation,weather_code`);
+                    return await response.json();
+                }  catch (error) {
+                    console.error('Error fetching dictionary:', error);
+                }
+
+                
+            }
+
+            function setBranchBlock(branch) {
+            let infoElement = document.getElementById("map-result");
+            let mapElement = document.getElementById("map");
+
+            if (!infoElement || !mapElement)
+                return;
+            
+            getBranchWeather(branch).then(weather => {
+                if (weather){
+                    const t_value = weather.current.temperature_2m;
+                    const t_unit = weather.current_units.temperature_2m
+
+                    const p_value = weather.current.precipitation;
+                    const p_unit = weather.current_units.precipitation; 
+                    
+                    $("#branch-weather").text(`${t_value}${t_unit}`)
+                    $("#branch-precipitation").text(`Precipitation: ${p_value}${p_unit}`)
+                } else {
+                    $("#branch-weather").text("Error getting Branch Weather");
+                }
+                
+            })
+
+            try{
+                $("#branch-name").text(branch.name);
+                $("#branch-phone").text(branch.phone);
+                $("#branch-address").text(branch.location.address);
+            } catch {
+                infoElement.style.display = "none";
+                return;
+                
+            }
+            
+            infoElement.style.display = "block";
+            }
+
+            function addPoint(location, content) {
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                map,
+                position:location
+            });
+
+            marker.addListener("click", () => {
+                setBranchBlock(content);
+            });
+
+            }
+
+            window.initMap = initMap;
+        </script>
     </body>
+
 </html>

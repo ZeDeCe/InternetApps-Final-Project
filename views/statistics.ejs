@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "Statistics"}); %>
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+
+    <body>
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <%- include('./partials/backbutton'); %>
+            <section class="mt-5 text-center text-wrap text-break" style="min-width:650px; max-width: 35%; margin: 0 auto;">
+                <h1>
+                    Statistics
+                </h1>
+                
+                <div class="container">
+                    <div class="row">
+                        <div class="col my-5">
+                            <%- include('./partials/graph_sales_week'); %>       
+                        </div>
+                    <div class="row">
+                        <div class="col">
+                            <hr>
+                        </div>
+                        
+                    </div>
+                    </div>
+                    <div class="row">
+                        <div class="col my-5">
+                            <%- include('./partials/graph_themes_week'); %>        
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+        <%- include('./partials/footer'); %>
+    </body>
+</html>

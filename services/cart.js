@@ -42,60 +42,62 @@ const getUserItems = async (user) => {
 }
 
 const addToCart = async (user, item) => {
-    var cart = await getCartById(user);
-    if (!cart) {
-        cart = await createCart(user);
-        if (!cart)
-            return "Couldn't Create Cart";
-    }
+    try{
+        var cart = await getCartById(user);
+        if (!cart) {
+            cart = await createCart(user);
+            if (!cart)
+                return "Couldn't Create Cart";
+        }
         
-    try {
         const itemData = await Item.findById(item);
         if (!itemData)
             return "Item ID invalid";
-    } catch (e){
-        return "Item ID invalid";
-    }
-    
-    const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
 
-    if (existingItem) {
-        existingItem.quantity++;
-    } else {
-        cart.items.push({
-            item: item,
-            quantity: 1
-        });
-    }
+        const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
 
-    try {
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.items.push({
+                item: item,
+                quantity: 1
+            });
+        }
+
         return await cart.save();
-    } catch (error) {
-        if (error)
+
+
+    } catch (e) {
         return "Can't add item to cart";
     }
     
 }
 
 const deleteFromCart = async (user, item) => {
-    const cart = await getCartById(user);
-    if (!cart){
+    try {
+        const cart = await getCartById(user);
+        if (!cart){
+            return;
+        }
+
+        const itemIndex = cart.items.findIndex(cartItem => cartItem.item._id.toString() === item.toString());
+        if (itemIndex > -1) {
+            cart.items.splice(itemIndex, 1); // Remove the item from the array
+        } else {
+            return; // Return the cart without changes if item is not found
+        }
+
+
+        if (cart.items.length > 0) {
+            return await cart.save(); // Save the cart
+        }
+            
+        return await deleteCart(user);
+    } catch (e) {
         return;
     }
-
-    const itemIndex = cart.items.findIndex(cartItem => cartItem.item._id.toString() === item.toString());
-    if (itemIndex > -1) {
-        cart.items.splice(itemIndex, 1); // Remove the item from the array
-    } else {
-        return; // Return the cart without changes if item is not found
-    }
-
-
-    if (cart.items.length > 0) {
-        return await cart.save(); // Save the cart
-    }
-        
-    return await deleteCart(user);
+    
 };
 
 const updateCartItem = async (user, item, quantity) => {
