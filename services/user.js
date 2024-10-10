@@ -1,5 +1,6 @@
 const User = require("../models/User")
 const orderService = require("./order")
+const bcrypt = require('bcrypt')
 
 // Requirement delete
 async function deleteUser(username) {
@@ -18,6 +19,13 @@ async function deleteUser(username) {
 
 // Requirement update
 async function updateUser(username, data) {
+    if(data.password) {
+        var err, hash = await bcrypt.hash(data.password, 10)
+        if (err) {
+            return {"password" : {"message": "Failed hashing password"}}
+        }
+        data.password = hash
+    }
     try {
         const user = await User.findOneAndUpdate({_id: username}, data);
         if (user == null) {
@@ -35,6 +43,11 @@ async function createUser(user) {
     if(await validateUsername(user._id)) {
         return {"user" : {"message": "User already exists with this name!"}}
     }
+    var err, hash = await bcrypt.hash(user.password, 10)
+    if (err) {
+        return {"password" : {"message": "Failed hashing password"}}
+    }
+    user.password = hash
     try {
         const newUser = new User(user)
         newUser.createAt = newUser.createAt ? newUser.createAt : Date.now();
