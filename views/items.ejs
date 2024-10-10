@@ -115,7 +115,7 @@
               });
   
               // Redirect to the filter route
-              window.location.href = `/items/filter?${queryString}`;
+              window.location.href = `/filter?${queryString}`;
           });
       });
       $(document).ready(function() {
@@ -123,7 +123,7 @@
           const sort = $(this).data('sort');
           const currentUrlParams = new URLSearchParams(window.location.search);
           currentUrlParams.set('sort', sort);
-          window.location.href = `/items/filter?${currentUrlParams.toString()}`;
+          window.location.href = `/filter?${currentUrlParams.toString()}`;
         });
       });
   </script>
