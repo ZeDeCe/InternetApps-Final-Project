@@ -148,7 +148,7 @@
         $('#addToCartBtn').on('click', function() {
             $.get('/cart/add/<%= item._id %>').done(function(data) {
                 if(data) {
-                    location.href = "/login"
+                    location.href = "/user_page"
                     return
                 }
                 respond("Added item successfully!");
