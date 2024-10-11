@@ -42,17 +42,14 @@ const getUserItems = async (user) => {
 }
 
 const addToCart = async (user, item) => {
-    try{
-        var cart = await getCartById(user);
-        if (!cart) {
-            cart = await createCart(user);
-            if (!cart)
-                return "Couldn't Create Cart";
-        }
-        
-        const itemData = await Item.findById(item);
-        if (!itemData)
-            return "Item ID invalid";
+    try {
+        const [cart, itemData] = await Promise.all([
+            await getCartById(user) || await createCart(user),
+            Item.findById(item)
+        ]);
+
+        if (!cart) return "Failed to create or retrieve cart";
+        if (!itemData) return "Invalid item ID";
 
         const existingItem = cart.items.find(cartItem => cartItem.item._id.toString() === item);
 
@@ -60,7 +57,7 @@ const addToCart = async (user, item) => {
             existingItem.quantity++;
         } else {
             cart.items.push({
-                item: item,
+                item: itemData._id,
                 quantity: 1
             });
         }
@@ -68,8 +65,9 @@ const addToCart = async (user, item) => {
         return await cart.save();
 
 
-    } catch (e) {
-        return "Can't add item to cart";
+    } catch (error) {
+        console.log(error); 
+        return "Couldn't Add item to cart.";
     }
     
 }
@@ -81,14 +79,8 @@ const deleteFromCart = async (user, item) => {
             return;
         }
 
-        const itemIndex = cart.items.findIndex(cartItem => cartItem.item._id.toString() === item.toString());
-        if (itemIndex > -1) {
-            cart.items.splice(itemIndex, 1); // Remove the item from the array
-        } else {
-            return; // Return the cart without changes if item is not found
-        }
-
-
+        cart.items = cart.items.filter(cartItem => cartItem.item._id.toString() !== item.toString());
+        
         if (cart.items.length > 0) {
             return await cart.save(); // Save the cart
         }
