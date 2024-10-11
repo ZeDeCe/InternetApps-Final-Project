@@ -31,7 +31,8 @@
                     <button id="addToCartBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Add to Cart
                     </button>
-                    <a href="/items" class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 hover:bg-gray-300 transition duration-300">&larr; Back to Items</a>
+                    <br>
+                    <span id="response" class="d-none"></span>
                 </div>
             </div>
         </div>
@@ -103,6 +104,24 @@
 
     <script>
     $(document).ready(function() {
+        // error to user
+        var response = $("#response")
+        var timeout;
+        function respond(message, error) {
+            clearTimeout(timeout)
+            response.text(message).removeClass("d-none")
+            if(error) {
+                response.addClass("text-danger")
+                response.removeClass("text-success")
+            } else {
+                response.addClass("text-success")
+                response.removeClass("text-danger")
+            }
+            timeout = setTimeout(function() {
+                response.addClass("d-none")
+            }, 5000)
+        }
+
         // Star rating logic
         $('form').each(function() {
             const $form = $(this);
@@ -127,16 +146,15 @@
 
         // Add to Cart button logic
         $('#addToCartBtn').on('click', function() {
-            $.ajax({
-                url: '/cart/add/<%= item._id %>',
-                method: 'GET',
-                success: function(response) {
-                    alert('Item added to cart successfully!');
-                },
-                error: function(xhr, status, error) {
-                    alert('Error adding item to cart. Please try again.');
+            $.get('/cart/add/<%= item._id %>').done(function(data) {
+                if(data) {
+                    location.href = "/user_page"
+                    return
                 }
-            });
+                respond("Added item successfully!");
+            }).fail(function(data) {
+                respond(data.responseText, true);
+            })
         });
     });
     </script>

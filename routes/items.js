@@ -4,12 +4,6 @@ const itemController = require('../controllers/item');
 const loginController = require('../controllers/login');
 const userController = require('../controllers/user');
 
-router.get('/', itemController.getItems);
-
-router.get('/search', itemController.searchItems);
-
-router.get('/filter', itemController.getFilteredItems);
-
 router.get('/create', loginController.isLoggedIn, userController.isAdmin, itemController.renderCreateItemForm);
 
 router.post('/create', loginController.isLoggedIn, userController.isAdmin, itemController.createItem);
@@ -24,9 +18,8 @@ router.post('/:id/rate', loginController.isLoggedIn, itemController.addRating);
 
 router.post('/:id/comment', loginController.isLoggedIn, itemController.addComment);
 
-
+router.route('/delete').post(userController.isAdmin, userController.deleteUser);
 
 
 module.exports = router;
 
-router.route('/delete').post(userController.isAdmin, userController.deleteUser);
