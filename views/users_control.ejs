@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%- include('./partials/head', {title: "Website: Admin Page"}); %>
+        <%- include('./partials/head', {title: "TONNS: Admin Page"}); %>
     </head>
     <body class="bg-light">
         <%- include('./partials/header'); %>
@@ -190,18 +190,18 @@
                 function filterTable() {
                     const searchName = $('#userSearch').val().toLowerCase()
                     const isAdmin = $('#isadminSearch').is(":checked");
-                    const startDate = new Date($('#dateStartSearch').val())
-                    const endDate = new Date($('#dateEndSearch').val())
+                    const startDate = (new Date()).setDate((new Date($('#dateStartSearch').val()).getDate() -1))
+                    const endDate = (new Date()).setDate((new Date($('#dateEndSearch').val()).getDate() +1))
 
                     $('#userTableBody tr').each(function(){
                         const myName = $(this).find('td:eq(0)').text().toLowerCase() + $(this).find('td:eq(1)').text().toLowerCase();
                         const myIsAdmin = $(this).find('td:eq(2)').text() === 'true'
-                        const rowDate = new Date($(this).find('td:eq(3)').attr("realdate"));
+                        const rowDate = new Date($(this).find('td:eq(4)').attr("realdate"));
 
                         if ((searchName === '' || myName.includes(searchName))
                             && ($('#isadminSearch').is(':indeterminate') || isAdmin === myIsAdmin)
-                            && ($('#dateStartSearch').val() === '' ||  startDate <= rowDate)
-                            && ($('#dateEndSearch').val() === '' ||  endDate >= rowDate)) {
+                            && (($('#dateStartSearch').val() === '' || $('#dateEndSearch').val() === '')
+                             ||  (endDate >= rowDate && startDate <= rowDate))) {
                                 $(this).show()
                         }
                         else {

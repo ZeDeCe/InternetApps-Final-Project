@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const loginController = require('../controllers/login')
+const itemController = require('../controllers/item')
 
-router.get('/', function(req, res) {
-  res.render('index.ejs', {username: req.session.username, isadmin: req.session.isAdmin});
-});
+router.get('/', itemController.getItems);
+
+router.get('/search', itemController.searchItems);
+
+router.get('/filter', itemController.getFilteredItems);
 
 router.get('/policies', function(req, res) {
   switch (req.query.page){

@@ -37,7 +37,6 @@ app.use(express.urlencoded({ extended: true }))
 app.set('views', [__dirname + '/views', __dirname + "/views/policies"])
 
 app.use('/items', itemsRouter);
-app.use('/search', itemsRouter);
 app.use('/', indexRouter);
 app.use('/login', loginRouter)
 app.use('/user_page', userpageRouter)

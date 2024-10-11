@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <%- include('./partials/head', {title: "Website: Personal Page"}); %>
+        <%- include('./partials/head', {title: "TONNS: Personal Page"}); %>
     </head>
     <body class="bg-light">
         <%- include('./partials/header'); %>
@@ -60,7 +60,9 @@
         <script>
             $(document).ready(function() {
                 var response = $("#response")
+                var timeout;
                 function respond(message, error) {
+                    clearTimeout(timeout)
                     response.text(message).removeClass("d-none")
                     if(error) {
                         response.addClass("text-danger")
@@ -69,6 +71,9 @@
                         response.addClass("text-success")
                         response.removeClass("text-danger")
                     }
+                    timeout = setTimeout(function() {
+                        response.addClass("d-none")
+                    }, 5000)
                 }
 
                 // Handle delete user button click
@@ -109,6 +114,7 @@
                         else {
                             // success
                             respond("Successfully saved changes!")
+                            
                         }
                     })
                 })
