@@ -24,7 +24,8 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Your Items</h5>
+                            <h5 class="card-title" id="cart-title"><%= items.length ? "Your Items" : "Your cart is empty" %></h5>
+                            
                             <ul class="list-group list-group-flush" id="cartItems">
                                 <%for (let i = 0; i< items.length; i++) { %>
                                     <li class="list-group-item d-flex justify-content-between align-items-center" id="list_<%= items[i].item._id%>">
@@ -137,6 +138,7 @@
                         $("[id='list_" + id + "']").remove();
                         if ($("[id^='list_']").length === 0){
                             $("#checkout-btn").addClass("disabled")
+                            $("#cart-title").text("Your cart is empty");
                         }
                         setOrderSummary(result);
 
