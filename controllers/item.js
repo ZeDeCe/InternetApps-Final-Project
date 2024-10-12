@@ -1,6 +1,7 @@
 const itemService = require('../services/item');
 const cartService = require('../services/cart');
 const { shareNewItem } = require('../services/social');
+const Item = require('../models/Item');
 
 const getItems = async (req, res) => {
     try {
@@ -43,20 +44,52 @@ const createItem = async (req, res) => {
 };
 
 const getFilteredItems = async (req, res) => {
+    const { priceRange, themes, piecesRange, sort, search } = req.query;
     try {
-      const filters = {
-        priceRange: req.query.priceRange,
-        themes: req.query.themes ? req.query.themes.split(',') : [],
-        piecesRange: req.query.piecesRange,
-      };
-      const sort = req.query.sort || 'a-z'; // Default to A-Z sorting
-      const filteredItems = await itemService.getFilteredItems(filters, sort);
-  
-      res.json({ items: filteredItems });
+        let filter = {};
+
+        // Search filter
+        if (search) {
+            const regex = new RegExp(search, 'i');
+            filter.name = regex; 
+        }
+
+        // Price filter
+        if (priceRange) {
+            const priceRanges = priceRange.split(',').map(range => range.split('-').map(Number));
+            filter.price = { $gte: Math.min(...priceRanges.map(r => r[0])), $lte: Math.max(...priceRanges.map(r => r[1])) };
+        }
+
+        // Theme filter
+        if (themes) {
+            filter.theme = { $in: themes.split(',') };
+        }
+
+        // Pieces filter
+        if (piecesRange) {
+            const piecesRanges = piecesRange.split(',').map(range => range.split('-').map(Number));
+            filter.pieces = { $gte: Math.min(...piecesRanges.map(r => r[0])), $lte: Math.max(...piecesRanges.map(r => r[1])) };
+        }
+
+        let items = await Item.find(filter);
+
+        // Sort
+        if (sort) {
+            if (sort === 'a-z') {
+                items.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (sort === 'price-low-high') {
+                items.sort((a, b) => a.price - b.price);
+            } else if (sort === 'price-high-low') {
+                items.sort((a, b) => b.price - a.price);
+            }
+        }
+
+        res.json({ items });
     } catch (error) {
-      res.status(500).json({ error: 'Internal Server Error' });
+        console.error("Error fetching filtered items:", error);
+        res.status(500).json({ message: "Error fetching items" });
     }
-  };
+};
 
 const searchItems = async (req, res) => {
     try {
