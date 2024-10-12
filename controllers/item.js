@@ -44,19 +44,19 @@ const createItem = async (req, res) => {
 
 const getFilteredItems = async (req, res) => {
     try {
-        const filters = {
-            priceRange: req.query.priceRange,
-            themes: req.query.themes ? req.query.themes.split(',') : [],
-            piecesRange: req.query.piecesRange
-        };
-        const sort = req.query.sort || 'a-z'; // Default to A-Z sorting
-        const filteredItems = await itemService.getFilteredItems(filters, sort); // Pass sort to service
-        const uniqueThemes = await itemService.getUniqueThemes(); 
-        res.render('items', { items: filteredItems, searchName: req.query.name, uniqueThemes }); 
+      const filters = {
+        priceRange: req.query.priceRange,
+        themes: req.query.themes ? req.query.themes.split(',') : [],
+        piecesRange: req.query.piecesRange,
+      };
+      const sort = req.query.sort || 'a-z'; // Default to A-Z sorting
+      const filteredItems = await itemService.getFilteredItems(filters, sort);
+  
+      res.json({ items: filteredItems });
     } catch (error) {
-        res.status(500).send('Internal Server Error');
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+  };
 
 const searchItems = async (req, res) => {
     try {
