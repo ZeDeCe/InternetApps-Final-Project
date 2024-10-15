@@ -38,7 +38,7 @@ body {
   object-fit: cover;
 }
 
-.content-wrapper {
+.content- wrapper {
   flex: 1 0 auto;
   padding-bottom: 60px; /* Adjust based on your footer height */
 }
@@ -304,5 +304,106 @@ body.create-item-page h3 {
   font-size: 3rem;
 }
 
-  
+/* Item Detail Page */
+.item-detail-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 20px;
+}
 
+.item-detail-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.item-detail-content {
+  width: 100%;
+}
+
+.rating-comment-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.star {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.comment-rating {
+  margin-bottom: 10px;
+}
+
+#notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  z-index: 1000;
+  display: none;
+}
+
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+.star-rating label {
+  font-size: 24px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input[type="radio"]:checked ~ label {
+  color: #ffc107;
+}
+
+.comment {
+  border-bottom: 1px solid #eee;
+  padding: 15px 0;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.comment-info {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* Responsive layout for item detail page */
+@media (min-width: 768px) {
+  .item-detail-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .item-detail-image {
+    width: 40%;
+    max-height: none;
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+
+  .item-detail-content {
+    width: 60%;
+  }
+}

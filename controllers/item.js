@@ -144,12 +144,16 @@ const getItemById = async (req, res) => {
         if (req.session.username) {
             userRating = item.ratings.find(rating => rating.username === req.session.username);
         }
-        res.render('itemDetail', { item, user: req.session.username, userRating });
+        res.render('itemDetail', { 
+            item, 
+            user: req.session.username, 
+            isAdmin: req.session.isAdmin, 
+            userRating 
+        });
     } catch (error) {
         res.status(500).render('error', { message: 'Server error', error: error.message });
     }
 };
-
 const addRating = async (req, res) => {
     try {
         const { id } = req.params;
@@ -205,6 +209,19 @@ const addToCart = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+const deleteComment = async (req, res) => {
+    try {
+        const { id, commentId } = req.params;
+        const username = req.session.username;
+        if (!req.session.isAdmin) {
+            return res.status(403).json({ message: 'You must be an admin to delete comments' });
+        }
+        await itemService.deleteComment(id, commentId);
+        res.status(200).json({ message: 'Comment deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting comment', error: error.message });
+    }
+};
 
 module.exports = {
     getItems,
@@ -217,5 +234,6 @@ module.exports = {
     deleteItem,
     addRating,
     addComment,
-    addToCart
+    addToCart,
+    deleteComment
 };

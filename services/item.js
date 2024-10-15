@@ -206,6 +206,21 @@ const addComment = async (id, comment, username) => {
         throw error;
     }
 };
+const deleteComment = async (itemId, commentId) => {
+    try {
+        const item = await Item.findById(itemId);
+        if (!item) throw new Error('Item not found');
+        
+        item.comments = item.comments.filter(comment => comment._id.toString() !== commentId);
+        
+        await item.save();
+        
+        return item;
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        throw error;
+    }
+};
 
 module.exports = {
     getItems,
@@ -220,5 +235,6 @@ module.exports = {
     addRating,
     addComment,
     getUserRating,
-    addOrUpdateRating
+    addOrUpdateRating,
+    deleteComment
 };

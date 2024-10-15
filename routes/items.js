@@ -20,6 +20,8 @@ router.post('/:id/comment', loginController.isLoggedIn, itemController.addCommen
 
 router.route('/delete').post(userController.isAdmin, userController.deleteUser);
 
+router.delete('/:id/comment/:commentId', loginController.isLoggedIn, userController.isAdmin, itemController.deleteComment);
+
 
 module.exports = router;
 
