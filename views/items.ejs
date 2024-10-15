@@ -1,132 +1,189 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <%- include('./partials/head', {title: "TONNS: Lego Land"}); %>
-  </head>
-  <body>
+</head>
+<body>
     <div class="main-div bg-light">
-      <%- include('./partials/header'); %>
-      <button type="button" id="filter-btn" class="btn">
-        Filter
-        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-        </svg>
-      </button>
+        <%- include('./partials/header'); %>
 
-      <!-- Sidebar Filter -->
-      <div id="sidebar" class="sidebar">
-        <h4>Filter By -</h4>
-        <a href="javascript:void(0)" class="closebtn">&times;</a> <!-- "x" button-->
-        <div>
-          <h5>Price Range</h5>
-          <label><input type="checkbox" data-type="price" value="1-49"> Under $50</label><br>
-          <label><input type="checkbox" data-type="price" value="50-99"> $50 - $99</label><br>
-          <label><input type="checkbox" data-type="price" value="100-500"> $100 - $500</label>
-          <label><input type="checkbox" data-type="price" value="501-10000"> More than $500</label>
-        </div>
-        <div>
-          <h5>Theme</h5>
-          <% uniqueThemes.forEach(theme => { %>
-            <label>
-              <input type="checkbox" data-type="theme" value="<%= theme %>"> <%= theme %>
-            </label><br>
-          <% }); %>
-        </div>
-        <div>
-          <h5>Piece Count</h5>
-          <label><input type="checkbox" data-type="pieces" value="1-100"> Under 100</label><br>
-          <label><input type="checkbox" data-type="pieces" value="100-500"> 100-500</label><br>
-          <label><input type="checkbox" data-type="pieces" value="500-1000"> 500-1000</label>
-          <label><input type="checkbox" data-type="pieces" value="1000-10000"> More than 1000</label>
-        </div>
-        <button id="apply-btn" class="apply-button"><b>Apply</b></button>
-      </div>
+        <button type="button" id="filter-btn" class="btn">
+            Filter
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+            </svg>
+        </button>
 
-      <button class="btn sort-button dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        Sort By
-      </button>
+        <div id="sidebar" class="sidebar">
+            <h4>Filter By -</h4>
+            <a href="javascript:void(0)" class="closebtn">&times;</a>
+            <div>
+                <h5>Price Range</h5>
+                <label><input type="checkbox" data-type="price" value="1-49"> Under $50</label><br>
+                <label><input type="checkbox" data-type="price" value="50-99"> $50 - $99</label><br>
+                <label><input type="checkbox" data-type="price" value="100-500"> $100 - $500</label>
+                <label><input type="checkbox" data-type="price" value="501-10000"> More than $500</label>
+            </div>
+            <div>
+                <h5>Theme</h5>
+                <% uniqueThemes.forEach(theme => { %>
+                    <label>
+                        <input type="checkbox" data-type="theme" value="<%= theme %>"> <%= theme %>
+                    </label><br>
+                <% }); %>
+            </div>
+            <div>
+                <h5>Piece Count</h5>
+                <label><input type="checkbox" data-type="pieces" value="1-100"> Under 100</label><br>
+                <label><input type="checkbox" data-type="pieces" value="100-500"> 100-500</label><br>
+                <label><input type="checkbox" data-type="pieces" value="500-1000"> 500-1000</label>
+                <label><input type="checkbox" data-type="pieces" value="1000-10000"> More than 1000</label>
+            </div>
+            <button id="apply-btn" class="apply-button"><b>Apply</b></button>
+        </div>
+
+        <button class="btn sort-button dropdown-toggle" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Sort By
+        </button>
+        
+        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="a-z">A-Z</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-low-high">Price: Low to High</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-high-low">Price: High to Low</a></li>
+        </ul>
+
+        <div class="container mt-4">
+          <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
       
-      <ul class="dropdown-menu" aria-labelledby="sortDropdown">
-        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="a-z">A-Z</a></li>
-        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-low-high">Price: Low to High</a></li>
-        <li><a class="dropdown-item" href="javascript:void(0)" data-sort="price-high-low">Price: High to Low</a></li>
-      </ul>
-
-
-      <div class="container mt-4">
-        <h1 class="my-4 text-center text-dark lego-font">Lego Land</h1>
-        <!-- Items section -->
-        <div class="row">
-          <% if (items.length > 0) { %>
-            <% items.forEach(item => { %>
-              <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
-                <div class="card border-secondary item-card bg-white">
-                  <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
-                  <div class="card-body">
-                    <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
-                    <p class="card-text text-danger item-price"><strong>$<%= item.price.toFixed(2) %></strong></p>
-                    <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
-                    <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
-                    <a href="/items/<%= item._id %>" class="btn btn-primary view-details">View Details</a>
-                  </div>
-                </div>
-              </div>
-            <% }); %>
-          <% } else { %>
-            <p class="text-center">No items found.</p>
+          <% if (searchName) { %>
+              <h5 class="my-4 text-center text-dark lego-font">Results for "<%= searchName %>"</h5>
           <% } %>
-        </div>
+      
+          <!-- Items section -->
+          <div class="row" id="items-container">
+              <% if (items.length > 0) { %>
+                  <% items.forEach(item => { %>
+                      <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
+                          <div class="card border-secondary item-card bg-white">
+                              <img src="<%= item.picture %>" class="card-img-top img-fluid item-image" alt="Item Image">
+                              <div class="card-body">
+                                  <h5 class="card-title text-dark item-name"><strong><%= item.name %></strong></h5>
+                                  <p class="card-text text-danger item-price"><strong>$<%= item.price.toFixed(2) %></strong></p>
+                                  <p class="card-text text-muted item-theme"><strong>Theme:</strong> <%= item.theme %></p>
+                                  <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> <%= item.pieces %></p>
+                                  <a href="/items/<%= item._id %>" class="btn btn-primary view-details">View Details</a>
+                              </div>
+                          </div>
+                      </div>
+                  <% }); %>
+              <% } else { %>
+                  <p class="text-center">No items found.</p>
+              <% } %>
+          </div>
       </div>
-    </div>
 
-    <!-- Sidebar JavaScript -->
+    <%- include('./partials/footer'); %>
+
     <script>
-      $(document).ready(function() {
-          $('#filter-btn').click(function() {
-              $('#sidebar').addClass('sidebar-open');
-          });
-  
-          $('.closebtn').click(function() {
-              $('#sidebar').removeClass('sidebar-open');
-          });
-  
-          $('#apply-btn').click(function() {
-              $('#sidebar').removeClass('sidebar-open');
-  
-              const priceRange = [];
-              const themes = [];
-              const piecesRange = [];
-  
-              $('input[type="checkbox"]:checked').each(function() {
-                  const type = $(this).data('type');
-                  if (type === "price") {
-                      priceRange.push($(this).val());
-                  } else if (type === "theme") {
-                      themes.push($(this).val());
-                  } else if (type === "pieces") {
-                      piecesRange.push($(this).val());
-                  }
-              });
-  
-              const queryString = $.param({
-                  priceRange: priceRange.join(','),
-                  themes: themes.join(','),
-                  piecesRange: piecesRange.join(',')
-              });
-  
-              // Redirect to the filter route
-              window.location.href = `/filter?${queryString}`;
-          });
-      });
-      $(document).ready(function() {
-        $('.dropdown-item').click(function() {
-          const sort = $(this).data('sort');
-          const currentUrlParams = new URLSearchParams(window.location.search);
-          currentUrlParams.set('sort', sort);
-          window.location.href = `/filter?${currentUrlParams.toString()}`;
+        $(document).ready(function() {
+            $('#filter-btn').click(function() {
+                $('#sidebar').addClass('sidebar-open');
+            });
+
+            $('.closebtn').click(function() {
+                $('#sidebar').removeClass('sidebar-open');
+            });
         });
-      });
-  </script>
-  </body>
-  <%- include('./partials/footer'); %>
+
+        $(document).ready(function () {
+            let currentFilters = {
+                priceRange: [],
+                themes: [],
+                piecesRange: [],
+                sort: null,
+                search: '<%= searchName %>' 
+            };
+
+            function setError(message, error = "") {
+                $("#items-error-message").text(message);
+                if (error) console.error(error);
+            }
+
+            function updateItemList(items) {
+                const itemContainer = $("#items-container"); 
+                itemContainer.empty(); 
+
+                if (items.length > 0) {
+                    items.forEach((item) => {
+                        const itemCard = `
+                            <div class="col-md-3 mb-4 col-lg-3 col-sm-6 col-md-4">
+                                <div class="card border-secondary item-card bg-white">
+                                    <img src="${item.picture}" class="card-img-top img-fluid item-image" alt="Item Image">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-dark item-name"><strong>${item.name}</strong></h5>
+                                        <p class="card-text text-danger item-price"><strong>$${item.price.toFixed(2)}</strong></p>
+                                        <p class="card-text text-muted item-theme"><strong>Theme:</strong> ${item.theme}</p>
+                                        <p class="card-text text-muted item-pieces"><strong>Pieces:</strong> ${item.pieces}</p>
+                                        <a href="/items/${item._id}" class="btn btn-primary view-details">View Details</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        itemContainer.append(itemCard); 
+                    });
+                } else {
+                    itemContainer.append('<p class="text-center">No items found.</p>');
+                }
+            }
+
+            $('#apply-btn').click(function () {
+                $('#sidebar').removeClass('sidebar-open');
+                currentFilters.priceRange = [];
+                currentFilters.themes = [];
+                currentFilters.piecesRange = [];
+
+                $('input[type="checkbox"]:checked').each(function () {
+                    const type = $(this).data('type');
+                    if (type === "price") {
+                        currentFilters.priceRange.push($(this).val());
+                    } else if (type === "theme") {
+                        currentFilters.themes.push($(this).val());
+                    } else if (type === "pieces") {
+                        currentFilters.piecesRange.push($(this).val());
+                    }
+                });
+
+                fetchItems();
+            });
+
+            $('.dropdown-item').click(function () {
+                currentFilters.sort = $(this).data('sort'); 
+                fetchItems(); 
+            });
+
+            function fetchItems() {
+                $.ajax({
+                    url: '/filter',
+                    type: 'GET',
+                    data: {
+                        priceRange: currentFilters.priceRange.join(','),
+                        themes: currentFilters.themes.join(','),
+                        piecesRange: currentFilters.piecesRange.join(','),
+                        sort: currentFilters.sort,
+                        search: currentFilters.search
+                    },
+                    success: function (result) {
+                        if (typeof result === 'object' && result.items) {
+                            updateItemList(result.items);
+                        } else {
+                            setError("Couldn't fetch items");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        setError("Error fetching items", error);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
 </html>
