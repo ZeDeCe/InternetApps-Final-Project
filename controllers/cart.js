@@ -1,5 +1,6 @@
 const cartService = require('../services/cart'); 
 const orderService = require("../services/order")
+const userService = require("../services/user")
 
 async function getCart(req, res) {
     const username = req.session.username;
@@ -8,6 +9,24 @@ async function getCart(req, res) {
     const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0
     res.render('cart.ejs', {items, orderPrice, shippingPrice});
 }
+
+async function getCartByUser(req, res) {
+    const username = req.params.username;
+    var userdata = await userService.getUser(username);
+
+    if (userdata.length === 0){
+        res.redirect('/admin/carts');
+        return;
+    }
+
+    userdata = userdata[0];
+
+    const items = await cartService.getUserItems(username);
+    const orderPrice = await orderService.getTotalOrderPrice(items);
+    const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0
+    res.render('cart_view_only.ejs', {userdata, items, orderPrice, shippingPrice});
+}
+
 
 async function getCheckout(req, res){
     const username = req.session.username;
@@ -80,10 +99,26 @@ async function deleteFromCart(req, res) {
 }
 
 
+async function getAllCartsInformation(req, res){
+    var minItems = 0;
+    try {
+        minItems = req.query.min ? Number(req.query.min): 0;
+        if (minItems < 0)
+            minItems = 0;
+    } catch (e){
+
+    }
+    
+    const carts = await cartService.getCartsByMinNumber(Number(minItems));
+    res.render('all_carts', {carts})
+}
+
 module.exports = {
     getCart,
     getCheckout,
     addToCart,
     deleteFromCart,
-    updateCartItem
+    updateCartItem,
+    getAllCartsInformation,
+    getCartByUser
 };

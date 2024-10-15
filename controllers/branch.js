@@ -1,7 +1,15 @@
 const branchService = require('../services/branch'); 
 
 async function getBranchesPage(req, res){
-    const branches = await branchService.getBranches();
+    const district = req.query.district;
+    var branches;
+    
+    if (district && /^[A-Za-z\s]+$/.test(district)){
+        branches = await branchService.searchBranchesByDistrict(district);
+    } else {
+        branches = await branchService.getBranches();
+    }
+    
     res.render('branches_control.ejs', {branches});
 }
 
@@ -28,7 +36,12 @@ async function getBranches(req, res){
 }
 
 async function createBranch(req, res){
-    res.send(await branchService.createBranch(req.body.branch));
+    const result = await branchService.createBranch(req.body.branch);
+    if (!result){
+        res.status(400).send("Couldn't Create Branch");
+        return;
+    }
+    res.send(result);
 }
 
 async function deleteBranch(req, res){    

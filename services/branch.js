@@ -10,7 +10,7 @@ const createBranch = async(branch) => {
         return await newBranch.save();
     }
     catch(e) {
-        return {}
+        return
     }
     
 };
@@ -26,6 +26,10 @@ const updateBranch = async(id, data) => {
     } catch(e) {
         return;
     }    
+}
+
+const searchBranchesByDistrict = async(district) => {
+    return await Branch.find({"location.district": district});
 }
 
 const getBranchById = async (id) => {
@@ -52,5 +56,6 @@ module.exports = {
     createBranch,
     getBranchById,
     deleteBranch,
-    updateBranch
+    updateBranch,
+    searchBranchesByDistrict
 };
