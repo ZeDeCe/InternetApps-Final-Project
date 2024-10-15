@@ -69,18 +69,6 @@ const searchItems = async (req, res) => {
     }
 };
 
-const getItemById = async (req, res) => {
-    try {
-        const item = await itemService.getItemById(req.params.id);
-        if (!item) {
-            return res.status(404).render('error', { message: 'Item not found' });
-        }
-        res.render('itemDetail', { item });
-    } catch (error) {
-        res.status(500).render('error', { message: 'Server error', error: error.message });
-    }
-};
-
 const updateItem = async (req, res) => {
     try {
         const { name, picture, price, description, pieceCount, theme } = req.body;
@@ -113,25 +101,55 @@ const deleteItem = async (req, res) => {
     }
 };
 
+const getItemById = async (req, res) => {
+    try {
+        const item = await itemService.getItemById(req.params.id);
+        if (!item) {
+            return res.status(404).render('error', { message: 'Item not found' });
+        }
+        let userRating = null;
+        if (req.session.username) {
+            userRating = item.ratings.find(rating => rating.username === req.session.username);
+        }
+        res.render('itemDetail', { item, user: req.session.username, userRating });
+    } catch (error) {
+        res.status(500).render('error', { message: 'Server error', error: error.message });
+    }
+};
+
 const addRating = async (req, res) => {
     try {
         const { id } = req.params;
         const { rating } = req.body;
-        await itemService.addRating(id, Number(rating));
-        res.redirect(`/items/${id}`);
+        const username = req.session.username;
+        if (!username) {
+            return res.status(401).json({ message: 'You must be logged in to rate items' });
+        }
+        const { updatedItem, avgRating } = await itemService.addOrUpdateRating(id, Number(rating), username);
+        res.status(200).json({ 
+            message: 'Rating submitted successfully',
+            avgRating: avgRating
+        });
     } catch (error) {
-        res.status(500).render('error', { message: 'Error adding rating', error: error.message });
+        res.status(500).json({ message: 'Error adding rating', error: error.message });
     }
 };
 
 const addComment = async (req, res) => {
     try {
         const { id } = req.params;
-        const { rating, comment } = req.body;
-        await itemService.addComment(id, Number(rating), comment);
-        res.redirect(`/items/${id}`);
+        const { comment } = req.body;
+        const username = req.session.username;
+        if (!username) {
+            return res.status(401).json({ message: 'You must be logged in to comment on items' });
+        }
+        const newComment = await itemService.addComment(id, comment, username);
+        res.status(200).json({ 
+            message: 'Comment submitted successfully',
+            comment: newComment
+        });
     } catch (error) {
-        res.status(500).render('error', { message: 'Error adding comment', error: error.message });
+        res.status(500).json({ message: 'Error adding comment', error: error.message });
     }
 };
 const addToCart = async (req, res) => {

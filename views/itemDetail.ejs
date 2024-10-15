@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('./partials/head', {title: item.name}); %>
+    <%- include('./partials/head', {title: item.name + " - Details"}); %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-gray-100">
     <%- include('./partials/header'); %>
@@ -15,126 +16,152 @@
                 </div>
                 <div class="p-8">
                     <h1 class="text-3xl font-bold mb-2"><%= item.name %></h1>
-                    <p class="text-gray-600 text-xl mb-4"><b>$<%= item.price.toFixed(2) %></b></p>
-                    <p class="text-gray-700 mb-2"><b>Pieces: </b><%= item.pieces %></p>
-                    <p class="text-gray-700 mb-4"><b>Theme: </b><%= item.theme %></p>
+                    <p class="text-gray-600 text-xl mb-4">$<%= item.price.toFixed(2) %></p>
+                    <p class="text-gray-700 mb-2">Pieces: <%= item.pieces %></p>
+                    <p class="text-gray-700 mb-4">Theme: <%= item.theme %></p>
                     <p class="text-gray-700 mb-4"><%= item.description %></p>
-                    <div class="flex items-center mb-4">
-                        <% const avgRating = item.ratings && item.ratings.length ? item.ratings.reduce((sum, rating) => sum + rating.value, 0) / item.ratings.length : 0; %>
+                    <div id="averageRating" class="flex items-center mb-4">
+                        <% 
+                        const avgRating = item.ratings.length 
+                            ? item.ratings.reduce((sum, rating) => sum + rating.value, 0) / item.ratings.length 
+                            : 0;
+                        const roundedAvgRating = Math.round(avgRating * 2) / 2; // Round to nearest 0.5
+                        %>
                         <% for (let i = 1; i <= 5; i++) { %>
-                            <svg class="w-5 h-5 <%= i <= Math.round(avgRating) ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <svg class="w-5 h-5 <%= i <= roundedAvgRating ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                             </svg>
                         <% } %>
-                        <span class="ml-2 text-gray-600">(<%= item.ratings ? item.ratings.length : 0 %> ratings)</span>
+                        <span class="ml-2 text-gray-600">(<%= avgRating.toFixed(1) %> avg, <%= item.ratings.length %> ratings)</span>
                     </div>
                     <button id="addToCartBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                         Add to Cart
                     </button>
-                    <br>
-                    <span id="response" class="d-none"></span>
                 </div>
             </div>
         </div>
 
-        <!-- Rating Form -->
-        <form action="/items/<%= item._id %>/rate" method="POST" class="mt-8 bg-white rounded-lg shadow-md p-6">
-            <h3 class="text-xl font-bold mb-4">Rate this Item</h3>
-            <div class="mb-4">
-                <label for="rating" class="block text-gray-700 font-bold mb-2">Rating:</label>
-                <div class="flex">
-                    <% for (let i = 1; i <= 5; i++) { %>
-                        <input type="radio" id="ratingStar<%= i %>" name="rating" value="<%= i %>" class="hidden" required>
-                        <label for="ratingStar<%= i %>" class="cursor-pointer">
-                            <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                            </svg>
-                        </label>
-                    <% } %>
-                </div>
-            </div>
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit Rating</button>
-        </form>
+        <!-- Notification area -->
+        <div id="notification" class="fixed top-0 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-b-lg shadow-lg transition-opacity duration-300 opacity-0 z-50"></div>
 
-        <!-- Comments Section -->
-        <div class="mt-8">
-            <h2 class="text-2xl font-bold mb-4">Comments</h2>
-            <% if (item.comments && item.comments.length > 0) { %>
-                <% item.comments.forEach(comment => { %>
-                    <div class="bg-white rounded-lg shadow-md p-4 mb-4">
-                        <div class="flex items-center mb-2">
-                            <% for (let i = 1; i <= 5; i++) { %>
-                                <svg class="w-5 h-5 <%= i <= comment.rating ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                </svg>
-                            <% } %>
-                        </div>
-                        <p class="text-gray-700"><%= comment.text %></p>
-                        <p class="text-sm text-gray-500 mt-2">Posted on <%= new Date(comment.createdAt).toLocaleDateString() %></p>
-                    </div>
-                <% }); %>
-            <% } else { %>
-                <p class="text-gray-600">No comments yet.</p>
-            <% } %>
-
-            <!-- Add Comment Form -->
-            <form action="/items/<%= item._id %>/comment" method="POST" class="mt-8 bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-xl font-bold mb-4">Add a Comment</h3>
+        <% if (user) { %>
+            <!-- Rating Form -->
+            <form id="ratingForm" class="mt-8 bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-4">Rate this Item</h3>
                 <div class="mb-4">
-                    <label for="commentRating" class="block text-gray-700 font-bold mb-2">Rating:</label>
+                    <label for="rating" class="block text-gray-700 font-bold mb-2">Rating:</label>
                     <div class="flex">
                         <% for (let i = 1; i <= 5; i++) { %>
-                            <input type="radio" id="commentStar<%= i %>" name="rating" value="<%= i %>" class="hidden" required>
-                            <label for="commentStar<%= i %>" class="cursor-pointer">
-                                <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <input type="radio" id="ratingStar<%= i %>" name="rating" value="<%= i %>" class="hidden" required
+                                   <%= (userRating && userRating.value === i) ? 'checked' : '' %>>
+                            <label for="ratingStar<%= i %>" class="cursor-pointer">
+                                <svg class="w-8 h-8 <%= (userRating && userRating.value >= i) ? 'text-yellow-400' : 'text-gray-300' %> hover:text-yellow-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                                 </svg>
                             </label>
                         <% } %>
                     </div>
                 </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit Rating</button>
+            </form>
+
+            <!-- Add Comment Form -->
+            <form id="commentForm" class="mt-8 bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-xl font-bold mb-4">Add a Comment</h3>
                 <div class="mb-4">
                     <label for="comment" class="block text-gray-700 font-bold mb-2">Comment:</label>
                     <textarea id="comment" name="comment" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
                 </div>
                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit Comment</button>
             </form>
+        <% } else { %>
+            <p class="mt-8 text-gray-600">Please <a href="/login" class="text-blue-500 hover:underline">log in</a> to rate or comment on this item.</p>
+        <% } %>
+
+        <!-- Comments Section -->
+        <div id="commentsSection" class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">Comments</h2>
+            <% if (item.comments && item.comments.length > 0) { %>
+                <% item.comments.forEach(comment => { %>
+                    <div class="bg-white rounded-lg shadow-md p-4 mb-4">
+                        <div class="flex items-center mb-2">
+                            <% const userRating = item.ratings.find(rating => rating.username === comment.username); %>
+                            <% if (userRating) { %>
+                                <% for (let i = 1; i <= 5; i++) { %>
+                                    <svg class="w-5 h-5 <%= i <= userRating.value ? 'text-yellow-400' : 'text-gray-300' %>" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <p class="text-gray-700"><%= comment.text %></p>
+                        <p class="text-sm text-gray-500 mt-2">Posted by <%= comment.username %> on <%= new Date(comment.createdAt).toLocaleDateString() %></p>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p class="text-gray-600">No comments yet.</p>
+            <% } %>
         </div>
     </div>
 
     <script>
-    $(document).ready(function() {
-        // error to user
-        var response = $("#response")
-        var timeout;
-        function respond(message, error) {
-            clearTimeout(timeout)
-            response.text(message).removeClass("d-none")
-            if(error) {
-                response.addClass("text-danger")
-                response.removeClass("text-success")
-            } else {
-                response.addClass("text-success")
-                response.removeClass("text-danger")
+        $(document).ready(function() {
+            function showNotification(message) {
+                $('#notification').text(message).removeClass('opacity-0');
+                setTimeout(() => {
+                    $('#notification').addClass('opacity-0');
+                }, 3000);
             }
-            timeout = setTimeout(function() {
-                response.addClass("d-none")
-            }, 5000)
-        }
-
-        // Star rating logic
-        $('form').each(function() {
-            const $form = $(this);
-            const $stars = $form.find('input[name="rating"]');
-            
-            $stars.on('change', function() {
-                const $checkedStar = $(this);
-                const checkedIndex = $stars.index($checkedStar);
+        
+            function updateAverageRating(newRating) {
+                const avgRating = parseFloat(newRating);
+                const roundedAvgRating = Math.round(avgRating * 2) / 2;
                 
-                $stars.each(function(index) {
-                    const $star = $(this);
-                    const $svg = $star.next().find('svg');
-                    
+                $('#averageRating svg').each(function(index) {
+                    if (index < roundedAvgRating) {
+                        $(this).removeClass('text-gray-300').addClass('text-yellow-400');
+                    } else {
+                        $(this).removeClass('text-yellow-400').addClass('text-gray-300');
+                    }
+                });
+                
+                $('#averageRating span').text(`(${avgRating.toFixed(1)} avg, <%= item.ratings.length %> ratings)`);
+            }
+        
+            function updateUserComments(username, newRating) {
+                $(`.comment[data-username="${username}"] .star-rating svg`).each(function(index) {
+                    if (index < newRating) {
+                        $(this).removeClass('text-gray-300').addClass('text-yellow-400');
+                    } else {
+                        $(this).removeClass('text-yellow-400').addClass('text-gray-300');
+                    }
+                });
+            }
+        
+            function addCommentToDisplay(comment) {
+                const commentHtml = `
+                    <div class="comment bg-white rounded-lg shadow-md p-4 mb-4" data-username="${comment.username}">
+                        <div class="star-rating flex items-center mb-2">
+                            ${Array(5).fill().map((_, i) => `
+                                <svg class="w-5 h-5 ${i < comment.rating ? 'text-yellow-400' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            `).join('')}
+                        </div>
+                        <p class="text-gray-700">${comment.text}</p>
+                        <p class="text-sm text-gray-500 mt-2">Posted by ${comment.username} on ${new Date(comment.createdAt).toLocaleDateString()}</p>
+                    </div>
+                `;
+                $('#commentsSection').prepend(commentHtml);
+            }
+        
+            // Star rating logic
+            $('#ratingForm input[name="rating"]').on('change', function() {
+                const $checkedStar = $(this);
+                const checkedIndex = $('#ratingForm input[name="rating"]').index($checkedStar);
+                
+                $('#ratingForm input[name="rating"]').each(function(index) {
+                    const $svg = $(this).next().find('svg');
                     if (index <= checkedIndex) {
                         $svg.removeClass('text-gray-300').addClass('text-yellow-400');
                     } else {
@@ -142,22 +169,65 @@
                     }
                 });
             });
+        
+            // Rating form submission
+            $('#ratingForm').on('submit', function(e) {
+                e.preventDefault();
+                const rating = $('input[name="rating"]:checked').val();
+                $.ajax({
+                    url: '/items/<%= item._id %>/rate',
+                    method: 'POST',
+                    data: { rating: rating },
+                    success: function(response) {
+                        showNotification('Rating submitted successfully!');
+                        updateAverageRating(response.avgRating);
+                        updateUserComments('<%= user %>', rating);
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Error submitting rating. Please try again.');
+                    }
+                });
+            });
+        
+            // Comment form submission
+            $('#commentForm').on('submit', function(e) {
+                e.preventDefault();
+                const comment = $('#comment').val();
+                $.ajax({
+                    url: '/items/<%= item._id %>/comment',
+                    method: 'POST',
+                    data: { comment: comment },
+                    success: function(response) {
+                        showNotification('Comment submitted successfully!');
+                        addCommentToDisplay({
+                            text: comment,
+                            username: '<%= user %>',
+                            rating: $('#ratingForm input[name="rating"]:checked').val() || 0,
+                            createdAt: new Date()
+                        });
+                        $('#comment').val(''); // Clear the comment field
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Error submitting comment. Please try again.');
+                    }
+                });
+            });
+        
+            // Add to Cart button logic
+            $('#addToCartBtn').on('click', function() {
+                $.ajax({
+                    url: '/cart/add/<%= item._id %>',
+                    method: 'GET',
+                    success: function(response) {
+                        showNotification('Item added to cart successfully!');
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Error adding item to cart. Please try again.');
+                    }
+                });
+            });
         });
-
-        // Add to Cart button logic
-        $('#addToCartBtn').on('click', function() {
-            $.get('/cart/add/<%= item._id %>').done(function(data) {
-                if(data) {
-                    location.href = "/user_page"
-                    return
-                }
-                respond("Added item successfully!");
-            }).fail(function(data) {
-                respond(data.responseText, true);
-            })
-        });
-    });
-    </script>
+        </script>
+    <%- include('./partials/footer'); %>
 </body>
-<%- include('./partials/footer'); %>
 </html>
