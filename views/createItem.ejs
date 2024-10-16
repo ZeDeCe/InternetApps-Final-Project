@@ -42,41 +42,58 @@
     <%- include('./partials/footer'); %>
 
     <script>
-    $(document).ready(function() {
-        $('#create-item-form').submit(function(event) {
-            const price = $('#price').val();
-            const pieces = $('#pieces').val();
-            const themeInput = $('#theme');
-            const nameInput = $('#name');
-            let errorMessage = '';
-
-            if (price < 1 || price > 10000) {
-                errorMessage += 'Price must be between 1 and 10,000.<br>';
-            }
-
-            if (pieces < 1 || pieces > 10000) {
-                errorMessage += 'Pieces number must be between 1 and 10,000.<br>';
-            }
-
-            let themeValue = themeInput.val().trim();
-            let nameValue = nameInput.val().trim();
-
-            if (themeValue.length === 0) {
-                errorMessage += 'Theme is required.<br>';
-            }
-
-            if (errorMessage) {
-                $('#error-message').html(errorMessage).show();
+        $(document).ready(function() {
+            $('#create-item-form').submit(function(event) {
                 event.preventDefault();
-            } else {
-                // Capitalize the first letter of the theme
-                themeValue = themeValue.charAt(0).toUpperCase() + themeValue.slice(1).toLowerCase();
-                nameValue = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
-                themeInput.val(themeValue);
-                nameInput.val(nameValue);
-            }
+                const price = $('#price').val();
+                const pieces = $('#pieces').val();
+                const themeInput = $('#theme');
+                const nameInput = $('#name');
+                let errorMessage = '';
+        
+                if (price < 1 || price > 10000) {
+                    errorMessage += 'Price must be between 1 and 10,000.<br>';
+                }
+        
+                if (pieces < 1 || pieces > 10000) {
+                    errorMessage += 'Pieces number must be between 1 and 10,000.<br>';
+                }
+        
+                let themeValue = themeInput.val().trim();
+                let nameValue = nameInput.val().trim();
+        
+                if (themeValue.length === 0) {
+                    errorMessage += 'Theme is required.<br>';
+                }
+        
+                if (errorMessage) {
+                    $('#error-message').html(errorMessage).show();
+                } else {
+                    // Capitalize the first letter of name and theme
+                    themeValue = themeValue.charAt(0).toUpperCase() + themeValue.slice(1).toLowerCase();
+                    nameValue = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+                    themeInput.val(themeValue);
+                    nameInput.val(nameValue);
+        
+                    $.ajax({
+                        type: 'POST',
+                        url: '/items/create',
+                        data: $('#create-item-form').serialize(),
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                window.location.href = `/items/${response.itemId}`;
+                            }
+                        },
+                        error: function(xhr) {
+                            const response = xhr.responseJSON;
+                            if (response.status === 'error') {
+                                $('#error-message').html(response.message).show();
+                            }
+                        }
+                    });
+                }
+            });
         });
-    });
-    </script>
+        </script>
 </body>
 </html>
