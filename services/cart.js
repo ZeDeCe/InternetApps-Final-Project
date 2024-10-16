@@ -143,6 +143,20 @@ const getCartsByMinNumber = async(minQuantity) => {
     }
 }
 
+const deleteItemFromAllCarts = async (item_id) => {
+    try {
+        const result = await Cart.updateMany(
+            { 'items.item': item_id },
+            { $pull: { items: { item: item_id } } }
+        );
+
+        return result;
+
+    } catch (error) {
+        return;
+    }
+};
+
 module.exports = {
     createCart,
     getCartById,
@@ -152,5 +166,6 @@ module.exports = {
     deleteCart,
     getCartShippingPrice,
     updateCartItem,
-    getCartsByMinNumber
+    getCartsByMinNumber,
+    deleteItemFromAllCarts
 }
