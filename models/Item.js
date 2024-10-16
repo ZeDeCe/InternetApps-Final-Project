@@ -36,6 +36,7 @@ const ItemSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
+        unique: true,
         set: function(value) {
             return value.charAt(0).toUpperCase() + value.slice(1);
         }

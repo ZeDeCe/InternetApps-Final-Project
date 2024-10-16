@@ -23,23 +23,19 @@ const createItem = async (req, res) => {
     const { name, description, price, picture, theme, pieces } = req.body;
 
     try {
+        // Check if the item name already exists
+        const existingItem = await Item.findOne({ name });
+        if (existingItem) {
+            return res.status(400).json({ status: 'error', message: 'Item name already exists' });
+        }
         const newItem = await itemService.createItem(name, description, price, picture, theme, pieces);
 
         if (newItem) {
             await shareNewItem(newItem);
+            return res.json({ status: 'success', itemId: newItem._id });
         }
-
-        res.redirect(`/items/${newItem._id}`); 
     } catch (error) {
-        res.render('createItem', {
-            error: error.message, 
-            name,
-            description,
-            price,
-            picture,
-            theme,
-            pieces
-        });
+        return res.status(400).json({ status: 'error', message: error.message });
     }
 };
 
