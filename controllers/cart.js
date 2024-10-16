@@ -6,7 +6,7 @@ async function getCart(req, res) {
     const username = req.session.username;
     const items = await cartService.getUserItems(username);
     const orderPrice = await orderService.getTotalOrderPrice(items);
-    const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0
+    const shippingPrice = items.length ? await cartService.getCartShippingPrice(orderPrice) : 0;
     res.render('cart.ejs', {items, orderPrice, shippingPrice});
 }
 

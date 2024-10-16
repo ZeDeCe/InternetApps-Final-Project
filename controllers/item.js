@@ -140,6 +140,12 @@ const deleteItem = async (req, res) => {
         if (!deletedItem) {
             return res.status(404).render('error', { message: 'Item not found' });
         }
+
+        const cartsResult = await cartService.deleteItemFromAllCarts(deletedItem._id);
+        if (!cartsResult){
+            return res.status(404).render('error', {message: 'Error Deleting Items from all carts.'})
+        }
+
         res.redirect('/');
     } catch (error) {
         res.status(500).render('error', { message: 'Error deleting item', error: error.message });
@@ -167,6 +173,7 @@ const addComment = async (req, res) => {
         res.status(500).render('error', { message: 'Error adding comment', error: error.message });
     }
 };
+
 const addToCart = async (req, res) => {
     try {
         const username = req.session.username;
