@@ -19,6 +19,18 @@
                     <button class="btn btn-primary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">
                         Filter
                     </button>
+                    <button class="btn btn-warning mb-2 ms-3" id="button-all" type="button">
+                        All
+                    </button>
+                    <button class="btn btn-warning mb-2" id="button-north" type="button">
+                        North
+                    </button>
+                    <button class="btn btn-warning mb-2" id="button-center" type="button">
+                        Center
+                    </button>
+                    <button class="btn btn-warning mb-2" id="button-south" type="button">
+                        South
+                    </button>
                 </div>
                 <div class="collapse mt-1" id="collapseFilter">
                     <div class="input-group mb-3">
@@ -45,6 +57,7 @@
                     <thead>
                         <tr>
                             <th>Branch Name</th>
+                            <th>District</th>
                             <th>Address</th>
                             <th>Phone</th>
                             <th>Actions</th>
@@ -54,6 +67,7 @@
                         <% branches.forEach(branch => { %>
                             <tr>
                                 <td><%= branch.name %></td>
+                                <td><%= branch.location.district %></td>
                                 <td><%= branch.location.address %></td>
                                 <td><%= branch.phone %></td>
                                 <td>
@@ -79,6 +93,15 @@
                                 <div class="mb-3">
                                     <label for="branchName" class="form-label">Branch Name</label>
                                     <input type="text" class="form-control" id="branchName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="branchDistrict" class="form-label">District</label>
+                                    <select class="form-select" id="branchDistrict" required>
+                                        <option value="" disabled selected>Select a district</option>
+                                        <option value="north">north</option>
+                                        <option value="center">center</option>
+                                        <option value="south">south</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="branchAddress" class="form-label">Address</label>
@@ -115,6 +138,15 @@
                                 <div class="mb-3">
                                     <label for="editBranchAddress" class="form-label">Address</label>
                                     <input type="text" class="form-control" id="editBranchAddress" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editBranchDistrict" class="form-label">District</label>
+                                    <select class="form-select" id="editBranchDistrict" required>
+                                        <option value="" disabled selected>Select a district</option>
+                                        <option value="north">north</option>
+                                        <option value="center">center</option>
+                                        <option value="south">south</option>
+                                    </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editBranchPhone" class="form-label">Phone</label>
@@ -249,7 +281,8 @@
                             location: {
                                 lat: coords.lat,
                                 lng: coords.lng,
-                                address: $('#branchAddress').val()
+                                address: $('#branchAddress').val(),
+                                district: $('#branchDistrict').val()
                             },
                             phone: $('#branchPhone').val()
                         };
@@ -258,6 +291,7 @@
                                 $('#branchTableBody').append(`
                                     <tr>
                                         <td>${newBranch.name}</td>
+                                        <td>${newBranch.location.district}</td>
                                         <td>${newBranch.location.address}</td>
                                         <td>${newBranch.phone}</td>
                                         <td>
@@ -284,6 +318,7 @@
                         if (branch) {
                             $('#editBranchId').val(branch._id);
                             $('#editBranchName').val(branch.name);
+                            $('#editBranchDistrict').val(branch.location.district);
                             $('#editBranchAddress').val(branch.location.address);
                             $('#editBranchPhone').val(branch.phone);
                             $('#editBranchModal').modal('show');
@@ -309,17 +344,19 @@
                             location: {
                                 lat: coords.lat,
                                 lng: coords.lng, 
-                                address: $('#editBranchAddress').val()
+                                address: $('#editBranchAddress').val(),
+                                district: $('#editBranchDistrict').val()
                             },
                             phone: $('#editBranchPhone').val()
                         };
 
-                        $.post('/branch/update', {branch: branchId, data: branchData}).done(function(data) {
-                            if(!data) {
+                        $.post('/branch/update', {branch: branchId, data: branchData}).done(function(data, status, xhr) {
+                            if (xhr.status === 200) {
                                 const row = $('#branchTableBody').find(`.editBranch[data-id="${branchId}"]`).closest('tr');
                                 row.find('td:eq(0)').text(branchData.name);
-                                row.find('td:eq(1)').text(branchData.location.address);
-                                row.find('td:eq(2)').text(branchData.phone);
+                                row.find('td:eq(1)').text(branchData.location.district);
+                                row.find('td:eq(2)').text(branchData.location.address);
+                                row.find('td:eq(3)').text(branchData.phone);
                                 $('#editBranchModal').modal('hide');
                             } else {
                                 $("#edit-error-message").text("Error updating branch.");
@@ -339,6 +376,24 @@
         $("#editBranchPhone").on("input", function() {
             $(this).val($(this).val().replace(/\D/g, ''));
         });
+
+        $("#button-north").click(function(){
+                    location.href = '?district=north'
+        })
+
+        $("#button-center").click(function(){
+                    location.href = '?district=center'
+        })
+
+        $("#button-south").click(function(){
+                    location.href = '?district=south'
+        })
+
+        $("#button-all").click(function(){
+            var urlWithoutQuery = window.location.origin + window.location.pathname;
+    
+            location.href = urlWithoutQuery;
+        })
         </script>
         <%- include('./partials/footer'); %>
     </body>
