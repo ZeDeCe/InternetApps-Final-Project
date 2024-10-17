@@ -74,7 +74,11 @@ const ItemSchema = new mongoose.Schema({
     },
     description: String,
     ratings: [RatingSchema],
-    comments: [CommentSchema]
+    comments: [CommentSchema],
+    deleted: {
+        default: false,
+        type: Boolean
+    }
 });
 
 module.exports = mongoose.model("Item", ItemSchema);

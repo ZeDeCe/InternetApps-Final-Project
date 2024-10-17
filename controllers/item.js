@@ -1,7 +1,6 @@
 const itemService = require('../services/item');
 const cartService = require('../services/cart');
 const { shareNewItem } = require('../services/social');
-const Item = require('../models/Item');
 
 const getItems = async (req, res) => {
     try {
@@ -24,7 +23,7 @@ const createItem = async (req, res) => {
 
     try {
         // Check if the item name already exists
-        const existingItem = await Item.findOne({ name });
+        const existingItem = await itemService.getItemByName(name);
         if (existingItem) {
             return res.status(400).json({ status: 'error', message: 'Item name already exists' });
         }
@@ -67,7 +66,7 @@ const getFilteredItems = async (req, res) => {
             filter.pieces = { $gte: Math.min(...piecesRanges.map(r => r[0])), $lte: Math.max(...piecesRanges.map(r => r[1])) };
         }
 
-        let items = await Item.find(filter);
+        let items = await itemService.searchItem(filter)
 
         // Sort
         if (sort) {
