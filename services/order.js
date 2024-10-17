@@ -136,7 +136,7 @@ const updateOrder = async (orderid, tupleid, quantity) => {
         return null;
     if(new Date() - order.date <= 30 * 60 * 1000){
         for(var i = 0; i < order.items.length; ++i) {
-            if (order.items[i]._id.toString() === tupleid) {
+            if (order.items[i]._id.toString() === tupleid && !order.items[i].item.deleted) {
                 order.items[i].quantity = quantity
                 break
             }
