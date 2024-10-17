@@ -94,13 +94,23 @@
                                 </div>
                             </div>
                         </div>
+                        <br><br>
+                        <section id="adminlist">
+                            <h5 class="ps-3">Admins list:</h5>
+                            <ul class="px-4 py-1 list-group list-group-flush list-group-horizontal flex-wrap">
+                            <% for (var i = 0; i < alladmins.length; i++) {%>
+                                <li class="list-group-item"><%= alladmins[i] %></li>
+                            <%}%>
+                            </ul>
+                        </section>
                     </div>
+                    
                 </div>
+                
             </div>
-        </div>    
+        </div>
         <script>
             $(document).ready(function() {
-                
                 $("#logout").click(function(){
                     location.href = '/logout'
                 })
