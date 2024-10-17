@@ -6,7 +6,8 @@ const Item = require('../models/Item')
 const getRandomItems = async(user) => {
     try {
         const randomItems = await Item.aggregate([
-          { $sample: { size: 3 } } 
+            { $match: { deleted: { $ne: true } } },
+            { $sample: { size: 3 } }
         ]);
     
         return randomItems;
