@@ -157,21 +157,82 @@ const addRating = async (id, rating) => {
     }
 };
 
-const addComment = async (id, rating, comment) => {
+const getUserRating = async (itemId, username) => {
+    try {
+        const item = await Item.findById(itemId);
+        if (!item) throw new Error('Item not found');
+        return item.ratings.find(rating => rating.username === username);
+    } catch (error) {
+        console.error('Error getting user rating:', error);
+        throw error;
+    }
+};
+
+const addOrUpdateRating = async (id, rating, username) => {
+    try {
+        const item = await Item.findById(id);
+        if (!item) throw new Error('Item not found');
+        
+        const existingRatingIndex = item.ratings.findIndex(r => r.username === username);
+        
+        if (existingRatingIndex !== -1) {
+            // Update existing rating
+            item.ratings[existingRatingIndex].value = rating;
+        } else {
+            // Add new rating
+            item.ratings.push({ value: rating, username });
+        }
+        
+        // Update rating in comments
+        item.comments.forEach(comment => {
+            if (comment.username === username) {
+                comment.rating = rating;
+            }
+        });
+        
+        await item.save();
+        
+        const avgRating = item.ratings.reduce((sum, r) => sum + r.value, 0) / item.ratings.length;
+        
+        return { updatedItem: item, avgRating };
+    } catch (error) {
+        console.error('Error adding or updating rating:', error);
+        throw error;
+    }
+};
+
+const addComment = async (id, comment, username) => {
     try {
         const item = await getItemById(id)
         if (!item) throw new Error('Item not found');
-        if (!item.comments) item.comments = [];
-        if (!item.ratings) item.ratings = [];
-        item.comments.push({ rating, text: comment });
-        item.ratings.push({ value: rating });
+        const newComment = {
+            text: comment,
+            username: username,
+            createdAt: new Date()
+        };
+        item.comments.push(newComment);
         await item.save();
+        return newComment;
     } catch (error) {
         console.error('Error adding comment:', error);
         throw error;
     }
 };
-
+const deleteComment = async (itemId, commentId) => {
+    try {
+        const item = await Item.findById(itemId);
+        if (!item) throw new Error('Item not found');
+        
+        item.comments = item.comments.filter(comment => comment._id.toString() !== commentId);
+        
+        await item.save();
+        
+        return item;
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        throw error;
+    }
+};
 
 module.exports = {
     getItems,
@@ -185,6 +246,9 @@ module.exports = {
     deleteItem,
     addRating,
     addComment,
+    getUserRating,
+    addOrUpdateRating,
+    deleteComment,
     searchItem,
     itemNotDeleted
 };

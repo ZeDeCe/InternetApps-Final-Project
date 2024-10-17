@@ -97,75 +97,115 @@ const searchItems = async (req, res) => {
     }
 };
 
+const updateItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, description, price, picture, theme, pieces } = req.body;
+        
+        const updatedItem = await itemService.updateItem(id, {
+            name,
+            description,
+            price: Number(price),
+            picture,
+            theme,
+            pieces: Number(pieces)
+        });
+
+        if (!updatedItem) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+
+        res.status(200).json({ message: 'Item updated successfully', item: updatedItem });
+    } catch (error) {
+        res.status(400).json({ message: 'Error updating item', error: error.message });
+    }
+};
+
+
+const deleteItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!req.session.isAdmin) {
+            return res.status(403).json({ message: 'You must be an admin to delete items' });
+        }
+        const deletedItem = await itemService.deleteItem(id);
+        if (!deletedItem) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+        
+        const cartsResult = await cartService.deleteItemFromAllCarts(deletedItem._id);
+        if (!cartsResult) {
+            return res.status(500).json({ message: 'Error deleting items from all carts' });
+        }
+
+        res.status(200).json({ message: 'Item deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting item', error: error.message });
+    }
+};
+
+const getUserRating = async(req, res) => {
+    try {
+        var ratingObject = (await itemService.getUserRating(req.params.id, req.session.username))
+        res.status(200).json(ratingObject ? {'rating': ratingObject.value} : {'rating': 0})
+    } catch (error) {
+        res.status(500).render('error', { message: 'Server error', error: error.message });
+    }
+}
+
 const getItemById = async (req, res) => {
     try {
         const item = await itemService.getItemById(req.params.id);
         if (!item) {
             return res.status(404).render('error', { message: 'Item not found' });
         }
-        res.render('itemDetail', { item });
+        let userRating = null;
+        if (req.session.username) {
+            userRating = item.ratings.find(rating => rating.username === req.session.username);
+        }
+        res.render('itemDetail', { 
+            item, 
+            user: req.session.username, 
+            isAdmin: req.session.isAdmin, 
+            userRating 
+        });
     } catch (error) {
         res.status(500).render('error', { message: 'Server error', error: error.message });
     }
 };
-
-const updateItem = async (req, res) => {
-    try {
-        const { name, picture, price, description, pieceCount, theme } = req.body;
-        const updatedItem = await itemService.updateItem(req.params.id, {
-            name,
-            picture,
-            price: Number(price),
-            description,
-            pieceCount: Number(pieceCount),
-            theme
-        });
-        if (!updatedItem) {
-            return res.status(404).render('error', { message: 'Item not found' });
-        }
-        res.redirect('/');
-    } catch (error) {
-        res.status(400).render('error', { message: 'Error updating item', error: error.message });
-    }
-};
-
-const deleteItem = async (req, res) => {
-    try {
-        const deletedItem = await itemService.deleteItem(req.params.id);
-        if (!deletedItem) {
-            return res.status(404).render('error', { message: 'Item not found' });
-        }
-
-        const cartsResult = await cartService.deleteItemFromAllCarts(deletedItem._id);
-        if (!cartsResult){
-            return res.status(404).render('error', {message: 'Error Deleting Items from all carts.'})
-        }
-
-        res.redirect('/');
-    } catch (error) {
-        res.status(500).render('error', { message: 'Error deleting item', error: error.message });
-    }
-};
-
 const addRating = async (req, res) => {
     try {
         const { id } = req.params;
         const { rating } = req.body;
-        await itemService.addRating(id, Number(rating));
-        res.redirect(`/items/${id}`);
+        const username = req.session.username;
+        if (!username) {
+            return res.status(401).json({ message: 'You must be logged in to rate items' });
+        }
+        const { updatedItem, avgRating } = await itemService.addOrUpdateRating(id, Number(rating), username);
+        res.status(200).json({ 
+            message: 'Rating submitted successfully',
+            avgRating: avgRating
+        });
     } catch (error) {
-        res.status(500).render('error', { message: 'Error adding rating', error: error.message });
+        res.status(500).json({ message: 'Error adding rating', error: error.message });
     }
 };
 
 const addComment = async (req, res) => {
     try {
         const { id } = req.params;
-        const { rating, comment } = req.body;
-        await itemService.addComment(id, Number(rating), comment);
-        res.redirect(`/items/${id}`);
+        const { comment } = req.body;
+        const username = req.session.username;
+        if (!username) {
+            return res.status(401).json({ message: 'You must be logged in to comment on items' });
+        }
+        const newComment = await itemService.addComment(id, comment, username);
+        res.status(200).json({ 
+            message: 'Comment submitted successfully',
+            comment: newComment
+        });
     } catch (error) {
-        res.status(500).render('error', { message: 'Error adding comment', error: error.message });
+        res.status(500).json({ message: 'Error adding comment', error: error.message });
     }
 };
 
@@ -189,6 +229,19 @@ const addToCart = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+const deleteComment = async (req, res) => {
+    try {
+        const { id, commentId } = req.params;
+        const username = req.session.username;
+        if (!req.session.isAdmin) {
+            return res.status(403).json({ message: 'You must be an admin to delete comments' });
+        }
+        await itemService.deleteComment(id, commentId);
+        res.status(200).json({ message: 'Comment deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting comment', error: error.message });
+    }
+};
 
 module.exports = {
     getItems,
@@ -201,5 +254,7 @@ module.exports = {
     deleteItem,
     addRating,
     addComment,
-    addToCart
+    addToCart,
+    deleteComment,
+    getUserRating
 };

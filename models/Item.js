@@ -7,6 +7,10 @@ const RatingSchema = new mongoose.Schema({
         min: 1,
         max: 5
     },
+    username: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -19,11 +23,9 @@ const CommentSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    rating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
+    username: {
+        type: String,
+        required: true
     },
     createdAt: {
         type: Date,

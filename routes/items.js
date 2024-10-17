@@ -20,6 +20,13 @@ router.post('/:id/comment', loginController.isLoggedIn, itemController.addCommen
 
 router.route('/delete').post(userController.isAdmin, userController.deleteUser);
 
+router.delete('/:id/comment/:commentId', loginController.isLoggedIn, userController.isAdmin, itemController.deleteComment);
+
+router.delete('/:id/delete', loginController.isLoggedIn,userController.isAdmin, itemController.deleteItem);
+
+router.post('/:id/update', loginController.isLoggedIn, userController.isAdmin, itemController.updateItem);
+
+router.get('/:id/user_rating', loginController.isLoggedIn, itemController.getUserRating);
 
 module.exports = router;
 
