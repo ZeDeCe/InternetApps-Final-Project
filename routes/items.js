@@ -22,6 +22,7 @@ router.route('/delete').post(userController.isAdmin, userController.deleteUser);
 
 router.delete('/:id/comment/:commentId', loginController.isLoggedIn, userController.isAdmin, itemController.deleteComment);
 
+router.get('/:id/user_rating', loginController.isLoggedIn, itemController.getUserRating);
 
 module.exports = router;
 
