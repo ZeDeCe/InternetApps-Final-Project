@@ -33,13 +33,16 @@
                     <% } %>
                     <span id="star-rate-text">(<%= avgRating.toFixed(1) %> avg, <%= item.ratings.length %> ratings)</span>
                 </div>
-                <button id="addToCartBtn" class="view-details">Add to Cart</button>
+                
+                
                 <% if (isAdmin) { %>
                     <div style="margin-top: 10px;">
                         <button id="editItemBtn" class="view-details edit-item" style="margin-top: 10px; margin-bottom: 10px;">Edit Item</button>
                         <button id="deleteItemBtn" class="view-details delete-item">Delete Item</button>
                     </div>
-                <% } %>
+                <% } else { %>
+                    <button id="addToCartBtn" class="view-details">Add to Cart</button>
+                <% }%>
             </div>
         </div>
         <div id="notification"></div>
