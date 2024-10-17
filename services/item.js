@@ -2,13 +2,18 @@ const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Types;
 const Item = require('../models/Item');
 
+const itemNotDeleted = async(id) => {
+    var item = await Item.findById(id)
+    return item != null ? (item.deleted !== null ? item.deleted : false) : false
+}
+
 const getItemById = async (id) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             console.error('Invalid ObjectId:', id);
             return null;
         }
-        return await Item.findById(id);
+        return await Item.findOne({_id: id, deleted: false});
     } catch (error) {
         console.error('Error fetching item by ID:', error);
         throw error; 
@@ -16,7 +21,7 @@ const getItemById = async (id) => {
 };
 
 const getItemByName = async (name) => {
-    return await Item.find({ name });
+    return await Item.findOne({ name, deleted: false });
 };
 
 const getItems = async (sortCriteria) => {
@@ -32,19 +37,25 @@ const getItems = async (sortCriteria) => {
         sortOptions.price = -1; 
     }
     
-    return await Item.find({}).sort(sortOptions);  
+    return await Item.find({deleted: false}).sort(sortOptions);  
 };
 
 const searchItemsByName = async (name) => {
     try {
         const items = await Item.find({
-            name: { $regex: name, $options: 'i' }  // Case-insensitive search
+            name: { $regex: name, $options: 'i' },
+            deleted: false  // Case-insensitive search
         });
         return items;
     } catch (error) {
         throw error;
     }
 };
+
+async function searchItem(filter) {
+    filter.push({key: deleted, value: false})
+    return await Item.find(filter)
+}
 
 async function createItem(name, description, price, picture, theme, pieces) {
     try {
@@ -57,7 +68,8 @@ async function createItem(name, description, price, picture, theme, pieces) {
             theme,
             pieces,
             ratings: [], // Initialize empty ratings array
-            comments: [] // Initialize empty comments array
+            comments: [], // Initialize empty comments array
+            deleted: false
         });
         return await item.save();
     } catch (error) {
@@ -96,7 +108,7 @@ const getFilteredItems = async (filters, sortCriteria) => {
     } else if (sortCriteria === 'price-high-low') {
         sortOptions.price = -1;
     }
-
+    query.push({key: deleted, value: false})
     try {
         return await Item.find(query).sort(sortOptions);
     } catch (error) {
@@ -125,7 +137,7 @@ const updateItem = async (id, updateData) => {
 
 const deleteItem = async (id) => {
     try {
-        return await Item.findByIdAndDelete(id);
+        return await Item.findByIdAndUpdate(id, {deleted: true});
     } catch (error) {
         console.error('Error deleting item:', error.message);
         throw error;
@@ -134,7 +146,7 @@ const deleteItem = async (id) => {
 
 const addRating = async (id, rating) => {
     try {
-        const item = await Item.findById(id);
+        const item = await getItemById(id)
         if (!item) throw new Error('Item not found');
         if (!item.ratings) item.ratings = [];
         item.ratings.push({ value: rating });
@@ -191,7 +203,7 @@ const addOrUpdateRating = async (id, rating, username) => {
 
 const addComment = async (id, comment, username) => {
     try {
-        const item = await Item.findById(id);
+        const item = await getItemById(id)
         if (!item) throw new Error('Item not found');
         const newComment = {
             text: comment,
@@ -236,5 +248,7 @@ module.exports = {
     addComment,
     getUserRating,
     addOrUpdateRating,
-    deleteComment
+    deleteComment,
+    searchItem,
+    itemNotDeleted
 };

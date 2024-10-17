@@ -67,7 +67,7 @@
                                         <div class="w-30 text-center">
                                             <div class="d-flex justify-content-center align-items-center">
                                                 <div class="fs-5 w-50">$<%= order.items[i].item.price %></div>
-                                                <select class="form-select w-50 quantity" data-itemid="<%=order.items[i]._id%>" data-orderid="<%=order._id%>" <%= isAdmin ? 'disabled' : ((new Date() - order.date <= 30 * 60 * 1000) ? '' : 'disabled') %>>
+                                                <select class="form-select w-50 quantity" data-itemid="<%=order.items[i]._id%>" data-orderid="<%=order._id%>" <%= isAdmin ? 'disabled' : ((new Date() - order.date <= 30 * 60 * 1000 && !order.items[i].item.deleted) ? '' : 'disabled') %>>
                                                     <%for(var num = 1; num<=10; num++) {%>
                                                         <option value="<%=num%>" <%= order.items[i].quantity === num ? 'selected' : '' %>><%=num%></option>
                                                     <%}%>
