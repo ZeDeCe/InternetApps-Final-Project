@@ -225,11 +225,7 @@
                     const searchName = $('#branchSearch').val().toLowerCase();
                     const searchPhone = $('#phoneSearch').val().toLowerCase();
                     const searchAddress = $('#addressSearch').val().toLowerCase();
-
-                    console.log(searchName);
-                    console.log(searchPhone);
-                    console.log(searchAddress);
-
+                    
                     $('#branchTableBody tr').each(function(){
                         const branchName = $(this).find('td:eq(0)').text().toLowerCase();
                         const branchAddress = $(this).find('td:eq(2)').text().toLowerCase();
