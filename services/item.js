@@ -53,7 +53,7 @@ const searchItemsByName = async (name) => {
 };
 
 async function searchItem(filter) {
-    filter.push({key: deleted, value: false})
+    filter["deleted"] = false
     return await Item.find(filter)
 }
 
@@ -108,7 +108,7 @@ const getFilteredItems = async (filters, sortCriteria) => {
     } else if (sortCriteria === 'price-high-low') {
         sortOptions.price = -1;
     }
-    query.push({key: deleted, value: false})
+    query["deleted"] = false
     try {
         return await Item.find(query).sort(sortOptions);
     } catch (error) {
