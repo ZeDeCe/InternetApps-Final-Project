@@ -83,4 +83,14 @@ const ItemSchema = new mongoose.Schema({
     }
 });
 
+ItemSchema.pre('findByIdAndUpdate', function(next) {
+    this.options.runValidators = true;
+    next();
+  });
+
+  ItemSchema.pre('findOneAndUpdate', function(next) {
+    this.options.runValidators = true;
+    next();
+  });
+
 module.exports = mongoose.model("Item", ItemSchema);
