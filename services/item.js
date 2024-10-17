@@ -59,7 +59,11 @@ async function searchItem(filter) {
 
 async function createItem(name, description, price, picture, theme, pieces) {
     try {
-        const item = new Item({
+        var item = await Item.findOne({name, deleted: true})
+        if (item) {
+            return await updateItem(item._id, {name, description, price, picture, theme, pieces, deleted: false})
+        }
+        item = new Item({
             _id: new mongoose.Types.ObjectId(),
             name,
             description,
