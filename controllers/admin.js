@@ -1,7 +1,7 @@
 const userService = require("../services/user")
 
-function displayMainPage(req, res) {
-    res.render('admin.ejs', {admin: req.session.username})
+async function displayMainPage(req, res) {
+    res.render('admin.ejs', {admin: req.session.username, alladmins: (await userService.searchUser({isAdmin: true})).map((admin => admin._id))})
 }
 
 async function displayUsers(req, res) {

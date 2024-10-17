@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('./partials/head', {title: "TONNS: Admins Carts View"}); %>
+    </head>
+    <body>
+    
+        <%- include('./partials/header'); %>
+        <div class="main-div">
+            <%- include('./partials/backbutton'); %>
+            <div class="container mt-5">
+            <h1 class="mb-4">Select a Number</h1>
+            <select id="numberSelect" class="form-select mb-4">
+                <option value="" disabled selected>Choose a number</option>
+                <option value="1">ALL</option>
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="7">7</option>
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="15">15</option>
+            </select>
+            <div id="tableContainer">
+                <h2 class="mb-3">Carts (Minimum 1 Item)</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Username</th>
+                            <th class="text-center">Items in cart</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <%for (let i = 0; i< carts.length; i++) { %>
+                            <tr>
+                                <td class="text-center"><%= carts[i]._id %></td>
+                                <td class="text-center"><%= carts[i].totalQuantity %></td>
+                                <td class="text-center"><button class="btn btn-warning btn-sm">View</button></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        $(document).ready(function() {
+            $('#numberSelect').change(function() {
+                
+               location.href = '?min=' + this.value;
+            });
+
+            // Add click event for View buttons
+            $('#tableBody').on('click', '.btn-warning', function() {
+                var username = $(this).closest('tr').find('td:first').text();
+                location.href = `/admin/carts/${username}`;
+            });
+        });
+    </script>
+
+    <%- include('./partials/footer'); %>
+</body>
+</html>

@@ -19,6 +19,11 @@ const Branch = new mongoose.Schema ({
             address: {
                 type: String,
                 required: true
+            },
+            district: {
+                type: String,
+                enum: ['north', 'south', 'center'],
+                required: true
             }
         },
         _id: false,
