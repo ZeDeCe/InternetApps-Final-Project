@@ -34,6 +34,12 @@
                     <span id="star-rate-text">(<%= avgRating.toFixed(1) %> avg, <%= item.ratings.length %> ratings)</span>
                 </div>
                 <button id="addToCartBtn" class="view-details">Add to Cart</button>
+                <% if (isAdmin) { %>
+                    <div style="margin-top: 10px;">
+                        <button id="editItemBtn" class="view-details edit-item" style="margin-top: 10px; margin-bottom: 10px;">Edit Item</button>
+                        <button id="deleteItemBtn" class="view-details delete-item">Delete Item</button>
+                    </div>
+                <% } %>
             </div>
         </div>
         <div id="notification"></div>
@@ -53,7 +59,6 @@
         </section>
         <h2>Add a Comment</h2>
         <section class="item-detail-card flex-column">
-            
             <div class="w-100">
                 <form id="commentForm" class="form-floating">
                     <textarea id="comment" name="comment" class="form-control w-100" required></textarea>
@@ -62,9 +67,9 @@
                     <button type="submit" class="view-details w-auto">Submit Comment</button>
                 </form>
             </div>
-            <% } else { %>
-                <p class="alert alert-info">Please <a href="/login">log in</a> to rate or comment on this item.</p>
-            <% } %>
+        <% } else { %>
+            <p class="alert alert-info">Please <a href="/login">log in</a> to rate or comment on this item.</p>
+        <% } %>
         </section>
         <h2>Comments</h2>
         <section id="commentsSection" class="item-detail-card flex-column">
@@ -90,7 +95,49 @@
                 <p id="no-comments-yet">No comments yet.</p>
             <% } %>
         </section>
-        <%-include('./partials/confirm', {message: "Are you sure you want to delete this comment?", title: "Delete Comment"})%>
+        <%- include('./partials/confirm', {message: "Are you sure you want to delete this item?", title: "Delete Item"}) %>
+    </div>
+
+     <!-- Edit Item Modal -->
+     <div class="modal fade" id="editItemModal" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editItemForm">
+                        <div class="mb-3">
+                            <label for="editItemName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editItemName" value="<%= item.name %>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="editItemDescription"><%= item.description %></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemPrice" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="editItemPrice" value="<%= item.price %>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemPicture" class="form-label">Picture URL</label>
+                            <input type="text" class="form-control" id="editItemPicture" value="<%= item.picture %>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemTheme" class="form-label">Theme</label>
+                            <input type="text" class="form-control" id="editItemTheme" value="<%= item.theme %>">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editItemPieces" class="form-label">Pieces</label>
+                            <input type="number" class="form-control" id="editItemPieces" value="<%= item.pieces %>">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <p id="errormsgedit" class="fw-bold text-danger d-none">Error</p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -202,12 +249,33 @@
         $(document).on('click', '.delete-comment-btn', function() {
             const commentId = $(this).closest('.comment').data('comment-id');
             $('#confirmDelete').data('id', commentId);
+            $('#confirmDelete').data('action', 'deleteComment');
+            $('#deleteModal').modal('show');
+        });
+
+        // Delete Item button click handler
+        $('#deleteItemBtn').on('click', function() {
+            $('#confirmDelete').data('action', 'deleteItem');
             $('#deleteModal').modal('show');
         });
 
         $('#confirmDelete').click(function() {
-            const commentId = $(this).data('id');
-            $.ajax({
+            const action = $(this).data('action');
+            if (action === 'deleteItem') {
+                $.ajax({
+                    url: '/items/<%= item._id %>/delete',
+                    method: 'DELETE',
+                    success: function(response) {
+                        showNotification(response.message);
+                        window.location.href = '/'; // Redirect to home page
+                    },
+                    error: function(xhr, status, error) {
+                        showNotification('Error deleting item. Please try again.');
+                    }
+                });
+            } else if (action === 'deleteComment') {
+                const commentId = $(this).data('id');
+                $.ajax({
                     url: `/items/<%= item._id %>/comment/${commentId}`,
                     method: 'DELETE',
                     success: function(response) {
@@ -217,9 +285,10 @@
                     error: function(xhr, status, error) {
                         showNotification('Error deleting comment. Please try again.');
                     }
-            });
+                });
+            }
             $('#deleteModal').modal('hide');
-        })
+        });
 
         // Add to Cart button logic
         $('#addToCartBtn').on('click', function() {
@@ -234,6 +303,40 @@
                 }
             });
         });
+            // Edit Item button click handler
+            $('#editItemBtn').on('click', function() {
+            $('#editItemModal').modal('show');
+        });
+
+        // Edit Item form submission
+        $('#editItemForm').on('submit', function(e) {
+            e.preventDefault();
+            const updatedItem = {
+                name: $('#editItemName').val(),
+                description: $('#editItemDescription').val(),
+                price: parseFloat($('#editItemPrice').val()),
+                picture: $('#editItemPicture').val(),
+                theme: $('#editItemTheme').val(),
+                pieces: parseInt($('#editItemPieces').val())
+            };
+
+            $.ajax({
+                url: '/items/<%= item._id %>/update',
+                method: 'POST',
+                data: updatedItem,
+                success: function(response) {
+                    showNotification('Item updated successfully!');
+                    $('#editItemModal').modal('hide');
+                    // Refresh the page to show updated item details
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    $('#errormsgedit').text('Error updating item. Please try again.').removeClass('d-none');
+                }
+            });
+        });
+
+        // ... (rest of the previous JavaScript code remains unchanged) ...
     });
     </script>
     <%- include('./partials/footer'); %>
