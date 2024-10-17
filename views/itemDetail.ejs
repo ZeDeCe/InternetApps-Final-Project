@@ -32,7 +32,7 @@
                     <% for (let i = 1; i <= 5; i++) { %>
                         <span class="star <%= i <= roundedAvgRating ? 'filled' : '' %>">★</span>
                     <% } %>
-                    <span>(<%= avgRating.toFixed(1) %> avg, <%= item.ratings.length %> ratings)</span>
+                    <span id="star-rate-text">(<%= avgRating.toFixed(1) %> avg, <%= item.ratings.length %> ratings)</span>
                 </div>
                 <button id="addToCartBtn" class="view-details">Add to Cart</button>
             </div>
@@ -80,7 +80,7 @@
                                 <% } %>
                             <% } %>
                         </div>
-                        <p><%= comment.text %></p>
+                        <p class="text-break"><%= comment.text %></p>
                         <p class="comment-info">Posted by <%= comment.username %> on <%= new Date(comment.createdAt).toLocaleDateString() %></p>
                         <% if (isAdmin) { %>
                             <button class="delete-comment-btn view-details w-25">Delete Comment</button>
@@ -108,12 +108,14 @@
                 $(this).toggleClass('filled', index < roundedAvgRating);
             });
             
-            $('#averageRating span').text(`(${avgRating.toFixed(1)} avg, <%= item.ratings.length + 1 %> ratings)`);
+            $('#averageRating #star-rate-text').text(`(${avgRating.toFixed(1)} avg, <%= item.ratings.length + 1 %> ratings)`);
         }
 
         function updateUserComments(username, newRating) {
-            $(`.comment[data-username="${username}"] .star`).each(function(index) {
-                $(this).toggleClass('filled', index < newRating);
+            $(`.comment[data-username="${username}"]`).each(function() {
+                ($(this).children('.comment-rating').eq(0).children('.star')).each(function(index) {
+                    $(this).toggleClass('filled', index < newRating);
+                })
             });
         }
 
