@@ -7,10 +7,10 @@ router.route('/').get(aboutController.getAbout);
 router.get('/graph', function(req, res) {
     switch (req.query.id){
       case "1":
-        aboutController.firstGraphData(req, res);
+        aboutController.salesGraphData(req, res);
         break;
       case "2":
-        aboutController.secondGraphData(req, res);
+        aboutController.themeGraphData(req, res);
         break;
         default:
             res.status(404).send();

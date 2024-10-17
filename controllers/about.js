@@ -4,7 +4,7 @@ async function getAbout(req, res)  {
     res.render('about.ejs');
 }
 
-async function firstGraphData(req, res) {    
+async function salesGraphData(req, res) {    
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 6); // Get date 6 days ago
     startDate.setHours(0, 0, 0, 0); // Set time to midnight
@@ -45,7 +45,7 @@ async function firstGraphData(req, res) {
 }
 
 
-async function secondGraphData(req, res) {
+async function themeGraphData(req, res) {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - 6); // Get date 6 days ago
     startDate.setHours(0, 0, 0, 0); // Set time to midnight
@@ -55,10 +55,20 @@ async function secondGraphData(req, res) {
 
     orders.forEach(order => {
         order.items.forEach(item => {
-            if (!itemsPerTheme[item.item.theme])
-                itemsPerTheme[item.item.theme] = 0;
+            try {
 
-            itemsPerTheme[item.item.theme] += 1 * item.quantity;
+                if (item.item){
+                    if (!itemsPerTheme[item.item.theme])
+                    itemsPerTheme[item.item.theme] = 0;
+
+                    itemsPerTheme[item.item.theme] += 1 * item.quantity;    
+                }
+                
+                
+            } catch (e) {
+
+            }
+            
         })
     });
 
@@ -73,6 +83,6 @@ async function secondGraphData(req, res) {
 
 module.exports = {
     getAbout,
-    firstGraphData,
-    secondGraphData
+    salesGraphData,
+    themeGraphData
 };
