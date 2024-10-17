@@ -186,7 +186,6 @@
             
             $(document).ready(function() {
                 // Handle search filters
-                $('#branchSearch, #phoneSearch, #addressSearch').on('input', filterTable);
 
                 async function getCordsByAddress(address) {
                 try {
@@ -221,15 +220,16 @@
                 }
             }
 
+            $('#branchSearch, #phoneSearch, #addressSearch').on('input', filterTable);
                 function filterTable() {
                     const searchName = $('#branchSearch').val().toLowerCase();
                     const searchPhone = $('#phoneSearch').val().toLowerCase();
                     const searchAddress = $('#addressSearch').val().toLowerCase();
-
+                    
                     $('#branchTableBody tr').each(function(){
                         const branchName = $(this).find('td:eq(0)').text().toLowerCase();
-                        const branchAddress = $(this).find('td:eq(1)').text().toLowerCase();
-                        const branchPhone = $(this).find('td:eq(2)').text().toLowerCase();
+                        const branchAddress = $(this).find('td:eq(2)').text().toLowerCase();
+                        const branchPhone = $(this).find('td:eq(3)').text().toLowerCase();
 
                         if ((searchName === '' || branchName.includes(searchName))
                             && (searchPhone === '' || branchPhone.includes(searchPhone))

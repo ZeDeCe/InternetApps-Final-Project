@@ -248,6 +248,7 @@
 
         // Updated checkout button click handler with simplified validation
         $("#checkout-btn").click(async function(event) {
+        $("#checkout-btn").addClass("disabled");
         event.preventDefault();
         clearAllInvalid();
         let isValid = true;
@@ -273,6 +274,7 @@
         });
 
         if (!isValid) {
+            $("#checkout-btn").removeClass("disabled");
             return;
         }
 
@@ -316,7 +318,10 @@
         } catch (e) {
             setError(errMSG, e);
         }
+
+        $("#checkout-btn").removeClass("disabled");
     });
+
 
     });
     </script>
