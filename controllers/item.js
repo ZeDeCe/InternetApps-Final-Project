@@ -136,6 +136,15 @@ const deleteItem = async (req, res) => {
     }
 };
 
+const getUserRating = async(req, res) => {
+    try {
+        var ratingObject = (await itemService.getUserRating(req.params.id, req.session.username))
+        res.status(200).json(ratingObject ? {'rating': ratingObject.value} : {'rating': 0})
+    } catch (error) {
+        res.status(500).render('error', { message: 'Server error', error: error.message });
+    }
+}
+
 const getItemById = async (req, res) => {
     try {
         const item = await itemService.getItemById(req.params.id);
@@ -238,5 +247,6 @@ module.exports = {
     addRating,
     addComment,
     addToCart,
-    deleteComment
+    deleteComment,
+    getUserRating
 };

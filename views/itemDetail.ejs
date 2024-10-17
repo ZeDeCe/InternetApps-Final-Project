@@ -120,11 +120,23 @@
         }
 
         function addCommentToDisplay(comment) {
+            var userRating = 0
+            $.ajax({
+                url: `/items/<%= item._id%>/user_rating`,
+                method: 'GET',
+                async: false,
+                success: function(data) {
+                    userRating = data.rating;
+                },
+                error: function(data) {
+                    // handle error
+                }
+            });
             const commentHtml = `
                 <div class="comment" data-username="${comment.username}" data-comment-id="${comment._id}">
                     <div class="comment-rating">
                         ${Array(5).fill().map((_, i) => `
-                            <span class="star ${i < comment.rating ? 'filled' : ''}">★</span>
+                            <span class="star ${i < userRating ? 'filled' : ''}">★</span>
                         `).join('')}
                     </div>
                     <p>${comment.text}</p>
@@ -176,8 +188,7 @@
                     addCommentToDisplay({
                         _id: response.comment._id,
                         text: comment,
-                        username: '<%= user %>',
-                        rating: $('#ratingForm input[name="rating"]:checked').val() || 0
+                        username: '<%= user %>'
                     });
                     $('#comment').val(''); // Clear the comment field
                     checkRemoveNoComments()
