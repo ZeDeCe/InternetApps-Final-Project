@@ -108,7 +108,7 @@
                 $(this).toggleClass('filled', index < roundedAvgRating);
             });
             
-            $('#averageRating #star-rate-text').text(`(${avgRating.toFixed(1)} avg, <%= item.ratings.length + 1 %> ratings)`);
+            $('#averageRating #star-rate-text').text(`(${avgRating.toFixed(1)} avg, <%= item.ratings.length %> ratings)`);
         }
 
         function updateUserComments(username, newRating) {
