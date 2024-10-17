@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('./partials/head', {title: "TONNS: Cart"}); %>
+</head>
+<body>
+    <%- include('./partials/header'); %>
+    <div class="main-div">
+        <div class="container mt-5">
+            <h1 class="mb-4"><%= userdata._id %>'s Shopping Cart</h1>
+            <% if (process.env.MIN_FREE_SHIPPING > 0) { %>
+                <h5 class="mb-3 text-secondary" id="freeShipping">
+                    <% if (items.length && shippingPrice) { %>
+                        $<%= process.env.MIN_FREE_SHIPPING - orderPrice %> Remaining for FREE shipping!
+                    <% } else if (items.length && !shippingPrice) { %>
+                        <%= userdata._id %>'s order is eligible for FREE Shipping!
+                    <% } else { %>
+                        FREE Shipping starts at $<%= process.env.MIN_FREE_SHIPPING %>
+                    <% } %>
+                </h5>
+            <%} %>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" id="cart-title"><%= items.length ? userdata._id + "'s Items" : userdata._id + "'s cart is empty" %></h5>
+                            
+                            <ul class="list-group list-group-flush" id="cartItems">
+                                <%for (let i = 0; i< items.length; i++) { %>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center" id="list_<%= items[i].item._id%>">
+                                        <div class="d-flex align-items-center">
+                                            <img src="<%= items[i].item.picture %>" alt="<%= items[i].item.name %>" class="product-image">
+                                            <div class="d-flex flex-column">
+                                                <a href="#" class="text-decoration-none text-dark"><%= items[i].item.name %></a>
+                                                <span class="text-muted">$<%= items[i].item.price %></span> <!-- Added price below item name -->
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="price" id="price_<%= items[i].item._id%>">$<%= items[i].item.price * items[i].quantity %></span>
+                                            <select class="form-select quantity-select mx-3 update-item" disabled data-item-id="<%= items[i].item._id%>">
+                                                <option value="<%= items[i].quantity %>"><%= items[i].quantity %> </option>
+                                            </select>
+                                        </div>
+                                    </li>        
+                                <% } %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Order Summary</h5>
+                            <ul class="list-group list-group-flush mb-3">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Subtotal</span>
+                                    <strong id="subtotal_price">$<%=orderPrice%></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Shipping</span>
+                                    <strong id="shipping_price"><%= "$" + shippingPrice %></strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Total</span>
+                                    <strong id="total_price">$<%=orderPrice+shippingPrice%></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('./partials/footer'); %>
+</body>
+</html>

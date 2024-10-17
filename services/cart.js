@@ -66,7 +66,6 @@ const addToCart = async (user, item) => {
 
 
     } catch (error) {
-        console.log(error); 
         return "Couldn't Add item to cart.";
     }
     
@@ -113,6 +112,51 @@ const updateCartItem = async (user, item, quantity) => {
 }
 
 
+const getCartsByMinNumber = async(minQuantity) => {
+    try {
+        const carts = await Cart.aggregate([
+            {
+                $unwind: "$items"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    totalQuantity: { $sum: "$items.quantity" }
+                }
+            },
+            {
+                $match: {
+                    totalQuantity: { $gte: minQuantity }
+                }
+            },
+            {
+                $sort: {
+                    _id: 1
+                }
+            }
+        ]);
+
+        return carts;
+    } catch (error) {
+        console.error("Error fetching carts: ", error);
+        return;
+    }
+}
+
+const deleteItemFromAllCarts = async (item_id) => {
+    try {
+        const result = await Cart.updateMany(
+            { 'items.item': item_id },
+            { $pull: { items: { item: item_id } } }
+        );
+
+        return result;
+
+    } catch (error) {
+        return;
+    }
+};
+
 module.exports = {
     createCart,
     getCartById,
@@ -121,5 +165,7 @@ module.exports = {
     deleteFromCart,
     deleteCart,
     getCartShippingPrice,
-    updateCartItem
+    updateCartItem,
+    getCartsByMinNumber,
+    deleteItemFromAllCarts
 }

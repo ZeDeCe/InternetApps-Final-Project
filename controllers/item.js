@@ -23,23 +23,19 @@ const createItem = async (req, res) => {
     const { name, description, price, picture, theme, pieces } = req.body;
 
     try {
+        // Check if the item name already exists
+        const existingItem = await Item.findOne({ name });
+        if (existingItem) {
+            return res.status(400).json({ status: 'error', message: 'Item name already exists' });
+        }
         const newItem = await itemService.createItem(name, description, price, picture, theme, pieces);
 
         if (newItem) {
             await shareNewItem(newItem);
+            return res.json({ status: 'success', itemId: newItem._id });
         }
-
-        res.redirect(`/items/${newItem._id}`); 
     } catch (error) {
-        res.render('createItem', {
-            error: error.message, 
-            name,
-            description,
-            price,
-            picture,
-            theme,
-            pieces
-        });
+        return res.status(400).json({ status: 'error', message: error.message });
     }
 };
 
@@ -128,6 +124,12 @@ const deleteItem = async (req, res) => {
         if (!deletedItem) {
             return res.status(404).render('error', { message: 'Item not found' });
         }
+
+        const cartsResult = await cartService.deleteItemFromAllCarts(deletedItem._id);
+        if (!cartsResult){
+            return res.status(404).render('error', {message: 'Error Deleting Items from all carts.'})
+        }
+
         res.redirect('/');
     } catch (error) {
         res.status(500).render('error', { message: 'Error deleting item', error: error.message });
@@ -189,6 +191,7 @@ const addComment = async (req, res) => {
         res.status(500).json({ message: 'Error adding comment', error: error.message });
     }
 };
+
 const addToCart = async (req, res) => {
     try {
         const username = req.session.username;

@@ -21,7 +21,6 @@ DB_URL=
 SESSION_SECRET=
 MAPS_TOKEN=
 TWITTER_ID=
-FACEBOOK_ID=
 MIN_FREE_SHIPPING=
 GLOBAL_SHIPPING_FEE=
 TWITTER_API_KEY=
@@ -32,10 +31,9 @@ TWITTER_ACCESS_TOKEN_SECRET=
 Make sure to have the DB_URL end in a /  
 Session secret can be some random string- this will change in production so it is temporary
 
-TWITTER_ID && FACEBOOK_ID are the id from the link.
+TWITTER_ID is the id from the link.
 example:
 for twitter = x.com/{TWITTER_ID}
-for facebook = facebook.com/profile.php?id={FACEBOOK_ID}
 MAPS Token is received from Google Cloud Platform by creating API Token for maps.
 
 MIN_FREE_SHIPPING --> Minimum price for free shipping(if set to 0, no free shipping.)
